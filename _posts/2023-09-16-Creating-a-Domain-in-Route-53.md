@@ -1,64 +1,133 @@
 ---
-title: Creting a Domain in Route 53
+title: Creating a domain in AWS Route 53 and point it to GitHub Pages
 date: 2023-09-16 09:47:00 -0700
 categories: [AWS, Route 53]
-tags: [aws route 53]     # TAG names should always be lowercase
+tags: [aws, route 53]     # TAG names should always be lowercase
 ---
 
-This is my first post in this blog which I have created to document my progress learning about the different public cloud providers starting with AWS (Amazon Web Services). I am a firm believer that "learning by doing" will help me to embrase more quickly all the benefits Public Cloud Providers have to offer.
+This is my very first post in this blog I have created to document my progress towards learning about public cloud providers.
+I am a firm believer of "learning by doing" to help learning more quickly and it is because of this reason that I am starting today with this blog.
+Today, I am registering a new domain in AWS Route 53 and creating the necessary records and point it to this blog. The blog has been created using [Jekyll](https://jekyllrb.com/) as a static site generator (written in Ruby) and it is hosted in [GitHub Pages](https://pages.github.com/) for free.
 
-This blog lives in my [GitHub](https://github.com/gustavos86/gustavos86.github.io) account and it is published using [GitHub Pages](https://pages.github.com/).
+Creating a this blog in GitHub Pages following and the documentation (see [Types of GitHub Pages sites](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#types-of-github-pages-sites)) required the original URL to be exactly `<username>.github.io`.
+I wanted to have my own domain and I am using AWS Route 53 to register **myjourneytocloud.com**. I am documenting the steps that taken to accomplish this using the AWS Management Console.
 
-Creating a this blog in GitHub Pages required following GitHub Page's documentation and therefore the URL of this blog was initially created using the naming convention of `<username>.github.io` as described in [Types of GitHub Pages sites](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#types-of-github-pages-sites)
+1. Starting from the Route 53 service in the AWS Managament Console initiate the wizard
 
-I wanted something more personalized as the URL. So I am using my AWS Route 53 to create a domain that points to this blog.
-
-I will start by directly going to the Route 53 service in my AWS account and from there initiate the wizard.
-
-I am choosing **Register a domain**
+Select **Register a domain**
 
 ![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/01-Route-53-initiate-the-wizard.png)
 
-I looked for the domain **myjourneytocloud.com** and it says it is not available.
+2. Look the domain is available. In my case, **myjourneytocloud.com** was already taken.
+However I noticed **myjourneytocloud.net** is available so took it.
+Select the desired domain and click on the button that shows up **Proceed to checkout**
 
 ![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/02-Route-53-checking-availability)
 
-I noticed **myjourneytocloud.net** is available so I will go with that one. I select it and click on the button that shows up **Proceed to checkout**
-
 ![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/03-Route-53-available-domains.png)
 
-Choosing 1 year and uncheck **Auto-renew** for now as that is my choice for the time being.
+3. The next screen asks for how long you want to register the domain and it reflects the cost of it. This screen also shows the option to enable or disable auto-renew. In my case I choosed 1 year and unchecked **Auto-renew**
 
 ![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/04-Route-53-duration-auto-renew.png)
 
-I start filling the form which asks for my names, email, phone number, address, Country, State, City, Zip code / Postal code and a few privacy options such as:
+4. The next screen asks for Contact Information such as name, email, phone number, address, Country, State, City, Zip code / Postal code and a few privacy options such as:
 
-- Admin Contact [enable|disable] - Same as registrant contact
-- Tech contact [enable|disable] - Same as registrant contact
-- Privacy contact [check|uncheck] - Turn on privacy protection for all contacts of myjourneytocloud.net. When you turn on privacy protection, contact information is hidden from WHOIS queries.
+    - Admin Contact (enable|disable) - *Same as registrant contact*
+    - Tech contact (enable|disable) - *Same as registrant contact*
+    - Privacy contact (box to check|uncheck) - *Turn on privacy protection for all contacts of myjourneytocloud.net. When you turn on privacy protection, contact information is hidden from WHOIS queries.*
 
 ![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/05-Route-53-contact-information.png)
 
-Finally, the **Review and submit** section completing the process of registering a new domain.
+5. Finally, the **Review and submit** section shows all the information entered to be confirmed. Just click on the appropriate button to complete the process of registering a new domain if all looks good.
 
 ![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/06-Route-53-review-and-submit.png)
 
-As a note, [Route 53 is primarily a global service](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/disaster-recovery-resiliency.html)
+> As a note, [Route 53 is primarily a global service](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/disaster-recovery-resiliency.html)
 
-In the navigation bar in the left side, in section **Domains > Requests** I see that registering my domain is in progress.
+6. To see status of creating the new Domain, on the left navigation bar go to **Domains > Requests**. The domain registration should be in progress.
 
 ![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/07-Route-53-requests-in-progress.png)
 
-> Registration Status ended up being Failed. Here I faced an error related to payment. It seems I need to update my credit card information in my AWS root account. I logged again to this account this time using the root user to update my account information.
+In my particular case, I had to update the credit card information in the root account. Once done I repeated the process of registering the domain.
 
-Once I updated my credit card information I had to repeat the process of registering the domain again.
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/08-Route-53-requests-in-progress_2.png)
 
-This time, I got some emails in my inbox:
+During this process I received a few emails in my inbox:
 
-1. One email from my bank letting me know that a charge was done to my credit card
-2. Another email from AWS including a link to verify the email address I put when registering the domain
-3. Finally, a third email from AWS informing me that my email was successfully verified for domain registration
+    1. One from my bank letting me know that a charge was done to my credit card
+    2. Another email with the invoice from AWS
+    3. Another from AWS including a link to verify the email address I put when registering the domain (step 4)
+    4. A third email from AWS informing me that my email was successfully verified for domain registration
+    5. An email from AWS letting me know the registration of the domain succeeded
 
-It is still taking in some minutes to complete the process of registering my new domain.
+7. Once the Domain has been fully created, on the left navigation bar go to the **Hosted Zone** section and open the existing Hosted Zone to create two new **Records**. The existing Hosted Zone was created when the domain process completed.
 
-![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/07-Route-53-requests-in-progress_2.png)
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/10-Route-53-aws-creating-hosted-zone.png)
+
+Click on **Create record**
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/12-Route-53-aws-creating-records.png)
+
+8. To create the record, you the DNS IP addresses of GitHub which are found in GitHub's documentation section [Configuring an apex domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain)
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/13-Route-53-aws-creating-record.png)
+
+9. Create the first record as follows:
+
+    - Leave the subdomain field *blank*
+    - Record type is A
+    - Value are the IP addresses of GitHub DNS
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/14-Route-53-aws-creating-first-record.png)
+
+10. Create the second record as follows:
+
+    - In subdomain type *www*
+    - Record type is CNAME
+    - Value is `<username>.github.io` for your GitHub account (in my case `gustavos86.github.io`)
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/15-Route-53-aws-creating-second-record.png)
+
+11. The end result should look similar to the following screenshot
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/16-Route-53-aws-records-created.png)
+
+12. In your GitHub repo (in my case [https://github.com/gustavos86/gustavos86.github.io/](https://github.com/gustavos86/gustavos86.github.io/)) go to **Settings > Pages**
+
+Under section **Custom Domain** add your DNS and click on the **save** button.
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/09-Route-53-github-custom-domain.png)
+
+Wait for the validation to complete. It should take just a few seconds.
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/17-Route-53-github-checking-domain.png)
+
+The result should look similar to the following screenshot. Make sure you check the **Enforce HTTPS** checkbox as well.
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/18-Route-53-github-custom-domain-ok.png)
+
+This should have created a file named **CNAME** in the project main folder. In my case [https://github.com/gustavos86/gustavos86.github.io/blob/main/CNAME](https://github.com/gustavos86/gustavos86.github.io/blob/main/CNAME) and the content is just:
+
+```
+myjourneytocloud.net
+```
+
+13. If you are getting a blank page with raw text of index.html file or similar when visiting yoru site, change the GitHub Pages settings to **Build and deployment** **Source** : **GitHub Actions**
+
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/19-Route-53-github-build-and-deployment-github-actions.png)
+
+14. Finally, if you are using [Jekyll](https://jekyllrb.com/) just like me, you may want to update the `_config.yml` file:
+
+```
+. . .
+# fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
+url: https://www.myjourneytocloud.net
+. . .
+```
+
+That's it, now https://www.myjourneytocloud.net/ and https://myjourneytocloud.net/ point to this blog.
+
+Interesting links.
+
+- https://medium.com/@benwiz/how-to-deploy-github-pages-with-aws-route-53-registered-custom-domain-and-force-https-bbea801e5ea3
+- https://stackoverflow.com/questions/72079476/jekyll-deployed-in-github-shows-raw-text-of-index-html-file
