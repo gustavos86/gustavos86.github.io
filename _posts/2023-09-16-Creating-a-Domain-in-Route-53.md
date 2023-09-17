@@ -22,7 +22,7 @@ Select **Register a domain**
 However I noticed **myjourneytocloud.net** is available so took it.
 Select the desired domain and click on the button that shows up **Proceed to checkout**
 
-![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/02-Route-53-checking-availability)
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/02-Route-53-checking-availability.png)
 
 ![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/03-Route-53-available-domains.png)
 
@@ -70,7 +70,7 @@ Click on **Create record**
 
 8. To create the record, you the DNS IP addresses of GitHub which are found in GitHub's documentation section [Configuring an apex domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain)
 
-![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/13-Route-53-aws-creating-record.png)
+![]({{ site.baseurl }}/images/2023/09-16-Creating-a-Domain-in-Route-53/13-Route-53-github-getting-ip-addresses-for-a-records.png)
 
 9. Create the first record as follows:
 
