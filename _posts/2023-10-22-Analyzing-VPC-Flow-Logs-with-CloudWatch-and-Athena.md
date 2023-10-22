@@ -7,18 +7,24 @@ tags: [aws, athena, vpc flow logs]     # TAG names should always be lowercase
 
 ## VPC Flow logs theory:
 
-VPC Flow logs are used to capture information about IP traffic going in/out of your interfaces.
+VPC Flow Logs capture IP traffic to and from network interfaces in your VPC. This can be useful in many circumstances, including:
 
-Helps to monitor and troubleshoot connecitivity issues
+1. providing flow log data to CloudWatch to create alerts when anyone attempts to access one of your EC2 instances via SSH
+2. identifying the source IP addresses of port probes
+3. helping troubleshoot why specific traffic is not reaching an instance.
 
-It can be configured at different levels:
+VPC Flow logs are used to capture information about IP traffic going in/out of your interfaces. It helps to monitor and troubleshoot connecitivity issues
+
+Flow Logs can be configured at different levels:
 - VPC Flow Logs
 - Subnet Flow Logs
 - ENI Flow Logs
 
-Flow logs can be stored in:
-- Cloud Watch Logs
-- S3
+Flow logs can be sent to:
+- CloudWatch Logs
+- an Amazon S3 bucket
+- Kinesis Firehose in the same account
+- Kinesis Firehose in a different account
 
 Can capture network information from AWS managed ENIs such as: ELB, RDS, ElasticCache, Redshift, Amazon WorkSpaces.
 
@@ -46,17 +52,19 @@ ${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstp
 
 ![]({{ site.baseurl }}/images/2023/10-22-Analyzing-VPC-Flow-Logs-with-CloudWatch-and-Athena/01-CloudWatch-Section-logo.png)
 
-2. Create a CloudWatch log group. Name it *VPCFlowLogs*. This is done in the **CloudWatch** section.
+2. In the **CloudWatch** section, create a CloudWatch log group. Name it *VPCFlowLogs*.
 
 ![]({{ site.baseurl }}/images/2023/09-25-VPC/01-VPC-icon.png)
 
-3. Create a VPC flow log to CloudWatch using the correct IAM role and the CloudWatch log group that was just created in the previous step.
+3. Create a VPC flow log to CloudWatch using the correct **IAM role** and the **CloudWatch log group** that was just created in the previous step.
 
 ![]({{ site.baseurl }}/images/2023/10-22-Analyzing-VPC-Flow-Logs-with-CloudWatch-and-Athena/01-CloudWatch-Section-logo.png)
 
 #### Create CloudWatch Filters and Alerts
 
-1. Create a **CloudWatch log metric filter**:
+1. Create a **CloudWatch log Metric filter**:
+
+You need to create the **Metric filter** in the **Log Group** created previously.
 
   - Use the below filter pattern:
 ```
@@ -75,7 +83,9 @@ ${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstp
   - Metric name: `SSH Rejects`
   - Metric value: `1`
 
-2. Create an alarm called **SSH-rejects** based on the metric filter.
+2. Create an alarm:
+
+You need to create the alarm **SSH-rejects** in the **Metric filter** created previously.
 
 Configuration page 1
 
