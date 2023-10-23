@@ -1,6 +1,6 @@
 ---
 title: Analyzing VPC Flow Logs with CloudWatch and Athena
-date: 2023-10-02 09:00:00 -0700
+date: 2023-10-22 09:00:00 -0700
 categories: [AWS, Athena, VPC Flow Logs]
 tags: [aws, athena, vpc flow logs]     # TAG names should always be lowercase
 ---
