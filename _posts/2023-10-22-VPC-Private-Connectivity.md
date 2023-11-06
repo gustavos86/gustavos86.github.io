@@ -46,7 +46,7 @@ VPC Endpoints provide connectivity between VPC and AWS services.
   - **Gateway Endpoint:** provisions a target and must be used in a route table. Only **S3 and DynamoDB**
   - **Interface Endoint:** provisions an ENI (private IP) as an entry point - most other AWS services
 
-### VPC Gateway Endpoint
+### Gateway Endpoints
 
 - Enables private connection between VPC and S3 or DynamoDB
 - Need to modify the route tables and add an entry to route the traffic to S3 or DnamoDB through the gateway VPC endpoint
@@ -63,5 +63,14 @@ VPC Endpoint Security
   - An IAM policy which is attached to VPC endpoint
   - Default policy allows full control to the AWS service
 
+### Interface Endpoints
+
+- Interface endpoints create local IP addresses (using ENI) in the VPC
+- You create one interface endpoint per Availability Zone for high availability
+- There is per hour cost (~$0.01/hr per AZ) and data processing cost (~$0.01 GB)
+- Uses Security Groups - inbound rules
+- For interface endpoints, AWS creates Regional and zonal DNS entries that resolves to private IP addresses of interface endpoints
+- Interface endpoints support only IPv4 traffic
+- Interface VPC endpoints support traffic only over TCP
 
 ## VPC PrivateLInk
