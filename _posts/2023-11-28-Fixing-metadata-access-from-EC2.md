@@ -29,7 +29,9 @@ Documentation:
 
 - [Retrieve instance metadata](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html#instance-metadata-returns)
 
-It seems I have to obtain a Token first. Example:
+What needs to be done is obtain a Token first by doing an **HTTP PUT** action to endpoint http://169.254.169.254/latest/api/token
+
+Example:
 
 ```
 [ec2-user@ip-172-31-30-20 ~]$ TOKEN=`curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
