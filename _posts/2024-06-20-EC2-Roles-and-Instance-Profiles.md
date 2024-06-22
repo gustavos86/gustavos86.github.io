@@ -1,5 +1,5 @@
 ---
-title: EC2 Roles and Instance Profiles
+title: How to attach IAM Instance Profile to EC2 instance
 date: 2024-06-20 20:42:00 -0700
 categories: [AWS, IAM, EC2]
 tags: [aws, iam, ec2]     # TAG names should always be lowercase
@@ -8,7 +8,17 @@ tags: [aws, iam, ec2]     # TAG names should always be lowercase
 # Introduction
 
 **IMPORTANT**
-*The outputs shown here where taken from a temporary AWS account which has now been deleted.*
+*The outputs shown here were taken from a temporary AWS account which has now been deleted*
+
+**Note**
+*The words "associate" and "attach" are used interchangeably*
+
+In this guide we are going to:
+
+- Create a new IAM Policy which has read access to a specific S3 bucket
+- Create an IAM Role and associate the IAM Policy to it
+- Create an IAM Instance Profile and associate the IAM Role to it
+- Associate the IAM Isntance Profile to an EC2 instance
 
 Amazon EC2 instances should be able to securely access other AWS services. Credentials need to be rotated regularly to minimize the adverse impact of a security breach.
 
@@ -75,6 +85,7 @@ Default region name [None]: us-east-1
 Default output format [None]: json
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
+
 ## 1. Create IAM Policy
 
 ```
@@ -96,9 +107,13 @@ Default output format [None]: json
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
+IAM Policy created as seen in the AWS Management Console
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/03-IAM-Policy-created.png)
+
 ## 2. Create IAM Role
 
-The IAM Role is created with the Trust Policy attached which gives to the EC2 service permissions to assume the role.
+The IAM Role is created with the Trust Policy associated which gives to the EC2 service permissions to assume the role.
 
 ```
 [cloud_user@ip-10-0-1-152 ~]$ aws iam create-role --role-name DEV_ROLE --assume-role-policy-document file://trust_policy_ec2.json
@@ -126,10 +141,14 @@ The IAM Role is created with the Trust Policy attached which gives to the EC2 se
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
+IAM Role created as seen in the AWS Management Console
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/02-IAM-Role-created.png)
+
 ## 3. Associate the IAM Policy to the IAM Role
 
 ```
-[cloud_user@ip-10-0-1-152 ~]$ aws iam attach-role-policy --role-name DEV_role --policy-arn "arn:aws:iam::880344156207:policy/DevS3ReadAccess"
+[cloud_user@ip-10-0-1-152 ~]$ aws iam attach-role-policy --role-name DEV_ROLE --policy-arn "arn:aws:iam::880344156207:policy/DevS3ReadAccess"
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
@@ -149,6 +168,10 @@ To verify, list the attached IAM Policies for this IAM Role
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
+IAM Policy attached to the IAM Role as seen in the AWS Management Console
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/04-IAM-Policy-attached-to-IAM-Role.png)
+
 ## 4. Create an IAM Instance Profile
 
 ```
@@ -166,7 +189,7 @@ To verify, list the attached IAM Policies for this IAM Role
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
-## 5. Attach the IAM Role to the IAM Instance Profile
+## 5. Associate the IAM Role to the IAM Instance Profile
 
 ```
 [cloud_user@ip-10-0-1-152 ~]$ aws iam add-role-to-instance-profile --instance-profile-name DEV_PROFILE --role-name DEV_ROLE
@@ -211,6 +234,11 @@ To verfiy:
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
+IAM Instance Profile ARN shown in the IAM Role as seen in the AWS Management Console
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/05-IAM-Instance-Profile-in-IAM-Role.png)
+
+
 ## 6. Associate the IAM Instance Profile with the EC2 Instance
 
 ```
@@ -229,173 +257,20 @@ To verfiy:
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
-To verify:
-
-<details open>
-  <summary>aws ec2 describe-instances --instance-ids $INSTANCE_ID</summary>
+Verification in AWS CLI:
 
 ```
-[cloud_user@ip-10-0-1-152 ~]$ aws ec2 describe-instances --instance-ids i-070823c5d33601d4f
-{
-    "Reservations": [
-        {
-            "Instances": [
-                {
-                    "Monitoring": {
-                        "State": "disabled"
-                    }, 
-                    "PublicDnsName": "ec2-54-145-81-219.compute-1.amazonaws.com", 
-                    "State": {
-                        "Code": 16, 
-                        "Name": "running"
-                    }, 
-                    "EbsOptimized": false, 
-                    "LaunchTime": "2024-06-21T02:23:54.000Z", 
-                    "PublicIpAddress": "54.145.81.219", 
-                    "PrivateIpAddress": "10.0.1.46", 
-                    "ProductCodes": [], 
-                    "VpcId": "vpc-0c98e19f2c023fcdf", 
-                    "CpuOptions": {
-                        "CoreCount": 1, 
-                        "ThreadsPerCore": 2
-                    }, 
-                    "StateTransitionReason": "", 
-                    "InstanceId": "i-070823c5d33601d4f", 
-                    "EnaSupport": true, 
-                    "ImageId": "ami-046fc64ce51e6ccab", 
-                    "PrivateDnsName": "ip-10-0-1-46.ec2.internal", 
-                    "SecurityGroups": [
-                        {
-                            "GroupName": "cfst-3035-52ca76f5ada32d15aa36187e15dd0e64-SecurityGroupHTTPAndSSH-6HoPH3j3tOvN", 
-                            "GroupId": "sg-07f9529db4ceaa38a"
-                        }
-                    ], 
-                    "ClientToken": "2dbeece3-f285-1e37-c2ca-1a18ecdff753", 
-                    "SubnetId": "subnet-077f734ee83abc902", 
-                    "InstanceType": "t3.micro", 
-                    "CapacityReservationSpecification": {
-                        "CapacityReservationPreference": "open"
-                    }, 
-                    "NetworkInterfaces": [
-                        {
-                            "Status": "in-use", 
-                            "MacAddress": "0e:5a:9f:9e:ab:97", 
-                            "SourceDestCheck": true, 
-                            "VpcId": "vpc-0c98e19f2c023fcdf", 
-                            "Description": "", 
-                            "NetworkInterfaceId": "eni-023b7e1a74e0dd32e", 
-                            "PrivateIpAddresses": [
-                                {
-                                    "PrivateDnsName": "ip-10-0-1-46.ec2.internal", 
-                                    "PrivateIpAddress": "10.0.1.46", 
-                                    "Primary": true, 
-                                    "Association": {
-                                        "PublicIp": "54.145.81.219", 
-                                        "PublicDnsName": "ec2-54-145-81-219.compute-1.amazonaws.com", 
-                                        "IpOwnerId": "amazon"
-                                    }
-                                }
-                            ], 
-                            "PrivateDnsName": "ip-10-0-1-46.ec2.internal", 
-                            "InterfaceType": "interface", 
-                            "Attachment": {
-                                "Status": "attached", 
-                                "DeviceIndex": 0, 
-                                "DeleteOnTermination": true, 
-                                "AttachmentId": "eni-attach-056ac16923e808825", 
-                                "AttachTime": "2024-06-21T02:23:54.000Z"
-                            }, 
-                            "Groups": [
-                                {
-                                    "GroupName": "cfst-3035-52ca76f5ada32d15aa36187e15dd0e64-SecurityGroupHTTPAndSSH-6HoPH3j3tOvN", 
-                                    "GroupId": "sg-07f9529db4ceaa38a"
-                                }
-                            ], 
-                            "Ipv6Addresses": [], 
-                            "OwnerId": "880344156207", 
-                            "PrivateIpAddress": "10.0.1.46", 
-                            "SubnetId": "subnet-077f734ee83abc902", 
-                            "Association": {
-                                "PublicIp": "54.145.81.219", 
-                                "PublicDnsName": "ec2-54-145-81-219.compute-1.amazonaws.com", 
-                                "IpOwnerId": "amazon"
-                            }
-                        }
-                    ], 
-                    "SourceDestCheck": true, 
-                    "Placement": {
-                        "Tenancy": "default", 
-                        "GroupName": "", 
-                        "AvailabilityZone": "us-east-1a"
-                    }, 
-                    "Hypervisor": "xen", 
-                    "BlockDeviceMappings": [
-                        {
-                            "DeviceName": "/dev/xvda", 
-                            "Ebs": {
-                                "Status": "attached", 
-                                "DeleteOnTermination": true, 
-                                "VolumeId": "vol-0757c962419a8240a", 
-                                "AttachTime": "2024-06-21T02:23:55.000Z"
-                            }
-                        }
-                    ], 
-                    "Architecture": "x86_64", 
-                    "RootDeviceType": "ebs", 
+[cloud_user@ip-10-0-1-152 ~]$ aws ec2 describe-instances --instance-ids i-070823c5d33601d4f | egrep IamInstanceProfile -A3 
                     "IamInstanceProfile": {
                         "Id": "AIPA4Z6EZZAX3ANMOXI64", 
                         "Arn": "arn:aws:iam::880344156207:instance-profile/DEV_PROFILE"
-                    }, 
-                    "RootDeviceName": "/dev/xvda", 
-                    "VirtualizationType": "hvm", 
-                    "Tags": [
-                        {
-                            "Value": "EC2InstanceWebServer", 
-                            "Key": "aws:cloudformation:logical-id"
-                        }, 
-                        {
-                            "Value": "cfst-3035-52ca76f5ada32d15aa36187e15dd0e64", 
-                            "Key": "aws:cloudformation:stack-name"
-                        }, 
-                        {
-                            "Value": "arn:aws:cloudformation:us-east-1:880344156207:stack/cfst-3035-52ca76f5ada32d15aa36187e15dd0e64/40664ce0-2f75-11ef-bea5-0e5f2c0b2977", 
-                            "Key": "Application"
-                        }, 
-                        {
-                            "Value": "21378432", 
-                            "Key": "UserId"
-                        }, 
-                        {
-                            "Value": "Web Server", 
-                            "Key": "Name"
-                        }, 
-                        {
-                            "Value": "arn:aws:cloudformation:us-east-1:880344156207:stack/cfst-3035-52ca76f5ada32d15aa36187e15dd0e64/40664ce0-2f75-11ef-bea5-0e5f2c0b2977", 
-                            "Key": "aws:cloudformation:stack-id"
-                        }
-                    ], 
-                    "HibernationOptions": {
-                        "Configured": false
-                    }, 
-                    "MetadataOptions": {
-                        "State": "applied", 
-                        "HttpEndpoint": "enabled", 
-                        "HttpTokens": "optional", 
-                        "HttpPutResponseHopLimit": 1
-                    }, 
-                    "AmiLaunchIndex": 0
-                }
-            ], 
-            "ReservationId": "r-0fa72987155594236", 
-            "RequesterId": "043234062703", 
-            "Groups": [], 
-            "OwnerId": "880344156207"
-        }
-    ]
-}
+                    },
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
-</details>
+
+IAM Instance Profile associated to EC2 Instance as seen in the AWS Management Console
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/01-IAM-Role-attached-to-EC2-Instance.png)
 
 ## 7. Verification
 
@@ -410,8 +285,6 @@ From the EC2 instance
 }
 [cloud_user@ip-10-0-1-46 ~]$ 
 ```
-
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Rooles-and-Instance-Profiles/01-IAM-Role-attached-to-EC2-Instance.png)
 
 ```
 [cloud_user@ip-10-0-1-46 ~]$ aws s3 ls
@@ -438,12 +311,42 @@ From the EC2 instance
 
 ## 1. Create IAM Policy
 
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/06-Create-IAM-Policy-via-GUI.png)
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/07-Create-IAM-Policy-via-GUI_2.png)
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/08-Create-IAM-Policy-via-GUI_3.png)
 
 ## 2. Associate the IAM Policy with an IAM Role
 
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/09-Create-IAM-Role-via-GUI.png)
 
-## 3. Attach the IAM Role to the EC2 instance
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/10-Create-IAM-Role-via-GUI.png)
 
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/11-Create-IAM-Role-via-GUIpng)
 
-## 4. Validation
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/12-Create-IAM-Role-via-GUI.png)
 
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/13-Create-IAM-Policy-via-GUI_3.png)
+
+## 3. Associate the IAM Role to the EC2 instance
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/14-Attach-IAM-Role-to-EC2-instance.png)
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/15-Attach-IAM-Role-to-EC2-instance.png)
+
+Verification:
+
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/16-Attach-IAM-Role-to-EC2-instance.png)
+
+## 4. Verification
+
+```
+[cloud_user@ip-10-0-1-104 ~]$  aws s3 ls s3://cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
+2024-06-22 03:12:12         41 file1-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
+2024-06-22 03:12:12         41 file2-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
+2024-06-22 03:12:12         41 file3-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
+2024-06-22 03:12:12         41 file4-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
+2024-06-22 03:12:13         41 file5-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
+[cloud_user@ip-10-0-1-104 ~]$ 
+```
