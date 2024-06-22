@@ -327,7 +327,7 @@ From the EC2 instance
 
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/12-Create-IAM-Role-via-GUI.png)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/13-Create-IAM-Policy-via-GUI.png)
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/13-Create-IAM-Role-via-GUI.png)
 
 ## 3. Associate the IAM Role to the EC2 instance
 
