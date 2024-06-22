@@ -323,7 +323,7 @@ From the EC2 instance
 
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/10-Create-IAM-Role-via-GUI.png)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/11-Create-IAM-Role-via-GUIpng)
+![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/11-Create-IAM-Role-via-GUI.png)
 
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/12-Create-IAM-Role-via-GUI.png)
 
