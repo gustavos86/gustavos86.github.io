@@ -13,6 +13,8 @@ There are 3 types of IAM Policies:
 - **Customer managed policy** is a standalone policy that you administer in your own AWS account.
 - **Inline policy** is a policy that's embedded in an IAM identity (a user, group, or role).
 
+# Steps
+
 1. Creating the IAM Policy
 
 Policy file in JSON format `dynamoDB_readOnly_allResources.json`
@@ -68,7 +70,7 @@ aws iam create-policy \
 ```
 
 <details markdown=1>
-  <summary>
+  <summary markdown="span">
     Output
   </summary>
 
