@@ -69,13 +69,18 @@ aws iam create-policy \
   --policy-document file://dynamoDB_readOnly_allResources.json
 ```
 
+<!--
+How to use <details><summary> and properly render markdown code insite it
+https://github.com/gettalong/kramdown/issues/155#issuecomment-1024896918
+-->
+
 <details markdown=1>
   <summary markdown="span">
     Output
   </summary>
 
-```json
-88665a1c97a7:.aws hectorsg$ aws iam create-policy \
+```bash
+$ aws iam create-policy \
 >   --policy-name MyCustomerManagedPolicy \
 >   --policy-document file://dynamoDB_readOnly_allResources.json \
 >   --profile cloudUser
@@ -93,6 +98,7 @@ aws iam create-policy \
         "UpdateDate": "2024-06-23T19:50:54+00:00"
     }
 }
+$
 ```
 
 </details>
