@@ -67,7 +67,7 @@ aws iam create-policy \
   --policy-document file://dynamoDB_readOnly_allResources.json
 ```
 
-<details>
+<details markdown=1>
   <summary>
     Output
   </summary>
