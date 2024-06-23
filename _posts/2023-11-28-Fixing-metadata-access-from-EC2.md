@@ -5,7 +5,9 @@ categories: [AWS, EC2]
 tags: [aws, ec2]     # TAG names should always be lowercase
 ---
 
-Today, while doing a practice lab I tried obtaining metadata information for a EC2 instance by executing CURL to the AWS metadata address 169.254.169.254. However, I got an **HTTP 401 error**.
+![]({{ site.baseurl }}/images/services/ec2.png)
+
+Today, while doing a practice lab, I tried obtaining EC2 instance's metadata information by executing the cURL command to the AWS metadata address 169.254.169.254. However, I got an **HTTP 401 Unauthorized error** message.
 
 ```
 [ec2-user@ip-172-31-30-20 ~]$ curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone
@@ -23,7 +25,7 @@ Today, while doing a practice lab I tried obtaining metadata information for a E
 [ec2-user@ip-172-31-30-20 ~]$ 
 ```
 
-A google search helped me to get the rason about of this.
+Googlin' to figure out the rason about of this **401 - Unauthorized** error message.
 
 Documentation:
 

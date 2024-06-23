@@ -39,7 +39,7 @@ Amazon VPC Flow Logs do not record traffic:
 
 ### Now the Configuration
 
-![]({{ site.baseurl }}/images/2023/09-25-VPC/01-VPC-icon.png)
+![]({{ site.baseurl }}/images/services/vpc.png)
 
 #### Create a **CloudWatch Log Group** and a **VPC Flow Log to CloudWatch**
 
@@ -50,15 +50,15 @@ The Default Format of the VPC Flog Logs is:
 ${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status}
 ```
 
-![]({{ site.baseurl }}/images/2023/10-22-Analyzing-VPC-Flow-Logs-with-CloudWatch-and-Athena/01-CloudWatch-Section-logo.png)
+![]({{ site.baseurl }}/images/services/cloudwatch.png)
 
 2. In the **CloudWatch** section, create a CloudWatch log group. Name it *VPCFlowLogs*.
 
-![]({{ site.baseurl }}/images/2023/09-25-VPC/01-VPC-icon.png)
+![]({{ site.baseurl }}/images/services/vpc.png)
 
 3. Create a VPC flow log to CloudWatch using the correct **IAM role** and the **CloudWatch log group** that was just created in the previous step.
 
-![]({{ site.baseurl }}/images/2023/10-22-Analyzing-VPC-Flow-Logs-with-CloudWatch-and-Athena/01-CloudWatch-Section-logo.png)
+![]({{ site.baseurl }}/images/services/cloudwatch.png)
 
 #### Create CloudWatch Filters and Alerts
 
@@ -116,7 +116,7 @@ In **CloudWatch** section,
 
 #### Analyze VPC Flow Logs Data in Athena
 
-![]({{ site.baseurl }}/images/2023/10-22-Analyzing-VPC-Flow-Logs-with-CloudWatch-and-Athena/03-S3-Logo.png)
+![]({{ site.baseurl }}/images/services/s3.png)
 
 0. Get the **S3 URI** of the Folder where the VPC FLow Logs are stored in S3
 
@@ -125,7 +125,7 @@ For example:
 s3://cfst-3029-c720f5353835c72125eaa-vpcflowlogsbucket-smty3vug8yp8/AWSLogs/{account_id}/vpcflowlogs/us-east-1/2023/10/22/
 ```
 
-![]({{ site.baseurl }}/images/2023/10-22-Analyzing-VPC-Flow-Logs-with-CloudWatch-and-Athena/04-Athena-Logo.png)
+![]({{ site.baseurl }}/images/services/athena.png)
 
 1. In the **Athena** service. Create a **Query result location** using the **S3 URI** taken. Make sure that the trailing / is there.
 

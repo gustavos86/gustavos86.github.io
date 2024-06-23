@@ -5,6 +5,9 @@ categories: [AWS, Route 53]
 tags: [aws, route 53]     # TAG names should always be lowercase
 ---
 
+![]({{ site.baseurl }}/images/services/route53.png)
+
+
 This is my very first post in this blog I have created to document my progress toward learning about public cloud providers.
 I am a firm believer in "learning by doing" to help me learn more quickly and it is for this reason that I am starting today with this blog.
 Today, I am registering a new domain in AWS Route 53, creating the necessary records, and pointing them to this blog. The blog has been created using [Jekyll](https://jekyllrb.com/) as a static site generator (written in Ruby) and it is hosted in [GitHub Pages](https://pages.github.com/) for free.

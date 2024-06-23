@@ -86,6 +86,8 @@ Default output format [None]: json
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
+![]({{ site.baseurl }}/images/services/iam.png)
+
 ## 1. Create IAM Policy
 
 ```
@@ -241,6 +243,8 @@ IAM Instance Profile ARN shown in the IAM Role as seen in the AWS Management Con
 
 ## 6. Associate the IAM Instance Profile with the EC2 Instance
 
+![]({{ site.baseurl }}/images/services/ec2.png)
+
 ```
 [cloud_user@ip-10-0-1-152 ~]$ aws ec2 associate-iam-instance-profile --instance-id i-070823c5d33601d4f --iam-instance-profile Name="DEV_PROFILE"
 {
@@ -309,29 +313,53 @@ From the EC2 instance
 
 # Configuration using the AWS Management Console
 
+![]({{ site.baseurl }}/images/services/iam.png)
+
 ## 1. Create IAM Policy
+
+a)
 
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/06-Create-IAM-Policy-via-GUI.png)
 
+b)
+
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/07-Create-IAM-Policy-via-GUI_2.png)
+
+c)
 
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/08-Create-IAM-Policy-via-GUI_3.png)
 
 ## 2. Associate the IAM Policy with an IAM Role
 
+a)
+
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/09-Create-IAM-Role-via-GUI.png)
+
+b)
 
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/10-Create-IAM-Role-via-GUI.png)
 
+c)
+
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/11-Create-IAM-Role-via-GUI.png)
+
+d)
 
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/12-Create-IAM-Role-via-GUI.png)
 
+e)
+
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/13-Create-IAM-Role-via-GUI.png)
+
+![]({{ site.baseurl }}/images/services/ec2.png)
 
 ## 3. Associate the IAM Role to the EC2 instance
 
+a)
+
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/14-Attach-IAM-Role-to-EC2-instance.png)
+
+b)
 
 ![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/15-Attach-IAM-Role-to-EC2-instance.png)
 
