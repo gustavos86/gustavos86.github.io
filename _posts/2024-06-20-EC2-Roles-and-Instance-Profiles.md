@@ -35,7 +35,7 @@ Amazon EC2 instances should be able to securely access other AWS services. Crede
 
 Trust Policy file: `trust_policy_ec2.json`
 
-```
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -50,7 +50,7 @@ Trust Policy file: `trust_policy_ec2.json`
 
 IAM Policy file: `dev_s3_read_access.json`
 
-```
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -75,9 +75,18 @@ IAM Policy file: `dev_s3_read_access.json`
 }
 ```
 
-From the Bastion
+From the Bastion:
 
+```bash
+aws configure
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws configure
 AWS Access Key ID [None]: 
 AWS Secret Access Key [None]: 
@@ -85,12 +94,24 @@ Default region name [None]: us-east-1
 Default output format [None]: json
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
+</details>
 
 ![]({{ site.baseurl }}/images/services/iam.png)
 
 ## 1. Create IAM Policy
 
+```bash
+aws iam create-policy \
+  --policy-name DevS3ReadAccess \
+  --policy-document file://dev_s3_read_access.json
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws iam create-policy --policy-name DevS3ReadAccess --policy-document file://dev_s3_read_access.json
 {
     "Policy": {
@@ -109,6 +130,8 @@ Default output format [None]: json
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
+</details>
+
 IAM Policy created as seen in the AWS Management Console
 
 ![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/03-IAM-Policy-created.png)
@@ -117,7 +140,18 @@ IAM Policy created as seen in the AWS Management Console
 
 The IAM Role is created with the Trust Policy associated which gives to the EC2 service permissions to assume the role.
 
+```bash
+aws iam create-role \
+  --role-name DEV_ROLE \
+  --assume-role-policy-document file://trust_policy_ec2.json
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws iam create-role --role-name DEV_ROLE --assume-role-policy-document file://trust_policy_ec2.json
 {
     "Role": {
@@ -143,20 +177,45 @@ The IAM Role is created with the Trust Policy associated which gives to the EC2 
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
+</details>
+
 IAM Role created as seen in the AWS Management Console
 
 ![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/02-IAM-Role-created.png)
 
 ## 3. Associate the IAM Policy to the IAM Role
 
+```bash
+aws iam attach-role-policy \
+  --role-name DEV_ROLE \
+  --policy-arn "arn:aws:iam::880344156207:policy/DevS3ReadAccess"
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws iam attach-role-policy --role-name DEV_ROLE --policy-arn "arn:aws:iam::880344156207:policy/DevS3ReadAccess"
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
+</details>
+
 To verify, list the attached IAM Policies for this IAM Role
 
+```bash
+aws iam list-attached-role-policies \
+  --role-name DEV_ROLE
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws iam list-attached-role-policies --role-name DEV_ROLE
 
 {
@@ -169,6 +228,7 @@ To verify, list the attached IAM Policies for this IAM Role
 }
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
+</details>
 
 IAM Policy attached to the IAM Role as seen in the AWS Management Console
 
@@ -176,7 +236,17 @@ IAM Policy attached to the IAM Role as seen in the AWS Management Console
 
 ## 4. Create an IAM Instance Profile
 
+```bash
+aws iam create-instance-profile \
+  --instance-profile-name DEV_PROFILE
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws iam create-instance-profile --instance-profile-name DEV_PROFILE
 {
     "InstanceProfile": {
@@ -191,16 +261,41 @@ IAM Policy attached to the IAM Role as seen in the AWS Management Console
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
+</details>
+
 ## 5. Associate the IAM Role to the IAM Instance Profile
 
+```bash
+aws iam add-role-to-instance-profile \
+  --instance-profile-name DEV_PROFILE \
+  --role-name DEV_ROLE
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws iam add-role-to-instance-profile --instance-profile-name DEV_PROFILE --role-name DEV_ROLE
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
+</details>
+
 To verfiy:
 
+```bash
+aws iam get-instance-profile \
+  --instance-profile-name DEV_PROFILE
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws iam get-instance-profile --instance-profile-name DEV_PROFILE
 
 {
@@ -236,16 +331,28 @@ To verfiy:
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
+</details>
+
 IAM Instance Profile ARN shown in the IAM Role as seen in the AWS Management Console
 
 ![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/05-IAM-Instance-Profile-in-IAM-Role.png)
-
 
 ## 6. Associate the IAM Instance Profile with the EC2 Instance
 
 ![]({{ site.baseurl }}/images/services/ec2.png)
 
+```bash
+aws ec2 associate-iam-instance-profile \
+  --instance-id i-070823c5d33601d4f \
+  --iam-instance-profile Name="DEV_PROFILE"
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws ec2 associate-iam-instance-profile --instance-id i-070823c5d33601d4f --iam-instance-profile Name="DEV_PROFILE"
 {
     "IamInstanceProfileAssociation": {
@@ -261,9 +368,21 @@ IAM Instance Profile ARN shown in the IAM Role as seen in the AWS Management Con
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
+</details>
+
 Verification in AWS CLI:
 
+```bash
+aws ec2 describe-instances \
+  --instance-ids i-070823c5d33601d4f | egrep IamInstanceProfile -A3 
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-152 ~]$ aws ec2 describe-instances --instance-ids i-070823c5d33601d4f | egrep IamInstanceProfile -A3 
                     "IamInstanceProfile": {
                         "Id": "AIPA4Z6EZZAX3ANMOXI64", 
@@ -272,15 +391,26 @@ Verification in AWS CLI:
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
+</details>
+
 IAM Instance Profile associated to EC2 Instance as seen in the AWS Management Console
 
 ![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/01-IAM-Role-attached-to-EC2-Instance.png)
 
 ## 7. Verification
 
-From the EC2 instance
+From the EC2 instance:
 
+```bash
+aws sts get-caller-identity
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-46 ~]$ aws sts get-caller-identity
 {
     "Account": "880344156207", 
@@ -290,7 +420,18 @@ From the EC2 instance
 [cloud_user@ip-10-0-1-46 ~]$ 
 ```
 
+</details>
+
+```bash
+aws s3 ls
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-46 ~]$ aws s3 ls
 2024-06-21 02:23:38 cfst-3035-52ca76f5ada32d15aa36-s3bucketengineering-824fw0br0cfy
 2024-06-21 02:23:39 cfst-3035-52ca76f5ada32d15aa36-s3bucketlookupfiles-zexuabydhnz4
@@ -301,7 +442,18 @@ From the EC2 instance
 [cloud_user@ip-10-0-1-46 ~]$ 
 ```
 
+</details>
+
+```bash
+aws s3 ls s3://cfst-3035-52ca76f5ada32d15aa36187e15dd-s3bucketdev-yedz0kexet91
 ```
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
 [cloud_user@ip-10-0-1-46 ~]$ aws s3 ls s3://cfst-3035-52ca76f5ada32d15aa36187e15dd-s3bucketdev-yedz0kexet91
 2024-06-21 02:25:04         41 file1-cfst-3035-52ca76f5ada32d15aa36187e15dd-s3bucketdev-yedz0kexet91
 2024-06-21 02:25:04         41 file2-cfst-3035-52ca76f5ada32d15aa36187e15dd-s3bucketdev-yedz0kexet91
@@ -310,6 +462,8 @@ From the EC2 instance
 2024-06-21 02:25:04         41 file5-cfst-3035-52ca76f5ada32d15aa36187e15dd-s3bucketdev-yedz0kexet91
 [cloud_user@ip-10-0-1-46 ~]$ 
 ```
+
+</details>
 
 # Configuration using the AWS Management Console
 
@@ -369,8 +523,17 @@ Verification:
 
 ## 4. Verification
 
+```bash
+aws s3 ls s3://cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
 ```
-[cloud_user@ip-10-0-1-104 ~]$  aws s3 ls s3://cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
+
+<details markdown=1>
+  <summary markdown="span">
+    Output
+  </summary>
+
+```bash
+[cloud_user@ip-10-0-1-104 ~]$ aws s3 ls s3://cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
 2024-06-22 03:12:12         41 file1-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
 2024-06-22 03:12:12         41 file2-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
 2024-06-22 03:12:12         41 file3-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
@@ -378,3 +541,4 @@ Verification:
 2024-06-22 03:12:13         41 file5-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
 [cloud_user@ip-10-0-1-104 ~]$ 
 ```
+</details>
