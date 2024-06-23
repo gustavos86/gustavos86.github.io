@@ -68,8 +68,9 @@ aws iam create-policy \
 ```
 
 <details>
-
-<summary>Output</summary>
+  <summary>
+    Output
+  </summary>
 
 ```json
 88665a1c97a7:.aws hectorsg$ aws iam create-policy \
