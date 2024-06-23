@@ -5,7 +5,7 @@ categories: [AWS, VPC Peering, VPC Endpoints, VPC PrivateLink]
 tags: [aws, vpc peering, vpc endpoints, vpc privatelink]     # TAG names should always be lowercase
 ---
 
-![]({{ site.baseurl }}/images/2023/09-25-VPC/01-VPC-icon.png)
+![]({{ site.baseurl }}/images/services/vpc.png)
 
 ## VPC Peering
 
