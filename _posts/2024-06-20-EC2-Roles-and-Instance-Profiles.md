@@ -111,7 +111,7 @@ Default output format [None]: json
 
 IAM Policy created as seen in the AWS Management Console
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/03-IAM-Policy-created.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/03-IAM-Policy-created.png)
 
 ## 2. Create IAM Role
 
@@ -145,7 +145,7 @@ The IAM Role is created with the Trust Policy associated which gives to the EC2 
 
 IAM Role created as seen in the AWS Management Console
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/02-IAM-Role-created.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/02-IAM-Role-created.png)
 
 ## 3. Associate the IAM Policy to the IAM Role
 
@@ -172,7 +172,7 @@ To verify, list the attached IAM Policies for this IAM Role
 
 IAM Policy attached to the IAM Role as seen in the AWS Management Console
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/04-IAM-Policy-attached-to-IAM-Role.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/04-IAM-Policy-attached-to-IAM-Role.png)
 
 ## 4. Create an IAM Instance Profile
 
@@ -238,7 +238,7 @@ To verfiy:
 
 IAM Instance Profile ARN shown in the IAM Role as seen in the AWS Management Console
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/05-IAM-Instance-Profile-in-IAM-Role.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/05-IAM-Instance-Profile-in-IAM-Role.png)
 
 
 ## 6. Associate the IAM Instance Profile with the EC2 Instance
@@ -274,7 +274,7 @@ Verification in AWS CLI:
 
 IAM Instance Profile associated to EC2 Instance as seen in the AWS Management Console
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/01-IAM-Role-attached-to-EC2-Instance.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/01-IAM-Role-attached-to-EC2-Instance.png)
 
 ## 7. Verification
 
@@ -319,37 +319,37 @@ From the EC2 instance
 
 a)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/06-Create-IAM-Policy-via-GUI.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/06-Create-IAM-Policy-via-GUI.png)
 
 b)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/07-Create-IAM-Policy-via-GUI_2.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/07-Create-IAM-Policy-via-GUI_2.png)
 
 c)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/08-Create-IAM-Policy-via-GUI_3.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/08-Create-IAM-Policy-via-GUI_3.png)
 
 ## 2. Associate the IAM Policy with an IAM Role
 
 a)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/09-Create-IAM-Role-via-GUI.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/09-Create-IAM-Role-via-GUI.png)
 
 b)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/10-Create-IAM-Role-via-GUI.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/10-Create-IAM-Role-via-GUI.png)
 
 c)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/11-Create-IAM-Role-via-GUI.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/11-Create-IAM-Role-via-GUI.png)
 
 d)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/12-Create-IAM-Role-via-GUI.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/12-Create-IAM-Role-via-GUI.png)
 
 e)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/13-Create-IAM-Role-via-GUI.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/13-Create-IAM-Role-via-GUI.png)
 
 ![]({{ site.baseurl }}/images/services/ec2.png)
 
@@ -357,15 +357,15 @@ e)
 
 a)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/14-Attach-IAM-Role-to-EC2-instance.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/14-Attach-IAM-Role-to-EC2-instance.png)
 
 b)
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/15-Attach-IAM-Role-to-EC2-instance.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/15-Attach-IAM-Role-to-EC2-instance.png)
 
 Verification:
 
-![]({{ site.baseurl }}/images/2024/2024-06-EC2-Roles-and-Instance-Profiles/16-Attach-IAM-Role-to-EC2-instance.png)
+![]({{ site.baseurl }}/images/2024/06-20-EC2-Roles-and-Instance-Profiles/16-Attach-IAM-Role-to-EC2-instance.png)
 
 ## 4. Verification
 
