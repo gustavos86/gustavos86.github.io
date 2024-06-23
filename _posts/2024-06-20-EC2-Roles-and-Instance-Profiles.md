@@ -35,6 +35,8 @@ Amazon EC2 instances should be able to securely access other AWS services. Crede
 
 Trust Policy file: `trust_policy_ec2.json`
 
+<details markdown=1><summary markdown="span">trust_policy_ec2.json</summary>
+
 ```json
 {
     "Version": "2012-10-17",
@@ -48,7 +50,11 @@ Trust Policy file: `trust_policy_ec2.json`
 }
 ```
 
+</details><br />
+
 IAM Policy file: `dev_s3_read_access.json`
+
+<details markdown=1><summary markdown="span">dev_s3_read_access.json</summary>
 
 ```json
 {
@@ -75,6 +81,8 @@ IAM Policy file: `dev_s3_read_access.json`
 }
 ```
 
+</details><br />
+
 From the Bastion:
 
 ```bash
@@ -94,7 +102,7 @@ Default region name [None]: us-east-1
 Default output format [None]: json
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
-</details>
+</details><br />
 
 ![]({{ site.baseurl }}/images/services/iam.png)
 
@@ -130,7 +138,7 @@ aws iam create-policy \
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
-</details>
+</details><br />
 
 IAM Policy created as seen in the AWS Management Console
 
@@ -177,7 +185,7 @@ aws iam create-role \
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
-</details>
+</details><br />
 
 IAM Role created as seen in the AWS Management Console
 
@@ -201,7 +209,7 @@ aws iam attach-role-policy \
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
-</details>
+</details><br />
 
 To verify, list the attached IAM Policies for this IAM Role
 
@@ -228,7 +236,7 @@ aws iam list-attached-role-policies \
 }
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
-</details>
+</details><br />
 
 IAM Policy attached to the IAM Role as seen in the AWS Management Console
 
@@ -261,7 +269,7 @@ aws iam create-instance-profile \
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
-</details>
+</details><br />
 
 ## 5. Associate the IAM Role to the IAM Instance Profile
 
@@ -281,7 +289,7 @@ aws iam add-role-to-instance-profile \
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
-</details>
+</details><br />
 
 To verfiy:
 
@@ -331,7 +339,7 @@ aws iam get-instance-profile \
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
-</details>
+</details><br />
 
 IAM Instance Profile ARN shown in the IAM Role as seen in the AWS Management Console
 
@@ -368,7 +376,7 @@ aws ec2 associate-iam-instance-profile \
 [cloud_user@ip-10-0-1-152 ~]$
 ```
 
-</details>
+</details><br />
 
 Verification in AWS CLI:
 
@@ -391,7 +399,7 @@ aws ec2 describe-instances \
 [cloud_user@ip-10-0-1-152 ~]$ 
 ```
 
-</details>
+</details><br />
 
 IAM Instance Profile associated to EC2 Instance as seen in the AWS Management Console
 
@@ -420,7 +428,7 @@ aws sts get-caller-identity
 [cloud_user@ip-10-0-1-46 ~]$ 
 ```
 
-</details>
+</details><br />
 
 ```bash
 aws s3 ls
@@ -442,7 +450,7 @@ aws s3 ls
 [cloud_user@ip-10-0-1-46 ~]$ 
 ```
 
-</details>
+</details><br />
 
 ```bash
 aws s3 ls s3://cfst-3035-52ca76f5ada32d15aa36187e15dd-s3bucketdev-yedz0kexet91
@@ -463,7 +471,7 @@ aws s3 ls s3://cfst-3035-52ca76f5ada32d15aa36187e15dd-s3bucketdev-yedz0kexet91
 [cloud_user@ip-10-0-1-46 ~]$ 
 ```
 
-</details>
+</details><br />
 
 # Configuration using the AWS Management Console
 
@@ -541,4 +549,4 @@ aws s3 ls s3://cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
 2024-06-22 03:12:13         41 file5-cfst-3035-ca2a0330a2c7f2c29971d25633e-s3bucketprod-uekmlotj3pna
 [cloud_user@ip-10-0-1-104 ~]$ 
 ```
-</details>
+</details><br />
