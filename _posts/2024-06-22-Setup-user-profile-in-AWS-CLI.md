@@ -5,6 +5,9 @@ categories: [AWS, CLI]
 tags: [aws, cli]     # TAG names should always be lowercase
 ---
 
+**IMPORTANT**
+*The outputs shown here were taken from a temporary AWS account which has now been deleted*
+
 # Install AWS CLI
 
 Refer to official AWS documentation [Install or update to the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
