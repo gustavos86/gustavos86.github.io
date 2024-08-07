@@ -1,8 +1,8 @@
 ---
 title: Terraform errors with solutions
 date: 2024-07-27 15:00:00 -0700
-categories: [TERRAFORM, ERRORS with SOLUTIONS]
-tags: [terraform, terraform errors with solutions]     # TAG names should always be lowercase
+categories: [TERRAFORM, ERRORS AND SOLUTIONS]
+tags: [terraform, terraform errors and solutions]     # TAG names should always be lowercase
 ---
 
 ![]({{ site.baseurl }}/images/services/terraform_logo.png)
