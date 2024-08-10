@@ -223,7 +223,11 @@ See: [Ansible 2.9.13 not working with python 3.12? #81946](https://github.com/an
 
 It seems the best is to upgrade Ansible and move on...
 
-## Installing the latest Ansible version
+## Installing the latest Ansible version from the official Ansible repo
+
+This is **not** a clean install of Ansible, since I installed it before with **Python PIP** as described in the previous section.
+
+I followed this guide [How to check Ansible version on Linux/Unix - Install latest ansible on a Ubuntu Linux based distro](https://www.cyberciti.biz/faq/command-to-see-ansible-version-check-on-linux-unix/)
 
 We need to add the `ppa:ansible/ansible` repo
 
@@ -468,8 +472,211 @@ ubuntu1 | CHANGED => {
 cloud_user@553b1e446c1c:~$
 ```
 
+## Clean install of Ansible from from the official Ansible repo
+
+This is a clean install of Ansible on a freshly installed Ubuntu 24.04 VM
+
+I followed this guide [How to check Ansible version on Linux/Unix - Install latest ansible on a Ubuntu Linux based distro](https://www.cyberciti.biz/faq/command-to-see-ansible-version-check-on-linux-unix/)
+
+```bash
+user@ubuntu:~$ cat /etc/*release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=24.04
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION="Ubuntu 24.04 LTS"
+PRETTY_NAME="Ubuntu 24.04 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+user@ubuntu:~$
+```
+
+<details markdown=1>
+<summary markdown="span">install process output</summary>
+
+```bash
+user@ubuntu:~$ sudo apt update
+sudo apt install software-properties-common
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible
+[sudo] password for user:
+Hit:1 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu noble InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Hit:4 http://us.archive.ubuntu.com/ubuntu noble-backports InRelease
+Get:5 http://us.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [344 kB]
+Get:6 http://us.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [321 kB]
+Fetched 791 kB in 2s (395 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+44 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+software-properties-common is already the newest version (0.99.48).
+software-properties-common set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 44 not upgraded.
+Repository: 'Types: deb
+URIs: https://ppa.launchpadcontent.net/ansible/ansible/ubuntu/
+Suites: noble
+Components: main
+'
+Description:
+Ansible is a radically simple IT automation platform that makes your applications and systems easier to deploy. Avoid writing scripts or custom code to deploy and update your applications— automate in a language that approaches plain English, using SSH, with no agents to install on remote systems.
+
+http://ansible.com/
+
+If you face any issues while installing Ansible PPA, file an issue here:
+https://github.com/ansible-community/ppa/issues
+More info: https://launchpad.net/~ansible/+archive/ubuntu/ansible
+Adding repository.
+Press [ENTER] to continue or Ctrl-c to cancel.
+Hit:1 http://us.archive.ubuntu.com/ubuntu noble InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:3 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:4 http://us.archive.ubuntu.com/ubuntu noble-backports InRelease
+Get:5 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble InRelease [17.8 kB]
+Get:6 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 Packages [776 B]
+Get:7 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main Translation-en [472 B]
+Fetched 19.1 kB in 1s (13.7 kB/s)
+Reading package lists... Done
+Hit:1 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu noble InRelease
+Hit:3 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble InRelease
+Hit:4 http://us.archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:5 http://us.archive.ubuntu.com/ubuntu noble-backports InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+44 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  ansible-core python3-jmespath python3-kerberos python3-nacl python3-ntlm-auth python3-packaging python3-paramiko python3-requests-ntlm python3-resolvelib python3-winrm
+  python3-xmltodict sshpass
+Suggested packages:
+  python-nacl-doc python3-gssapi python3-invoke
+The following NEW packages will be installed:
+  ansible ansible-core python3-jmespath python3-kerberos python3-nacl python3-ntlm-auth python3-packaging python3-paramiko python3-requests-ntlm python3-resolvelib
+  python3-winrm python3-xmltodict sshpass
+0 upgraded, 13 newly installed, 0 to remove and 44 not upgraded.
+Need to get 18.4 MB of archives.
+After this operation, 202 MB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 ansible-core all 2.16.9-1ppa~noble [1,032 kB]
+Get:2 http://us.archive.ubuntu.com/ubuntu noble/main amd64 python3-packaging all 24.0-1 [41.1 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu noble/universe amd64 python3-resolvelib all 1.0.1-1 [25.7 kB]
+Get:4 http://us.archive.ubuntu.com/ubuntu noble/main amd64 python3-jmespath all 1.0.1-1 [21.3 kB]
+Get:5 http://us.archive.ubuntu.com/ubuntu noble/universe amd64 python3-kerberos amd64 1.1.14-3.1build9 [21.2 kB]
+Get:6 http://us.archive.ubuntu.com/ubuntu noble/main amd64 python3-nacl amd64 1.5.0-4build1 [57.9 kB]
+Get:7 http://us.archive.ubuntu.com/ubuntu noble/universe amd64 python3-ntlm-auth all 1.5.0-1 [21.3 kB]
+Get:8 http://us.archive.ubuntu.com/ubuntu noble/main amd64 python3-paramiko all 2.12.0-2ubuntu4 [137 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu noble/universe amd64 python3-requests-ntlm all 1.1.0-3 [6,308 B]
+Get:10 http://us.archive.ubuntu.com/ubuntu noble/main amd64 python3-xmltodict all 0.13.0-1 [13.4 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu noble/universe amd64 python3-winrm all 0.4.3-2 [31.9 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu noble/universe amd64 sshpass amd64 1.09-1 [11.7 kB]
+Get:13 https://ppa.launchpadcontent.net/ansible/ansible/ubuntu noble/main amd64 ansible all 9.8.0-1ppa~noble [17.0 MB]
+Fetched 18.4 MB in 3s (6,347 kB/s)
+Selecting previously unselected package python3-packaging.
+(Reading database ... 83350 files and directories currently installed.)
+Preparing to unpack .../00-python3-packaging_24.0-1_all.deb ...
+Unpacking python3-packaging (24.0-1) ...
+Selecting previously unselected package python3-resolvelib.
+Preparing to unpack .../01-python3-resolvelib_1.0.1-1_all.deb ...
+Unpacking python3-resolvelib (1.0.1-1) ...
+Selecting previously unselected package ansible-core.
+Preparing to unpack .../02-ansible-core_2.16.9-1ppa~noble_all.deb ...
+Unpacking ansible-core (2.16.9-1ppa~noble) ...
+Selecting previously unselected package ansible.
+Preparing to unpack .../03-ansible_9.8.0-1ppa~noble_all.deb ...
+Unpacking ansible (9.8.0-1ppa~noble) ...
+Selecting previously unselected package python3-jmespath.
+Preparing to unpack .../04-python3-jmespath_1.0.1-1_all.deb ...
+Unpacking python3-jmespath (1.0.1-1) ...
+Selecting previously unselected package python3-kerberos.
+Preparing to unpack .../05-python3-kerberos_1.1.14-3.1build9_amd64.deb ...
+Unpacking python3-kerberos (1.1.14-3.1build9) ...
+Selecting previously unselected package python3-nacl.
+Preparing to unpack .../06-python3-nacl_1.5.0-4build1_amd64.deb ...
+Unpacking python3-nacl (1.5.0-4build1) ...
+Selecting previously unselected package python3-ntlm-auth.
+Preparing to unpack .../07-python3-ntlm-auth_1.5.0-1_all.deb ...
+Unpacking python3-ntlm-auth (1.5.0-1) ...
+Selecting previously unselected package python3-paramiko.
+Preparing to unpack .../08-python3-paramiko_2.12.0-2ubuntu4_all.deb ...
+Unpacking python3-paramiko (2.12.0-2ubuntu4) ...
+Selecting previously unselected package python3-requests-ntlm.
+Preparing to unpack .../09-python3-requests-ntlm_1.1.0-3_all.deb ...
+Unpacking python3-requests-ntlm (1.1.0-3) ...
+Selecting previously unselected package python3-xmltodict.
+Preparing to unpack .../10-python3-xmltodict_0.13.0-1_all.deb ...
+Unpacking python3-xmltodict (0.13.0-1) ...
+Selecting previously unselected package python3-winrm.
+Preparing to unpack .../11-python3-winrm_0.4.3-2_all.deb ...
+Unpacking python3-winrm (0.4.3-2) ...
+Selecting previously unselected package sshpass.
+Preparing to unpack .../12-sshpass_1.09-1_amd64.deb ...
+Unpacking sshpass (1.09-1) ...
+Setting up python3-ntlm-auth (1.5.0-1) ...
+Setting up python3-resolvelib (1.0.1-1) ...
+Setting up python3-kerberos (1.1.14-3.1build9) ...
+Setting up sshpass (1.09-1) ...
+Setting up python3-xmltodict (0.13.0-1) ...
+Setting up python3-packaging (24.0-1) ...
+Setting up python3-jmespath (1.0.1-1) ...
+Setting up python3-nacl (1.5.0-4build1) ...
+Setting up python3-requests-ntlm (1.1.0-3) ...
+Setting up ansible-core (2.16.9-1ppa~noble) ...
+Setting up python3-winrm (0.4.3-2) ...
+Setting up ansible (9.8.0-1ppa~noble) ...
+Setting up python3-paramiko (2.12.0-2ubuntu4) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Scanning processes...
+Scanning linux images...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+user@ubuntu:~$
+```
+</details><br />
+
+No issues installing Ansible.
+
+```bash
+user@ubuntu:~$ ansible --version
+ansible [core 2.16.9]
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/home/user/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  ansible collection location = /home/user/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/bin/ansible
+  python version = 3.12.3 (main, Jul 31 2024, 17:43:48) [GCC 13.2.0] (/usr/bin/python3)
+  jinja version = 3.1.2
+  libyaml = True
+user@ubuntu:~$
+```
+
 ## References
 
-- [How to check Ansible version on Linux/Unix](https://www.cyberciti.biz/faq/command-to-see-ansible-version-check-on-linux-unix/)
+- [How to check Ansible version on Linux/Unix - Install latest ansible on a Ubuntu Linux based distro](https://www.cyberciti.biz/faq/command-to-see-ansible-version-check-on-linux-unix/)
 - [Releases and maintenance](https://docs.ansible.com/ansible/latest/reference_appendices/release_and_maintenance.html#ansible-core-support-matrix)
 - [Error when running ansible-playbook from ubuntu20.04 ansible server to ubuntu24.04](https://ubuntuforums.org/showthread.php?t=2497608)
