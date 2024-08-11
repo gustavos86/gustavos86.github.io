@@ -199,7 +199,7 @@ lab@mxC>
 </details><br />
 
 <details markdown=1>
-<summary markdown="span">mxD</summary
+<summary markdown="span">mxD</summary>
 
 ```
 lab@mxD> show configuration | display set 
