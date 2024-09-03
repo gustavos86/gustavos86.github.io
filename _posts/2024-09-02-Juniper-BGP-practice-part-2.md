@@ -14,6 +14,6 @@ This post documents BGP configuration on Juniper Junos OS
 <details markdown=1>
 <summary markdown="span">Display Network Topology</summary>
 
-![]({{ site.baseurl }}/images/2024/09-02-Juniper-BGP-practice-part-2/)
+![]({{ site.baseurl }}/images/2024/09-02-Juniper-BGP-practice-part-2/01-Network-topology.png)
 
 </details><br />
