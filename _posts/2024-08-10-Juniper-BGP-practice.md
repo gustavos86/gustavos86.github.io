@@ -5,7 +5,7 @@ categories: [JUNIPER, BGP]
 tags: [juniper, bgp]     # TAG names should always be lowercase
 ---
 
-This post is documents BGP configuration on Juniper Junos OS
+This post documents BGP configuration on Juniper Junos OS
 
 ## Network Topology
 
