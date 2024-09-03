@@ -16,7 +16,7 @@ This post documents BGP configuration on Juniper Junos OS
 
 </details><br />
 
-## Base configuration
+## Base configurations
 
 <details markdown=1>
 <summary markdown="span">mxA</summary>
