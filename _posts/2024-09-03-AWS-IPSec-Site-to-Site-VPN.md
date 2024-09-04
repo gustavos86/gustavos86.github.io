@@ -37,3 +37,11 @@ Click on orange button **Create customer gateway** on the upper-right part of th
 - **NOTE:** Obtain your Public IPv4 address from https://whatismyipaddress.com/
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/03-Customer-gateway-created.png)
+
+## Step 2 - AWS : Configure a Virtual Private Gateway (VGW)
+
+![]({{ site.baseurl }}/images/services/vpc.png)
+
+Still in the VPC section, go to **Virtual private network (VPN) > Virtual private gateways**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/04-Virtual-private-gateways.png)
