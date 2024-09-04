@@ -66,6 +66,28 @@ And select the desired VPC from the list of Available VPCs. In this case I am ch
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/08-VGW-Attach-to-VPC-select-the-VPC.png)
 
+Finally, click on **Attach to VPC**.
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/09-VGW-in-the-process-of-being-attached-to-VPC.png)
+
+It should take a moment for the process to complete. You need to refresh the screen and see the **State** column showing **Attached**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/10-VGW-attached-to-VPC.png)
+
+## Step 4 - AWS : Configure a Site-to-Site VPN connection
+
+Go next to **Virtual private network (VPN) > Site-to-Site VPN connections**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/11-Site-to-Site-VPN-connections.png)
+
+Click on orange button **Create VPN connection** on the upper-right part of the screen.
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/12-Create-VPN-connection-part1.png)
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/13-Create-VPN-connection-part2.png)
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/14-Create-VPN-connection-part3.png)
+
 ## References
 
 - [How AWS Site-to-Site VPN works](https://docs.aws.amazon.com/vpn/latest/s2svpn/how_it_works.html)
