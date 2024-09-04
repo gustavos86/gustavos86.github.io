@@ -148,6 +148,104 @@ The Router must be able to ping a Host on the Internet, in this case we are ping
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/23-Router-ping.png)
 
+## Step 7 - GNS3 : Configure Router
+
+```
+!
+! IKE Phase 1 Configs
+!
+crypto isakmp policy 200
+  encryption aes 128
+  authentication pre-share  
+  group 2  
+  lifetime 28800
+  hash sha
+exit
+!
+crypto keyring keyring-vpn-01 
+  local-address GigabitEthernet0/0
+  pre-shared-key address 34.234.127.166 key cisco123
+exit
+!
+crypto isakmp profile isakmp-vpn-01
+  local-address GigabitEthernet0/0
+  match identity address 34.234.127.166
+  keyring keyring-vpn-01
+exit
+!
+! IKE Phase 2 Configs
+!
+crypto ipsec transform-set ipsec-prop-vpn-01 esp-aes 128 esp-sha-hmac
+  mode tunnel
+exit
+!
+crypto ipsec profile ipsec-vpn-01
+  set pfs group2
+  set security-association lifetime seconds 3600
+  set transform-set ipsec-prop-vpn-01
+exit
+!
+crypto ipsec df-bit clear
+crypto isakmp keepalive 10 10 on-demand
+crypto ipsec security-association replay window-size 128
+crypto ipsec fragmentation before-encryption
+!
+! Tunnel config
+!
+interface Tunnel1
+  ip address 169.254.0.6 255.255.255.252
+  tunnel source GigabitEthernet0/0
+  tunnel destination 34.234.127.166
+  tunnel mode ipsec ipv4
+  tunnel protection ipsec profile ipsec-vpn-01
+  ip tcp adjust-mss 1379
+  no shutdown
+exit
+!
+! BGP Configs
+!
+router bgp 65000
+  neighbor 169.254.0.5 remote-as 64512
+  neighbor 169.254.0.5 activate
+  neighbor 169.254.0.5 timers 10 30 30
+exit
+!
+```
+
+Once the configuration is applied, the status of the Crypto SA should be **QM_IDLE** in the output of `show crypto isakmp sa`
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/24-Crypto-SA-status.png)
+
+The status Tunnel interface should be **up/up**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/25-Interface-status.png)
+
+We should also see a BGP peering established with the AWS VPN endpoint
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/26-BGP-status.png)
+
+And thru this BGP peering, we should be receiving the **AWS VPC CIDR**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/27-BGP-Table.png)
+
+In this case, we have configured a loopback on the Router with IP address **1.1.1.1**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/28-Loopback-configuration.png)
+
+We will be advertising this loopback to AWS thru this same BGP session
+
+```
+configure terminal
+!
+router bgp 65000
+  network 1.1.1.1 mask 255.255.255.255
+!
+```
+
+We confirm this IP address is advertised to the **AWS VGW**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/29-Advertising-loopback.png)
+
 ## References
 
 - [How AWS Site-to-Site VPN works](https://docs.aws.amazon.com/vpn/latest/s2svpn/how_it_works.html)
