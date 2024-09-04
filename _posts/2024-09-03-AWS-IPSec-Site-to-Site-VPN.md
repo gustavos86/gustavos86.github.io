@@ -100,9 +100,15 @@ Click on the orange button **Create VPN connection**
 
 The VPN connection takes a few minutes to get created. Once we refresh the screen, we should see the **State** column showing ****
 
+Click on the newly created VPN. On the button section of the screen click-on **Tunnel details**. The IP addresses displayed in column **Outside IP address** are the AWS Public IP addresses to be used as the IPSec endpoints.
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/16-Site-to-Site-VPN-Tunnel-details.png)
+
 ## Step 5 - AWS : Propagate the Routes in the Route Table
 
+Finally, go to **Virtual private cloud > Route tables**
 
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/17-Route-tables.png)
 
 ## References
 
