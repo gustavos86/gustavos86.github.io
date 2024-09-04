@@ -45,3 +45,14 @@ Click on orange button **Create customer gateway** on the upper-right part of th
 Still in the VPC section, go to **Virtual private network (VPN) > Virtual private gateways**
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/04-Virtual-private-gateways.png)
+
+Click on orange button **Create virtual private gateway** on the upper-right part of the screen.
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/05-Virtual-private-gateways-configuration.png)
+
+- **NOTE:** The Amazon default ASN is **64512**
+
+## References
+
+- (How AWS Site-to-Site VPN works)[https://docs.aws.amazon.com/vpn/latest/s2svpn/how_it_works.html]
+- (AWS Advanced Networking – Part 2)[https://roborndoff.com/2019/04/05/aws-advanced-networking-part-2/index.html]
