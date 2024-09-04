@@ -260,6 +260,17 @@ Observe there is now an entry for **1.1.1.1** pointing to the VGW.
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/31-Route-Table-with-the-onprem-route.png)
 
+Finally, we will quickly spin up an EC2 instance in the VPC so we can ping to it from the Cisco Router in GNS3
+
+![]({{ site.baseurl }}/images/services/ec2.png)
+
+Here how the EC2 instance looks like
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/32-EC2-instance-for-testing.png)
+
+And finally, we have a successful ping test between **the Cisco Router in GNS3 running in my personal laptop and an EC2 intance in a VPC in the AWS cloud**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/33-ping-successful.png)
 
 ## References
 
