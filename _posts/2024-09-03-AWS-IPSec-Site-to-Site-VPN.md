@@ -13,7 +13,7 @@ This post explains step by step the configuration of a Site-to-Site VPN between 
 
 Overall, these are the steps:
 
-- Step 1 - AWS : Configure a Customer Gateway
+- Step 1 - AWS : Configure a Customer Gateway (CGW)
 - Step 2 - AWS : Configure a Virtual Private Gateway (VGW)
 - Step 3 - AWS : Attach the VGW to a VPC
 - Step 4 - AWS : Configure a Site-to-Site VPN connection
@@ -22,7 +22,7 @@ Overall, these are the steps:
 - Step 7 - GNS3 : Configure Router
 - Step 8 - Validate connectivity using ICMP packets (ping test)
 
-## Step 1 - AWS : Configure a Customer Gateway
+## Step 1 - AWS : Configure a Customer Gateway (CGW)
 
 ![]({{ site.baseurl }}/images/services/vpc.png)
 
@@ -82,11 +82,17 @@ Go next to **Virtual private network (VPN) > Site-to-Site VPN connections**
 
 Click on orange button **Create VPN connection** on the upper-right part of the screen.
 
+Select the **Virtual Private Gateway (VGW)** and **Customer Gateway (CGW)** created previously.
+
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/12-Create-VPN-connection-part1.png)
+
+We are also adding an **Inside IPv4 CIDR** which is the Tunnel Point-to-Point IP addressing and **Pre-shared key**. These are optional but we are using them here to make the template configuration for the Cisco Router easier to read.
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/13-Create-VPN-connection-part2.png)
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/14-Create-VPN-connection-part3.png)
+
+Click on the orange button **Create VPN connection**
 
 ## References
 
