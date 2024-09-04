@@ -94,6 +94,16 @@ We are also adding an **Inside IPv4 CIDR** which is the Tunnel Point-to-Point IP
 
 Click on the orange button **Create VPN connection**
 
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/15-Site-to-Site-VPN-connection-created.png)
+
+**NOTE:** Like in several AWS configuration, the **Name** of this VPN connection is a customer friendly *tag* which we ommited in this lab.
+
+The VPN connection takes a few minutes to get created. Once we refresh the screen, we should see the **State** column showing ****
+
+## Step 5 - AWS : Propagate the Routes in the Route Table
+
+
+
 ## References
 
 - [How AWS Site-to-Site VPN works](https://docs.aws.amazon.com/vpn/latest/s2svpn/how_it_works.html)
