@@ -22,9 +22,9 @@ Overall, these are the steps:
 - Step 7 - GNS3 : Configure Router
 - Step 8 - Validate connectivity using ICMP packets (ping test)
 
-## Step 1 - AWS : Configure a Customer Gateway (CGW)
-
 ![]({{ site.baseurl }}/images/services/vpc.png)
+
+## Step 1 - AWS : Configure a Customer Gateway (CGW)
 
 In the VPC section, go to **Virtual private network (VPN) > Customer gateways**
 
@@ -39,8 +39,6 @@ Click on orange button **Create customer gateway** on the upper-right part of th
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/03-Customer-gateway-created.png)
 
 ## Step 2 - AWS : Configure a Virtual Private Gateway (VGW)
-
-![]({{ site.baseurl }}/images/services/vpc.png)
 
 Still in the VPC section, go to **Virtual private network (VPN) > Virtual private gateways**
 
@@ -245,6 +243,23 @@ router bgp 65000
 We confirm this IP address is advertised to the **AWS VGW**
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/29-Advertising-loopback.png)
+
+## Step 8 - Validate connectivity using ICMP packets (ping test)
+
+![]({{ site.baseurl }}/images/services/vpc.png)
+
+On the **AWS Management Console** go again to **Virtual private network (VPN) > Site-to-Site VPN connections** and observe the **Status** of Tunnel1 is **Up**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/30-VPN-Site-to-Site-validation.png)
+
+Go to **Virtual private cloud > Route tables**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/17-Route-tables.png)
+
+Observe there is now an entry for **1.1.1.1** pointing to the VGW.
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/31-Route-Table-with-the-onprem-route.png)
+
 
 ## References
 
