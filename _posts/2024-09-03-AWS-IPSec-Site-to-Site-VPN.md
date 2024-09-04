@@ -110,7 +110,46 @@ Finally, go to **Virtual private cloud > Route tables**
 
 ![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/17-Route-tables.png)
 
+Select the Route Table and click on the **Rotute propagation** tab
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/18-Route-propagation.png)
+
+Enable the Route propagation checkbox and click **Save**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/19-Route-propagation-enable.png)
+
+## Step 6 - GNS3 : Conect Router to the Internet
+
+I already have a **GNS3** setup running with the the GNS3 VM (installation tutorial in the References section) and VMware® Workstation 17 Pro.
+
+What I am using is a Cisco Router 7200 connected to a **NAT Cloud**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/20-GNS3-Router-to-NAT.png)
+
+The first step is configure the Router to receive an IP Address via DHCP
+
+```
+configure terminal
+!
+interface GigabitEthernet0/0
+ ip address dhcp
+ no shutdown
+!
+exit
+```
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/21-Router-dhcp-client.png)
+
+We must see the Routing table now having a Default Route installed installed in the Routing Table
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/22-Router-default-route.png)
+
+The Router must be able to ping a Host on the Internet, in this case we are pinging the well-known Google DNS server **8.8.8.8**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/23-Router-ping.png)
+
 ## References
 
 - [How AWS Site-to-Site VPN works](https://docs.aws.amazon.com/vpn/latest/s2svpn/how_it_works.html)
 - [AWS Advanced Networking – Part 2](https://roborndoff.com/2019/04/05/aws-advanced-networking-part-2/index.html)
+- [GNS3 Setup wizard with the GNS3 VM](https://docs.gns3.com/docs/getting-started/setup-wizard-gns3-vm/)
