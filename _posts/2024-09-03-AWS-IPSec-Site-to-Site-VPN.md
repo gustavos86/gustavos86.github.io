@@ -15,8 +15,8 @@ Overall, these are the steps:
 
 - Step 1 - AWS : Configure a Customer Gateway
 - Step 2 - AWS : Configure a Virtual Private Gateway (VGW)
-- Step 3 - AWS : Configure a Site-to-Site VPN connection
-- Step 4 - AWS : Attach the VGW to a VPC
+- Step 3 - AWS : Attach the VGW to a VPC
+- Step 4 - AWS : Configure a Site-to-Site VPN connection
 - Step 5 - AWS : Propagate the Routes in the Route Table
 - Step 6 - GNS3 : Conect Router to the Internet
 - Step 7 - GNS3 : Configure Router
@@ -52,7 +52,21 @@ Click on orange button **Create virtual private gateway** on the upper-right par
 
 - **NOTE:** The Amazon default ASN is **64512**
 
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/06-Virtual-private-gateway-created.png)
+
+## Step 3 - AWS : Attach the VGW to a VPC
+
+While still in **Virtual private network (VPN) > Virtual private gateways**, click on the newly created VGW
+
+On the upper-right side of the screen, click on **Actions > Attach to VPC**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/07-VGW-Attach-to-VPC.png)
+
+And select the desired VPC from the list of Available VPCs. In this case I am choosing the **Default VPC**
+
+![]({{ site.baseurl }}/images/2024/09-03-AWS-IPSec-Site-to-Site-VPN/08-VGW-Attach-to-VPC-select-the-VPC.png)
+
 ## References
 
-- (How AWS Site-to-Site VPN works)[https://docs.aws.amazon.com/vpn/latest/s2svpn/how_it_works.html]
-- (AWS Advanced Networking – Part 2)[https://roborndoff.com/2019/04/05/aws-advanced-networking-part-2/index.html]
+- [How AWS Site-to-Site VPN works](https://docs.aws.amazon.com/vpn/latest/s2svpn/how_it_works.html)
+- [AWS Advanced Networking – Part 2](https://roborndoff.com/2019/04/05/aws-advanced-networking-part-2/index.html)
