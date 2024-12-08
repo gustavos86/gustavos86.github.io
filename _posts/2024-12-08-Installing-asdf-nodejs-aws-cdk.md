@@ -188,6 +188,12 @@ npm notice
 Reshimming asdf nodejs...
 ubuntu@ip-172-31-25-204:~$
 
+ubuntu@ip-172-31-25-204:~$ npm install -g typescript
+
+added 1 package in 1s
+Reshimming asdf nodejs...
+ubuntu@ip-172-31-25-204:~$
+
 ubuntu@ip-172-31-25-204:~$ cdk --version
 2.172.0 (build 0f666c5)
 ubuntu@ip-172-31-25-204:~$
