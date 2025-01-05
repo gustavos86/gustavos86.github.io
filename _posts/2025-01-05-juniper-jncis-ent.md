@@ -1,6 +1,6 @@
 ---
 title: Juniper Junos OS R&S commands
-date: 2024-01-05 04:00:00 -0700
+date: 2025-01-05 04:00:00 -0700
 categories: [JUNIPER, JUNOS OS]
 tags: [juniper]     # TAG names should always be lowercase
 ---
