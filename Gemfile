@@ -26,3 +26,9 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 if RUBY_PLATFORM =~ /linux-musl/
   gem "jekyll-sass-converter", "~> 2.0"
 end
+
+# Fix to https://github.com/gustavos86/gustavos86.github.io/actions/runs/12619484758
+# See https://medium.marktinderholt.com/ruby-3-4-0-vs-my-jekyll-workflow-how-ignored-warnings-came-back-to-bite-me-1489883a9599
+gem "csv"
+gem "base64"
+gem "bigdecimal"
