@@ -189,8 +189,8 @@ set import-policy <POLICY-NAME>
 
 |   Cisco term   |    Juniper Term     |
 |----------------|---------------------|
-| Port Security  | Mac Liimiting       |
-| Sticky         | Persistent Learning |
+| Port Security  | Mac Limiting        |
+| Sticky MAC     | Persistent Learning |
 
 ```
 show ethernet-switching interface xe-0/0/x.0
