@@ -185,6 +185,26 @@ edit routing-options rib-groups <RIB-GROUP-NAME>
 set import-policy <POLICY-NAME>
 ```
 
+## Mac Limiting
+
+|   Cisco term   |    Juniper Term     |
+|----------------|---------------------|
+| Port Security  | Mac Liimiting       |
+| Sticky         | Persistent Learning |
+
+```
+show ethernet-switching interface xe-0/0/x.0
+```
+
+```
+edit switching-options
+edit interface xe-0/0/x.0
+
+set interface-mac-limit <NUMBER>
+set interface-mac-limit packet-action drop
+set persistent-learning
+```
+
 #### Reference
 
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
