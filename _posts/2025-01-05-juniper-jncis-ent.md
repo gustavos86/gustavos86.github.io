@@ -134,7 +134,7 @@ edit interface xe-0/0/x
 set cost <COST>
 ```
 
-### rib-groups
+## Rib-groups
 
 1. Define `rib-group` under the `routing-options` hierarchy level
 
