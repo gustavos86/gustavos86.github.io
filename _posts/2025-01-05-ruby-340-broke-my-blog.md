@@ -1,7 +1,7 @@
 ---
 title: Jekyll build failing due to Ruby 3.4.0
 date: 2025-01-05 06:00:00 -0700
-categories: [GITHUB, GITHUG ACTIONS]
+categories: [GITHUB, GITHUB ACTIONS]
 tags: [github, ruby]     # TAG names should always be lowercase
 ---
 
