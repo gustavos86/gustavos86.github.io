@@ -89,6 +89,10 @@ Once I did, building my Jekyll site started working correctly again. Here the li
 You can add logger to your Gemfile or gemspec to silence this warning.
 ```
 
-## Resources
+#### Update
+
+I kept facing issues with the build which I think I finally solved in [this commit](https://github.com/gustavos86/gustavos86.github.io/commit/6ab93982e0f6c0fad76baac7702e48ef6b53f4dc)
+
+## References
 
 - [Ruby 3.4.0 vs. My Jekyll Workflow: How Ignored Warnings Came Back to Bite Me](https://medium.com/p/1489883a9599)
