@@ -40,7 +40,11 @@ jobs:
         uses: actions/configure-pages@v3
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        # uses: ruby/setup-ruby@v1
+        # Error: https://github.com/gustavos86/gustavos86.github.io/actions/runs/12625913894/job/35178333812
+        # Solution: https://github.com/orgs/community/discussions/147696
+        # setup-ruby v1.195.0
+        uses: ruby/setup-ruby@086ffb1a2090c870a3f881cc91ea83aa4243d408
         with:
           ruby-version: 3
           bundler-cache: true
