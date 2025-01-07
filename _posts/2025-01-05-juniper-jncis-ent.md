@@ -205,6 +205,43 @@ set interface-mac-limit packet-action drop
 set persistent-learning
 ```
 
+## DHCP snooping, DAI (Dynamic ARP Inspection), IP Source Guard
+
+```
+show dhcp-security binding [ip-source-guard]
+show dhcp-security arp inspection statistics
+```
+
+### EX Switch
+
+```
+edit ethernet-switching-options
+
+edit secure-access-port interface xe-0/0/x
+set dhcp-trusted
+
+edit secure-access-port interface xe-0/0/y
+set no-dhcp-trusted
+
+edit vlan default
+set examine-dhcp
+set arp-inspection
+set ip-source-guard
+```
+
+### QFX Switch
+
+```
+edit vlans default forwarding-options dhcp-security 
+set arp-instapection
+set ip-source-guard
+
+set group TRUSTED overrides trusted
+set group TRUSTED interface xe-0/0/x.0
+
+set group STATIC-binding interface xe-0/0/x.0 static-ip <IP_ADDRESS> mac <MAC_ADDRESS>
+```
+
 #### Reference
 
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
