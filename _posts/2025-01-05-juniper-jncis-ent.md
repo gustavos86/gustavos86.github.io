@@ -30,6 +30,32 @@ edit vlans <VLAN_NAME>
 set interface <INTERFACE>
 ```
 
+## Interface Monitoring commands
+
+|          Juniper command           |         Cisco command        |
+|------------------------------------|------------------------------|
+| show interfaces descriptions       | show interfaces descriptions |
+| show interfaces terse              | show ip interface brief      |
+| show ethernet-switching interfaces | show interfaces switchport   |
+| show ethernet-switching interfaces | show interfaces trunk        |
+| show vlans                         | show vlans                   |
+| show ethernet-switching table      | show mac address table       |
+
+NOTE that on `show interfaces descriptions` - only interfaces with descriptions are displayed
+
+```
+show interfaces ge-0/0/x brief
+show interfaces ge-0/0/x
+show interfaces ge-0/0/x detail
+show interfaces ge-0/0/x extensive
+```
+
+Log of recent changes in the MAC address table:
+
+```
+show ethernet-switching mac-learning-log | except 00:00:00:00:00:00
+```
+
 ## Layer 2 Access & Trunk ports
 
 ```
@@ -197,10 +223,10 @@ set import-policy <POLICY-NAME>
 
 ## Mac Limiting
 
-|   Cisco term   |    Juniper Term     |
-|----------------|---------------------|
-| Port Security  | Mac Limiting        |
-| Sticky MAC     | Persistent Learning |
+|    Juniper Term     |   Cisco term   |
+|---------------------|----------------|
+| Mac Limiting        |  Port Security |
+| Persistent Learning |  Sticky MAC    |
 
 ```
 show ethernet-switching interface xe-0/0/x.0
