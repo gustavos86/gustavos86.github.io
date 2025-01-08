@@ -97,8 +97,9 @@ set native-vlan-id default      (optional)
 802.1w RSTP
 
 ```
-show spanning-tree interface
 show spanning-tree bridge
+show spanning-tree interface
+show ethernet-switching interfaces
 ```
 
 Activate RSTP on all interfaces
@@ -156,6 +157,8 @@ Modify RSTP Bridge-Priority
 ```
 edit protocols rstp
 
+set bridge-priority 20k
+or
 set bridge-priority 16k
 or
 set bridge-priority 8k
@@ -168,6 +171,32 @@ edit protocols rstp
 edit interface xe-0/0/x
 
 set cost <COST>
+```
+
+Example:
+
+```
+edit protocols rstp
+
+set bridge-priority 20k
+set interface ge-0/0/x.0 disable
+set interface ge-0/0/y.0 cost 1000
+set interface ge-0/0/z.0 edge
+
+set interface ge-0/0/y.0 mode point-to-point
+```
+
+### MSTP
+
+MSTP provides the same benefits as RSTP, but also provides standardized support to multiple VLANs with different topologies.
+
+Group VLANs
+
+```
+set protocols mstp configuration-name example
+
+set protocols mstp msti 1 vlan [1 3 5]  # Assign VLANs 1, 3, and 5 to instance 1
+set protocols mstp msti 2 vlan [2 4 6]  # Assign VLANs 2, 4, and 6 to instance 2
 ```
 
 ## Rib-groups
