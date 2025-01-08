@@ -303,6 +303,30 @@ set unit 100 description Example
 set unit 100 family inet address 192.168.100.2/24
 ```
 
+## Firewall filters
+
+Firewall filters are not stateful firewall rules, but stateless packet filters just like Cisco IOS ACLs.
+
+Junos OS
+
+- `[edit firewall family inet]`: IPv4 filters for Layer 3 interfaces
+- `[edit firewall family ethernet-switching]`: Filters for Layer 2 interfaces
+
+```
+edit firewall family inet
+
+edit filter sample-filter
+set term block-bad-subnet from source-address 192.168.0.0/24 then discard
+set term access-all then accept
+```
+
+Cisco IOS
+
+```
+access-list 100 deny ip 192.168.0.0 0.0.0.255 any
+access-list 100 permit ip any any
+```
+
 ## References
 
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
