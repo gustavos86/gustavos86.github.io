@@ -11,6 +11,7 @@ tags: [juniper]     # TAG names should always be lowercase
 
 ```
 show vlans
+show vlans <VLAN_NAME> detail
 ```
 
 ```
@@ -19,6 +20,14 @@ set default vlan-id 1
 set vlan10  vlan-id 10
 set vlan20  vlan-id 20
 set <VLAN_NAME> vlan-id <VLAN_ID>
+```
+
+Optional way to assign an interface to a VLAN
+
+```
+edit vlans <VLAN_NAME>
+
+set interface <INTERFACE>
 ```
 
 ## Layer 2 Access & Trunk ports
@@ -53,6 +62,7 @@ delete family inet
 
 edit family ethernet-switching
 set interface-mode trunk vlan members [vlan10 vlan20]
+set native-vlan-id default      (optional)
 ```
 
 ## Spanning-Tree
@@ -255,6 +265,18 @@ set interfaces ae0 unit 0 family ethernet-switching port-mode trunk
 set interfaces ae0 aggregated-ether-options lacp active
 ```
 
-#### Reference
+## Configuring Routed VLAN interfaces
+
+```
+edit vlans
+set example l3-interface vlan.100
+
+top
+edit interfaces vlan
+set unit 100 description Example
+set unit 100 family inet address 192.168.100.2/24
+```
+
+## References
 
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
