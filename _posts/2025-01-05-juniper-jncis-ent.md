@@ -242,6 +242,19 @@ set group TRUSTED interface xe-0/0/x.0
 set group STATIC-binding interface xe-0/0/x.0 static-ip <IP_ADDRESS> mac <MAC_ADDRESS>
 ```
 
+### LACP - Aggregated Ethernet
+
+```
+set chassis aggregated-devices ethernet device-count 1
+
+set interfaces ge-0/0/x ether-options 802.3ad ae0
+set interfaces ge-0/0/y ether-options 802.3ad ae0
+
+set interfaces ae0 unit 0 family ethernet-switching port-mode trunk
+
+set interfaces ae0 aggregated-ether-options lacp active
+```
+
 #### Reference
 
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
