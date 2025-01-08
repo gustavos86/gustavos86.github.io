@@ -430,6 +430,56 @@ set qualified-next-hop 192.168.3.15 interface vlan.3
 set qualified-next-hop 192.168.3.15 preference 30
 ```
 
+## OSPF
+
+```
+show ospf database
+show ospf interface
+show ospf neighbor
+show route protocols ospf
+```
+
+```
+edit protocols ospf
+
+set area 2 interface vlan.5
+set area 2 interface ge-0/0/4.0
+set area 2 interface ge-0/0/4.0 passive
+set area 2 interface vlan.5 metric 200
+
+set area 2 stub
+set area 3 nssa
+
+set area 2 stub default-metric 1
+set area 3 deafult-lsa default-metric 1
+```
+
+NOTE: Loopback interfaces are set to `passive` implicitly in OSPF by Junos OS
+
+### Redistribute from Static Routes to OSPF
+
+```
+edit policy-options
+edit policy-statement static-to-ospf
+edit term match-internal-static
+
+set from protocols static
+set from route-filter 192.168.0.0/16 orlonger;
+set then metric 100
+set then external type 2
+set then accept
+
+edit protocols ospf
+set export static-to-ospf
+```
+
+### OSPF authentication
+
+```
+edit protocols ospf area 0.0.0.2
+set interface vlan5 authentication md5 1 key <SUPER_SECRET_KEY>
+```
+
 ## References
 
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
