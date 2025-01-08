@@ -372,6 +372,64 @@ access-list 100 deny ip 192.168.0.0 0.0.0.255 any
 access-list 100 permit ip any any
 ```
 
+## Routing
+
+```
+show route hidden
+show route <NETWORK>
+show route <NETWORK> exact
+show route <NETWORK> exact detail
+show route <NETWORK> exact extensive
+```
+
+|     Junos OS      |      Cisco IOS       |
+|-------------------|----------------------|
+| show route        | show ip route        |
+| show bgp summary  | show ip bgp summary  |
+| show bgp neighbor | show ip bgp neighbor |
+| show ospf ...     | show ip ospf         |
+
+|                      Junos OS                      |                         Cisco IOS                         |
+|----------------------------------------------------|-----------------------------------------------------------|
+| Route Preference                                   |  Administrative Distance                                  |
+| Same Route Preference for IBGP and EBGP by default |  IBGP has higher Administrative Distance than EBGP routes |
+
+
+Route Preference Values
+
+|          Source          | Default Preference |
+|--------------------------|--------------------|
+| Direct                   |                  0 |
+| Local                    |                  0 |
+| Static                   |                  5 |
+| OSPF internal            |                 10 |
+| RIP                      |                100 |
+| Aggregate                |                130 |
+| OSPF AS external         |                150 |
+| BGP (both EBGP and IBGP) |                170 |
+
+### Configure Static Routes
+
+```
+edit routing-options
+
+set static route 10.11.0.0/24 next-hop 192.168.3.1
+set static route default next-hop 192.168.1.1
+```
+
+Multiple next-hops
+
+```
+edit routing-options
+edit static route 10.12.0.0/24
+
+set qualified-next-hop 192.168.2.15 interface vlan.2
+set qualified-next-hop 192.168.2.15 preference 15
+
+set qualified-next-hop 192.168.3.15 interface vlan.3
+set qualified-next-hop 192.168.3.15 preference 30
+```
+
 ## References
 
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
