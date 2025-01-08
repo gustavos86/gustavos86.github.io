@@ -307,6 +307,10 @@ set unit 100 family inet address 192.168.100.2/24
 
 Firewall filters are not stateful firewall rules, but stateless packet filters just like Cisco IOS ACLs.
 
+```
+show firewall
+```
+
 Junos OS
 
 - `[edit firewall family inet]`: IPv4 filters for Layer 3 interfaces
@@ -318,6 +322,18 @@ edit firewall family inet
 edit filter sample-filter
 set term block-bad-subnet from source-address 192.168.0.0/24 then discard
 set term access-all then accept
+```
+
+Applying the Firewall filter to an interface
+
+```
+set interfaces vlan.2 family inet filter input sample-filter
+```
+
+Applying the Firewall filter to an entire vlan
+
+```
+set vlans <VLAN_NAME> filter input sample-filter
 ```
 
 Cisco IOS
