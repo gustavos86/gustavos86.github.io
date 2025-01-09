@@ -501,6 +501,16 @@ delete interfaces xe-0/0/x.0 family inet
 set interfaces xe-0/0/x.0 family ethernet-switching storm-control drop-at-1G
 ```
 
+## Redundant Trunk Group
+
+```
+edit switch-options redundant-trunk-group
+set group rtg1 interface xe-0/0/x.0 primary
+set group rtg1 interface xe-0/0/y.0
+
+set group rtg1 preempt-cutover-timer 30  # this is in seconds
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
