@@ -511,6 +511,18 @@ set group rtg1 interface xe-0/0/y.0
 set group rtg1 preempt-cutover-timer 30  # this is in seconds
 ```
 
+## Graceful Routing Engine Switchover (GRES)
+
+Minimize downtime during Routing Engine Transitions.
+GRES often works in conjunction with NSR (Non-Stop Routing) to maintain uninterrupted control plane operation during a switchover event.
+
+```
+set virtual-chassis member 0 mastership-priority
+set virtual-chassis member 1 mastership-priority
+
+set chassis redundancy graceful-switchover
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
