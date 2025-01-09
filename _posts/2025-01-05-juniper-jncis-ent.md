@@ -343,6 +343,7 @@ show firewall
 Junos OS
 
 - `[edit firewall family inet]`: IPv4 filters for Layer 3 interfaces
+- `[edit firewall family inet6]`: IPv6 filters for Layer 3 interfaces
 - `[edit firewall family ethernet-switching]`: Filters for Layer 2 interfaces
 
 ```
@@ -356,13 +357,13 @@ set term access-all then accept
 Applying the Firewall filter to an interface
 
 ```
-set interfaces vlan.2 family inet filter input sample-filter
+set interfaces vlan.2 family inet filter input|output sample-filter
 ```
 
 Applying the Firewall filter to an entire vlan
 
 ```
-set vlans <VLAN_NAME> filter input sample-filter
+set vlans <VLAN_NAME> filter input|output sample-filter
 ```
 
 Cisco IOS
