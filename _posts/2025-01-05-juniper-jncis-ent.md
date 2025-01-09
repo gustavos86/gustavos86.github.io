@@ -310,14 +310,18 @@ set group STATIC-binding interface xe-0/0/x.0 static-ip <IP_ADDRESS> mac <MAC_AD
 ### LACP - Aggregated Ethernet
 
 ```
+show lacp interfaces
+show interfaces terse | match ae
+```
+
+```
 set chassis aggregated-devices ethernet device-count 1
+
+set interfaces ae0 unit 0 family ethernet-switching port-mode trunk
+set interfaces ae0 aggregated-ether-options lacp active
 
 set interfaces ge-0/0/x ether-options 802.3ad ae0
 set interfaces ge-0/0/y ether-options 802.3ad ae0
-
-set interfaces ae0 unit 0 family ethernet-switching port-mode trunk
-
-set interfaces ae0 aggregated-ether-options lacp active
 ```
 
 ## Configuring Routed VLAN interfaces
