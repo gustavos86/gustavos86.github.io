@@ -480,6 +480,23 @@ edit protocols ospf area 0.0.0.2
 set interface vlan5 authentication md5 1 key <SUPER_SECRET_KEY>
 ```
 
+## Storm Control
+
+```
+show interfaces xe-0/0/x extensive
+```
+
+```
+edit forwarding-options
+set storm-control-profiles default all
+set storm-control-profiles drop-at-1G all bandwidth-level 1000000
+
+top
+delete interfaces xe-0/0/x.0 family inet
+set interfaces xe-0/0/x.0 family ethernet-switching storm-control drop-at-1G
+```
+
 ## References
 
+- [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
