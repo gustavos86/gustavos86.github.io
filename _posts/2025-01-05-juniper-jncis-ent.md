@@ -517,6 +517,10 @@ Minimize downtime during Routing Engine Transitions.
 GRES often works in conjunction with NSR (Non-Stop Routing) to maintain uninterrupted control plane operation during a switchover event.
 
 ```
+show system switchover
+```
+
+```
 set virtual-chassis member 0 mastership-priority
 set virtual-chassis member 1 mastership-priority
 
