@@ -413,7 +413,22 @@ Route Preference Values
 | OSPF AS external         |                150 |
 | BGP (both EBGP and IBGP) |                170 |
 
-### Configure Static Routes
+## Static Routes
+
+```
+set routing-options static route 192.168.7.0/24 next-hop 192.168.2.1
+```
+
+Configure Static Route to Null0
+
+- `reject` device will reply with an ICMP Network Unreachable back to the source
+- `discard` will drop the packet silently
+
+```
+set routing-options static route 192.168.7.0/24 reject
+set routing-options static route 192.168.8.0/24 discard
+
+```
 
 ```
 edit routing-options
@@ -422,17 +437,25 @@ set static route 10.11.0.0/24 next-hop 192.168.3.1
 set static route default next-hop 192.168.1.1
 ```
 
-Multiple next-hops
+Multiple next-hops - Qualified Next Hop
+
+**Qualified Next Hop** in Juniper is the equivalent to **Floating Static Route** in Cisco.
+It is about configuring a 2nd Static Route to the same destination with a less preferred Route Preference.
 
 ```
 edit routing-options
 edit static route 10.12.0.0/24
 
-set qualified-next-hop 192.168.2.15 interface vlan.2
 set qualified-next-hop 192.168.2.15 preference 15
-
-set qualified-next-hop 192.168.3.15 interface vlan.3
 set qualified-next-hop 192.168.3.15 preference 30
+```
+
+Recursive static route
+
+Requires the parameter `resolve` for next-hop not in the Routing Table as `direct`
+
+```
+set routing-options static route 3.3.3.3/32 next-hop 192.168.1.32 resolve
 ```
 
 ## OSPF
@@ -532,7 +555,7 @@ set chassis redundancy graceful-switchover
 IRB interfaces are used to do **inter-vlan** Routing. They are the equivalent to Cisco SVIs.
 
 ```
-set vlans blue vlan-id 10 l3-interface irb.10
+set vlans blue vlan-id 10 l3-interface irb.10st
 set vlan green vlan-id 20 l3-interface irb.20
 
 set interfaces irb.10 family inet address 192.168.10.1/24
