@@ -527,6 +527,23 @@ set virtual-chassis member 1 mastership-priority
 set chassis redundancy graceful-switchover
 ```
 
+## IRB Bridging
+
+IRB interfaces are used to do **inter-vlan** Routing. They are the equivalent to Cisco SVIs.
+
+```
+set vlans blue vlan-id 10 l3-interface irb.10
+set vlan green vlan-id 20 l3-interface irb.20
+
+set interfaces irb.10 family inet address 192.168.10.1/24
+set interfaces irb.20 family inet address 192.168.20.1.24
+
+delete interfaces xe-0/0/x.0 family inet
+delete interfaces xe-0/0/y.0 family inet
+set interfaces xe-0/0/x.0 family ethernet-switching vlan members blue
+set interfaces xe-0/0/y.0 family ethernet-switching vlan members green
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
