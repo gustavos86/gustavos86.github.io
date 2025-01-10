@@ -515,6 +515,13 @@ edit protocols ospf area 0
 set interface all interface-type p2p
 ```
 
+### Set Router-ID
+
+```
+edit routing-options
+set router-id 10.10.10.10
+```
+
 ## Storm Control
 
 ```
