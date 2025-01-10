@@ -567,6 +567,27 @@ set interfaces xe-0/0/x.0 family ethernet-switching vlan members blue
 set interfaces xe-0/0/y.0 family ethernet-switching vlan members green
 ```
 
+## Load Balancing
+
+This is ECMP (Equal Cost Multi-Path)
+
+- Per packet (not recommended)
+- Per flow. This is the one we are configuring
+
+```
+show route 1.1.1.1
+show route forwarding-table | match 1.1.1.1   # Here is where we should the ECMP entry
+```
+
+```
+edit policy-options policy-statement load-balance-loopback
+set from route-filter 1.1.1.1/32 exact
+set then load-balance per-packet   # this actually means "per flow"
+
+top edit routing-options
+set forwarding-table export load-balance-loopback
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
