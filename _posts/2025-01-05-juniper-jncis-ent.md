@@ -240,7 +240,7 @@ set from ...
 set then ...
 ```
 
-4. Apply the policy to the `rib-group`
+4. Apply the policy to the `rib-group` (optional)
 
 The `import-policy` controls which routes are installed in each routing table.
 
@@ -464,7 +464,7 @@ set routing-options static route 3.3.3.3/32 next-hop 192.168.1.32 resolve
 show ospf database
 show ospf interface
 show ospf neighbor
-show route protocols ospf
+show route protocol ospf
 ```
 
 ```
@@ -506,6 +506,13 @@ set export static-to-ospf
 ```
 edit protocols ospf area 0.0.0.2
 set interface vlan5 authentication md5 1 key <SUPER_SECRET_KEY>
+```
+
+### OSPF interface type
+
+```
+edit protocols ospf area 0
+set interface all interface-type p2p
 ```
 
 ## Storm Control
@@ -586,6 +593,50 @@ set then load-balance per-packet   # this actually means "per flow"
 
 top edit routing-options
 set forwarding-table export load-balance-loopback
+```
+
+## Filter-Based Forwarding
+
+This is like **PBR (Policy-Based Routing)** in Cisco IOS.
+
+```
+show firewall family inet filter customer-servers
+show route-instances
+show route table ISP-A.inet.0
+show route table ISP-B.inet.0
+```
+
+Step 1
+
+```
+edit firewall family inet filter customer-servers
+set term match-serverA-subnet from source-address 12.1.1.0/24
+set term match-serverA-subnet then routing-instance ISP-A
+set term match-serverB-subnet from source-address 12.2.2.0/24
+set term match-serverB-subnet then routing-instance ISP-B
+
+edit interfaces ge-0/0/x.0 family inet
+set filter input customer-servers
+```
+
+Step 2
+
+```
+edit routing-instances
+set ISP-A instace-type forwarding
+set ISP-A routing-options static route 0/0 next-hop 10.1.0.2
+set ISP-B instace-type forwarding
+set ISP-B routing-options static route 0/0 next-hop 10.1.0.6
+```
+
+Step 3
+
+```
+edit routing-options
+set rib-group FBF-rib-group import-rib [inet.0 ISP-A.inet.0 ISP-B.inet.0]
+set interface-routes rib-group inet FBF-rib-group
+
+set rib-group FBF-rib-group import-policy <POLICY_NAME>  # optional
 ```
 
 ## References
