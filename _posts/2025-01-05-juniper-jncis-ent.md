@@ -9,6 +9,8 @@ tags: [juniper]     # TAG names should always be lowercase
 
 ## Vlans
 
+In the pre-ELS **(Enhanced Layer 2 Software)** version of Junos OS, the default VLAN did not have a **VLAN ID** associated with it and was untagged.
+
 ```
 show vlans
 show vlans <VLAN_NAME> detail
@@ -88,7 +90,21 @@ delete family inet
 
 edit family ethernet-switching
 set interface-mode trunk vlan members [vlan10 vlan20]
-set native-vlan-id default      (optional)
+or
+set interface-mode trunk vlan members all  # To allow all the configured VLANs in the Trunk
+
+set native-vlan-id <VLAN_ID>      (optional)
+```
+
+## Voice VLAN
+
+To assign a port to a "voice" vlan, additionally to assigning the port to a vlan, configure the following under `switch-options` hierarchy.
+
+```
+edit switch-options
+edit voip interface (access-ports | ge-0/0/x.0)
+set vlan (<VLAN_NAME> | <VLAN_ID>)
+set forwarding-class assured-forwarding
 ```
 
 ## Interface Range
@@ -610,8 +626,12 @@ set chassis redundancy graceful-switchover
 
 IRB interfaces are used to do **inter-vlan** Routing. They are the equivalent to Cisco SVIs.
 
+IRBs must be associated with a VLAN and must have an operational L2 interface participating in that VLAN before they become operational.
+
+All EX-Series switches running ELS (Enhanced Layer 2 Software) support IRBs as well as other Layer 3 routing operations.
+
 ```
-set vlans blue vlan-id 10 l3-interface irb.10st
+set vlans blue vlan-id 10 l3-interface irb.10
 set vlan green vlan-id 20 l3-interface irb.20
 
 set interfaces irb.10 family inet address 192.168.10.1/24
