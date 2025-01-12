@@ -461,6 +461,7 @@ set routing-options static route 3.3.3.3/32 next-hop 192.168.1.32 resolve
 ## OSPF
 
 ```
+show ospf statistics
 show ospf database
 show ospf interface
 show ospf neighbor
@@ -520,6 +521,25 @@ set interface all interface-type p2p
 ```
 edit routing-options
 set router-id 10.10.10.10
+```
+
+### Debug OSPF
+
+```
+set protocols ospf traceoptions file ospf-trace
+set protocols ospf traceoptions flag error detail
+set protocols ospf traceoptions flag event detail
+show log ospf-trace
+```
+
+### Summarize in OSPF
+
+```
+edit protocols ospf
+edit area <X>
+set area-range 192.168.0.0/21
+or
+set nssa area-range 192.168.0.0/21 [restrict]
 ```
 
 ## Storm Control
