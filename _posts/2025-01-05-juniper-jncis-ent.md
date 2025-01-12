@@ -666,6 +666,40 @@ set interface-routes rib-group inet FBF-rib-group
 set rib-group FBF-rib-group import-policy <POLICY_NAME>  # optional
 ```
 
+## BGP
+
+```
+show bgp summary
+show bgp neighbor
+show route protocol bgp
+show route receive-protocol bgp <NEIGHBOR-ADDRESS>
+show route advertising-protocol bgp <NEIGHBOR-ADDRESS>
+```
+
+```
+edit routing-options
+set autonomous-system <ASN>
+
+top
+edit protocols bgp
+edit group <GROUP-NAME>
+set type external
+set neighbor <NEIGHBOR_IP>
+set peer-as <PEER_ASN>
+```
+
+### Redistribute connected into BGP
+
+```
+edit policy-options policy-statement BGP-connected
+set term 1 from protocol direct
+set term 1 then accept
+
+top
+edit protocols bgp group <GROUP-NAME>
+set export BGP-connected
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
