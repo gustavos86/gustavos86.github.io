@@ -91,6 +91,28 @@ set interface-mode trunk vlan members [vlan10 vlan20]
 set native-vlan-id default      (optional)
 ```
 
+## Interface Range
+
+Define a range of interfaces that share common configuration parameters.
+
+```
+edit interfaces
+edit interface-range <RANGE-NAME>
+set member-range ge-0/0/x to ge-0/0/z
+set unit 0 family ethernet-switching
+```
+
+or
+
+```
+edit interfaces
+edit interface-range <RANGE-NAME>
+set member ge-0/0/x
+set member ge-0/0/y
+set member ge-0/0/z
+set unit 0 family ethernet-switching
+```
+
 ## Spanning-Tree
 
 802.1d STP
