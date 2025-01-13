@@ -137,6 +137,7 @@ set unit 0 family ethernet-switching
 ```
 show spanning-tree bridge
 show spanning-tree interface
+show spanning-tree statistics interface
 show ethernet-switching interfaces
 ```
 
