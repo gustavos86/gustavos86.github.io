@@ -238,6 +238,84 @@ set protocols mstp msti 1 vlan [1 3 5]  # Assign VLANs 1, 3, and 5 to instance 1
 set protocols mstp msti 2 vlan [2 4 6]  # Assign VLANs 2, 4, and 6 to instance 2
 ```
 
+## BPDU Protection, Root Protection, and Loop Protection
+
+### BPDU Protection
+
+Configured on Edge Ports to drop/block incoming BPDUs and blocks the interface.
+
+To unblock the interface, run
+
+```
+clear error bpdu interface ge-0/0/x
+```
+
+or automatically unblock the port after certain time with:
+
+```
+edit protocols layer2-control
+set bpdu-block disable-timeout <10..3600 SECONDS>
+```
+
+#### With STP enabled
+
+```
+show spanning-tree interface ge-0/0/x.0
+```
+
+```
+edit protocols rstp
+set interface ge-0/0/x.0 edge
+set bpdu-block-on-edge
+```
+
+#### With STP disabled
+
+```
+show interfaces ge-0/0/x
+```
+
+```
+edit protocols layer2-control
+set bpdu-block interface ge-0/0/x.0
+```
+
+### Root Protection
+
+Enable Root Protection on ports that should not receive superior BPDUs from the root bridge and should not be elected as the root port.
+Commonly configured on Aggregation layer Switches torwards Access layer Switches.
+
+```
+show spanning-tree interface
+```
+
+```
+edit protocols rstp
+set interface ge-0/0/x.0 no-root-poort
+```
+
+### Loop Protection
+
+The loop protection feature provides additional protection against Layer 2 loops by preventing non-designated ports from becoming designated ports.
+Enable loop protection on all non-designated ports.
+
+Ports that detect the loss of BPDUs transition to the loop inconsistent role, which maintains the blocking state.
+Port automatically transitions back to previous or new role when it receives a BPDU.
+
+It is recommended when enabling loop protection, enable it on all switch interfaces that have a chance of becoming root or designated ports. It is most effective when it is enable don all switches within the network.
+
+```
+show spanning-tree interface
+show log messages | match "loop|protect"
+```
+
+```
+edit protocols rstp
+set interface ge-0/0/x.0 bpdu-timeout-action block
+```
+
+**NOTE:** An interface can be configured for either loop protection or root protection but not both.
+
 ## Rib-groups
 
 1. Define `rib-group` under the `routing-options` hierarchy level
