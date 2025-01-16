@@ -700,6 +700,8 @@ When the storm control level is exceeded, the switch can either:
 - Drop offending traffic (default) or
 - Shut down the interface through which the traffic is passing.
 
+Using the default configuration, all **broadcast, multicast, and unknown unicast (BUM)** traffic that **exceed 80 percent** is **dropped**.
+
 ```
 show interfaces xe-0/0/x extensive
 show ethernet-switching interface xe-0/0/x
@@ -710,7 +712,7 @@ clear ethernet-switching recovery-timeout
 ```
 edit forwarding-options
 set storm-control-profiles default all
-set storm-control-profiles drop-at-1G all bandwidth-level 1000000
+set storm-control-profiles drop-at-1G bandwidth-level 1000000
 
 top
 delete interfaces xe-0/0/x.0 family inet
