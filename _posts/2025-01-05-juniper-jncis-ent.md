@@ -692,8 +692,19 @@ set nssa area-range 192.168.0.0/21 [restrict]
 
 ## Storm Control
 
+Storm control monitors traffic levels and drops traffic when the threshold (storm control level) is exceeded.
+Prevents traffic from proliferating and degrading the LAN.
+The storm control feature ensures that traffic storms do not degrade LAN performance.
+
+When the storm control level is exceeded, the switch can either:
+- Drop offending traffic (default) or
+- Shut down the interface through which the traffic is passing.
+
 ```
 show interfaces xe-0/0/x extensive
+show ethernet-switching interface xe-0/0/x
+show log messages | match l2ald | match xe-0/0/x
+clear ethernet-switching recovery-timeout
 ```
 
 ```
