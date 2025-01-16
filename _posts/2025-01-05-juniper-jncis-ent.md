@@ -424,21 +424,51 @@ set group TRUSTED interface xe-0/0/x.0
 set group STATIC-binding interface xe-0/0/x.0 static-ip <IP_ADDRESS> mac <MAC_ADDRESS>
 ```
 
-### LACP - Aggregated Ethernet
+### LAGs - LACP - Aggregated Ethernet
+
+802.3as standard. Link aggregation combines multiple Ethernet interfaces into a single link layer interface, also known as a **Link Aggregation Group (LAG)** or bundle.
+
+- Full duplex and link speed must match
+- Up to 16 member links per LAG
+- Member links do not need to be contiguous ports, nor must they be on the same switch when part of a Virtual Chassis
+
+LACP exchanges are made between actors and partners:
+
+- Actor: Local interface
+- Partner: Remote interface
+
+LACP exchanges protocol data units (PDUs) across all member links to ensure that each physical interface is configured and is functioning properly.
 
 ```
 show lacp interfaces
 show interfaces terse | match ae
+show interfaces extensive ae0.0 | find "LACP Statistics:"
 ```
 
-```
-set chassis aggregated-devices ethernet device-count 1
+1. Create aggregated Ethernet interfaces
 
-set interfaces ae0 unit 0 family ethernet-switching port-mode trunk
+```
+set chassis aggregated-devices ethernet device-count <NUMBER_OF_aeX_INTERFACES>
+```
+
+2. Configure the aggregated Ethernet interface and associate desire dmember links with the LAG
+
+```
+set interfaces ae0 unit 0 family ethernet-switching interface-mode trunk
+set interfaces ae0 unit 0 family ethernet-switching vlan members all
 set interfaces ae0 aggregated-ether-options lacp active
 
 set interfaces ge-0/0/x ether-options 802.3ad ae0
 set interfaces ge-0/0/y ether-options 802.3ad ae0
+```
+
+Optional.
+
+Set LACP exchange speed rate
+
+```
+edit interfaces ae0 aggregated-ether-options lacp
+set periodic (fast|slow)
 ```
 
 ## Configuring Routed VLAN interfaces
