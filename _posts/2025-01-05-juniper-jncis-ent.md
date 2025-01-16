@@ -441,6 +441,7 @@ LACP exchanges protocol data units (PDUs) across all member links to ensure that
 
 ```
 show lacp interfaces
+show lacp statistics interfaces
 show interfaces terse | match ae
 show interfaces extensive ae0.0 | find "LACP Statistics:"
 ```
@@ -705,14 +706,27 @@ delete interfaces xe-0/0/x.0 family inet
 set interfaces xe-0/0/x.0 family ethernet-switching storm-control drop-at-1G
 ```
 
-## Redundant Trunk Group
+## RTG - Redundant Trunk Group
+
+RTGs are used as an alternative to STP on trunk ports in redundant enterprise networks.
+RTG is typically only configured on access switches.
+RTG and STP are mutually exclusive on a given port.
+
+
+```
+show redundant-trunk-group
+```
 
 ```
 edit switch-options redundant-trunk-group
-set group rtg1 interface xe-0/0/x.0 primary
-set group rtg1 interface xe-0/0/y.0
+set group <RTG_NAME> interface xe-0/0/x.0 primary
+set group <RTG_NAME> interface xe-0/0/y.0
+```
 
-set group rtg1 preempt-cutover-timer 30  # this is in seconds
+Optional.
+
+```
+set group <RTG_NAME> preempt-cutover-timer 30  # this is in seconds
 ```
 
 ## Graceful Routing Engine Switchover (GRES)
