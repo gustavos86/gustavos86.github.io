@@ -486,13 +486,22 @@ set unit 100 family inet address 192.168.100.2/24
 
 ## Firewall filters
 
-Firewall filters are not stateful firewall rules, but stateless packet filters just like Cisco IOS ACLs.
+Firewall filters are not stateful firewall rules, but stateless packet filters just like **Cisco IOS ACLs**.
+
+**Port-based** and **VLAN based** filters use the `family ethernet-switching` option, while **router-based** filters use `family inet` or `family inet6` depending on traffic type.
+
+- Input order: Rx Packet, Port Filter, VLAN Filter, Router Filter
+- Output order: Router Filter, VLAN Filter, Port Filter, Tx Packet
+
+NOTE: A **router-based filter** that is applied to an integrated routing and bridging (IRB) does not apply to switched packets in the same VLAN.
 
 ```
 show firewall
 ```
 
 Junos OS
+
+When a Firewall Filter is applied, the software **discards** (drops silently) all traffic not explicitly enabled.
 
 - `[edit firewall family inet]`: IPv4 filters for Layer 3 interfaces
 - `[edit firewall family inet6]`: IPv6 filters for Layer 3 interfaces
@@ -706,17 +715,35 @@ Using the default configuration, all **broadcast, multicast, and unknown unicast
 show interfaces xe-0/0/x extensive
 show ethernet-switching interface xe-0/0/x
 show log messages | match l2ald | match xe-0/0/x
+```
+
+When `action-shutdown` is configured, this commands manually recovers the port.
+
+```
 clear ethernet-switching recovery-timeout
 ```
 
+Example 1:
+
 ```
 edit forwarding-options
-set storm-control-profiles default all
-set storm-control-profiles drop-at-1G bandwidth-level 1000000
+set storm-control-profiles drop-at-1G-profile all bandwidth-level 1000000
 
 top
-delete interfaces xe-0/0/x.0 family inet
-set interfaces xe-0/0/x.0 family ethernet-switching storm-control drop-at-1G
+set interfaces xe-0/0/x.0 family ethernet-switching storm-control drop-at-1G-profile
+```
+
+Example 2:
+
+```
+edit forwarding-options
+set storm-control-profiles my-profile all bandwidth-level 5000
+set storm-control-profiles my-profile action-shutdown
+
+top
+set interfaces xe-0/0/x.0 family ethernet-switching storm-control my-profile
+set interfaces xe-0/0/x.0 family ethernet-switching recovery-timeout 3600
+
 ```
 
 ## RTG - Redundant Trunk Group
