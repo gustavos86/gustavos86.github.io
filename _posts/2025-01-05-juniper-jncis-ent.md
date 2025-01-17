@@ -534,6 +534,123 @@ access-list 100 deny ip 192.168.0.0 0.0.0.255 any
 access-list 100 permit ip any any
 ```
 
+## MAC limiting
+
+By default, interfaces have no defined limit on the number of MAC addresses they can learn.
+
+- VLAN can be configured to limit the number of times, a MAC address can move to a new interface within a period of time.
+- Interface can be configured to only learn a certain number of MAC addresses or to process traffic only from specific MAC addresses.
+
+Use MAC limiting to protect the network by:
+
+- Limiting the number of MAC addresses learned on a port
+- Preventing MAC address spoofing by explicitly configured accepted MAC addresses for a port
+- Monitoring MAC address movement between the ports in a VLAN
+
+MAC move limitng is enabled on a per-VLAN basis. For example, if MAC address moves more than the configured limit within one second, the switch performs the configured action.
+
+When a MAC address or MAC move limit is exceeded, the switch can perform one of the following actions.
+
+|    Action    |                                  Description                                  |
+|--------------|-------------------------------------------------------------------------------|
+| none         | Does nothing                                                                  |
+| drop         | Drops the packet and generates an alarm, an SNMP trap, or a system log entry. |
+| log          | Does not drop the packet but generates a system log entry.                    |
+| drop-and-log | Drops the packet and generates an alarm, an SNMP trap, or a system log entry. |
+| shutdown     | Disables the port, blocks data traffic, and generates a system log entry.     |
+
+Use `recovery-timeout #` under `family ethernet-switching` interface hierarchy to recover the port automatically. Otherwise, manually clearing the disable port is required to recover it running `clear ethernet-switching recovery-timeout`.
+
+Configuration example fot **Static Source MAC addresses**
+
+```
+show ethernet-switching interface ge-0/0/x
+show log messages | match l2ald
+clear ethernet-switching recovery-timeout interface ge-0/0/x
+```
+
+```
+set interfaces ge-0/0/x.0 accept-source-mac mac-address XX:XX:XX:XX:XX:XX
+set interfaces ge-0/0/x.0 accept-source-mac mac-address YY:YY:YY:YY:YY:YY
+```
+
+```
+set interfaces ge-0/0/x.0 interface-mac-limit 2
+set interfaces ge-0/0/x.0 interface-mac-limit packet-action log|drop|shutdown|drop-and-log
+```
+
+```
+set vlans <VLAN_NAME> switch-options mac-move-limit 1 packet-action shutdown
+```
+
+## Persistent MAC Learning
+
+Persistent MAC learning or "Sticky MAC" enables the retation of dynamically learned MAC addresses on a port even after the switch is reloaded or the port is bounced.
+
+User the `clear ethernet-switching table persistent-learning` to clear the persistent MAC address entry from the interface.
+
+If the original port is down when moving the device, then the new port learns the MAC address and the device can connect. But if the original port comes up the original entry is re-installed and the devices now in the new port looses connectivity.
+
+```
+show ethernet-switching table
+```
+
+```
+set switch-options interface ge-0/0/x.0 persistent-learning
+```
+
+## MACsec
+
+Terms:
+
+- CKN - Connecitivty Association Key Name
+- CAK - Connecitivty Association Key
+- MKA - MACsec Key Agreement
+- SAK - Secure Association Key
+
+Configuring static Connectivity Association Key (CAK) security mode:
+
+1. Create connectivity association:
+
+```
+set security macsec connecitivty-association <CA_NAME>
+```
+
+2. Configure the MACsec mode as static CAK:
+
+```
+set security macsec connecitivty-association <CA_NAME> security-mode static-cak
+```
+
+3. Configure the preshared key with the Connecitivty Associate Key Name (CKN) and CAK:
+
+```
+set security macsec connecitivty-association <CA_NAME> pre-shared-key ckn <HEXADECIMAL_NUMBER>
+set security macsec connecitivty-association <CA_NAME> pre-shared-key cak <HEXADECIMAL_NUMBER>
+```
+
+4. Associate interfaces with the connecitvity association:
+
+```
+set security macsec interfaces <INTERFACE_NAME> connectivity-association <CA_NAME>
+```
+
+Example:
+
+```
+edit security macsec
+set connectivity-association ca1
+set connectivity-association ca1 security-mode static-cak
+set connectivity-association ca1 pre-shared-key ckn <HEXADECIMAL_NUMBER>
+set connectivity-association ca1 pre-shared-key cak <HEXADECIMAL_NUMBER>
+set interfaces xe-0/1/0 connectivity-association ca1
+```
+
+```
+show security macsec connections
+show security mka statistics
+```
+
 ## Routing
 
 ```
