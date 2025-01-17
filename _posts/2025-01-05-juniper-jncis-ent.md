@@ -651,6 +651,122 @@ show security macsec connections
 show security mka statistics
 ```
 
+## DHCP snooping
+
+Attackers can exploit DHCP by setting up a rogue DHCP server, effectively launching a denial of service (DoS) attack.
+DHCP snooping inspects all DHCP packets on **untrusted** ports.
+
+- By default, Junos OS detects **access ports** as **untrusted** and **trunk ports** as **trusted**
+- DHCP Servers should be behind **trusted** ports
+
+DHCP snooping supports **DHCP option 82**, aka the **DHCP relay agent** information option.
+
+EX Series switch implementation of option 82 contains three sub-options:
+
+- circuit-id - Identifies the circuit (interface, VLAN or both) on the switch on which the request was received. Example: `ge-0/0/10:vlan1` or `ge-0/0/10`
+- remote-id - Identifies the host. By default, it is the MAC address of the Switch but it could be the hostname of the Switch, the interface description, or a character string of your choice.
+- vendor-id - Identifies the vendor of the host. If enabled but not specified the value `Juniper` is used.
+
+The DHCP Server must be configured to accept **Option 82** if enabled on Network devices.
+
+```
+show dhcp-security binding
+
+clear dhcp-security binding
+clear dhcp-security binding vlan <VLAN_ID>
+clear dhcp-security binding interface <INTERFACE_NAME>
+clear dhcp-security binding ip-address <IP_ADDRESS>
+```
+
+```
+# Enabling dhcp security features under forwarding-options automatically turns on DHCP snooping
+set vlans <VLAN_NAME> forwarding-options dhcp-security
+
+# Overrides default behavior and enables specified access interface to receive DHCP server traffic (DHCPOFFER, DHCPACK, DHCPNAK). Default setting to Trunk ports.
+# DHCP Servers should be behind trusted ports
+set vlans <VLAN_NAME> forwarding-options dhcp-security group trusted-1 overrides trusted
+set vlans <VLAN_NAME> forwarding-options dhcp-security group trusted-1 interface ge-0/0/x.0
+
+# Access ports are untrusted by default anyway...
+set vlans <VLAN_NAME> forwarding-options dhcp-security group untrusted interface ge-0/0/y.0
+set vlans <VLAN_NAME> forwarding-options dhcp-security group untrusted interface ge-0/0/z.0
+
+# Optional. Add Static Entries for hosts with ARP disabled
+set vlans <VLAN_NAME> forwarding-options dhcp-security group untrusted interface ge-0/0/z.0 static-ip X.X.X.X mac XX:XX:XX:XX:XX:XX
+```
+
+Keep the DHCP Snooping database persistent across reboots
+
+```
+edit system processes
+set dhcp-service dhcp-snooping-file /var/tmp/dhcp-snooping-database
+set dhcp-service dhcp-snooping-file write-interval 60
+```
+
+```
+file show /var/tmp/dhcp-snooping-database
+show dhcp-security binding statistics
+```
+
+## Persistent Dynamic ARP Inspection (DAI)
+
+**DHCP snoooping must be enabled for DAI to work**
+
+Dynamic ARP Inspection (DAI) examines ARP requests and responses on the LAN. Each ARP packet received on an **untrusted access port** is validated against the **DHCP snooping database**.
+By validating each ARP packet received on untrusted access ports, DAI can prevent ARP spoofing.
+If the DHCP snooping database does not contain an IP address-to-MAC entry for the information within the ARP packet, DAI drops the ARP packet, preventing the propagation of invalid host address information.
+DAI also drops ARP packets when the IP address in the packet is invalid because DAI depends on the entries found within the DHCP snooping database.
+ARP packets bypass DAI on **trusted** ports.
+
+```
+show arp
+show dhcp-security binding
+show dhcp-security arp inspection statistics
+show log messages | match DAI
+```
+
+DAI is enabled per VLAN and not on individual ports
+
+**DAI must set ports to Trusted on those ports which connects to Hosts configured with an Static IP address in order to accept ARP packets to pass**
+
+```
+# Enable DAI
+set vlans <VLAN_NAME> forwarding-options dhcp-security arp-inspection
+
+# DAI must set ports to Trusted on those ports which connects to Hosts configured with an Static IP address in order to accept ARP packets to pass
+set vlans <VLAN_NAME> forwarding-options dhcp-security group group-1 overrides trusted
+set vlans <VLAN_NAME> forwarding-options dhcp-security group group-1 interface ge-0/0/x.0
+```
+
+ARP packets are sent to the Routing Engine (RE). To prevent CPU overloading, Junos OS retes limit these ARP packets hitting the RE.
+
+## IP Source Guard
+
+IP Source Guard checks the source IP and MAC address in packets entering **untrusted ports** agains the **DHCP snooping database**. Packets failing this check are **discarded**.
+
+IP Source Guard is enabled per VLAN and it check packets only on **untrusted access interfaces** and never on **Trunk interfaces** or **trusted access interfaces**.
+
+IP Source Guard prevents IP spoofing attacks by:
+- Inspecting IP packets on untrusted ports and validating them against the DHCP snooping database
+- Check if the source MAC address of the IP packet matches a valid entry in the DHCP snooping database
+- If no IP-MAC entry in the database corresponds to the information in the IP packet, IP source guard drops the IP packet
+
+```
+show dhcp-security binding
+show dhcp-security binding ip-source-guard
+```
+
+```
+set vlans <VLAN_NAME> forwarding-options dhcp-security ip-source-guard
+```
+
+802.1X user authentication features is applied in one of the three modes:
+- Single supplicant: Works with IP source guard
+- Single-source supplicant: Does not work with IP source guard
+- Multiple supplicant: Does not work with IP source guard
+
+**Define a Static IP-MAC under dhcp-security for those hosts with Static IP address configured.**
+
 ## Routing
 
 ```
