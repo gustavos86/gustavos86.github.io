@@ -561,7 +561,7 @@ When a MAC address or MAC move limit is exceeded, the switch can perform one of 
 
 Use `recovery-timeout #` under `family ethernet-switching` interface hierarchy to recover the port automatically. Otherwise, manually clearing the disable port is required to recover it running `clear ethernet-switching recovery-timeout`.
 
-Configuration example fot **Static Source MAC addresses**
+Configuration example for **Static Source MAC addresses**
 
 ```
 show ethernet-switching interface ge-0/0/x
@@ -766,6 +766,18 @@ set vlans <VLAN_NAME> forwarding-options dhcp-security ip-source-guard
 - Multiple supplicant: Does not work with IP source guard
 
 **Define a Static IP-MAC under dhcp-security for those hosts with Static IP address configured.**
+
+## Graceful Routing Engine Switchover (GRES)
+
+Enables system control to switch from the **primary RE** to the **backup RE** with minimal interruption to network communications by synchronizing the kernel tables and **Packet Forwarding Engine (PFE)** tables. This feature requires **redundant REs** or **Virtual Chassis**
+
+## Nonstop Acting Routing (NSR)
+
+Provides high availability in a Switch with **redundant REs** or on a **Virtual Chassis** by enabling transparent switchover of the REs **without requiring a restart of supporting routing protocols** by synchronizing the **Routing Protocol Process (rpd)** and routing information.
+
+## Nonstop Briding (NSB)
+
+Provides high availability in a Switch with **redundant REs** or on a **Virtual Chassis** by enabling transparent switchover of the REs by enabling transparent switchover of the REs **without requiring a restart of supported L2 protocols** by synchronizing the RE process and switching information.
 
 ## Routing
 
