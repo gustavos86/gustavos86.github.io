@@ -771,13 +771,73 @@ set vlans <VLAN_NAME> forwarding-options dhcp-security ip-source-guard
 
 Enables system control to switch from the **primary RE** to the **backup RE** with minimal interruption to network communications by synchronizing the kernel tables and **Packet Forwarding Engine (PFE)** tables. This feature requires **redundant REs** or **Virtual Chassis**
 
+GRES enables a Switch with redundant REs (or participating in a Virtual Chassis) to continue forwarding packets, even if one RE fails by enabling control of switch from the primary RE to the backup RE with minimal interruption to network communications.
+
+GRES preserves **Interface and Kernel information** and ensures that traffic forwarding is not interrupted during a primary role change. GRES does not, however, preserve **Control Plane** information which means the Routing Protocols Process (rpd) must restart.
+In such case, the information learned through rpd must be relearned unless **Nonstop Active Routing (NSR)** is also configured.
+
+Without GRES, a failure on the primary RE or a manual switchover to the backup RE, causes a **Packet Forwarding Engine (PFE)** restart and all interfaces are discovered by the new primary RE.
+
+With GRES enabled, the PFE is NOT restarted and all interface and kernet information is preserved.
+
+```
+show system switchover  # Only on Backup RE
+commit synchronize
+```
+
+Enable GRES
+
+```
+set chassis redundancy graceful-switchover
+```
+
+Manual Switchover:
+
+```
+request chassis routing-engine master switch
+request chassis routing-engine master ?
+```
+
 ## Nonstop Acting Routing (NSR)
 
 Provides high availability in a Switch with **redundant REs** or on a **Virtual Chassis** by enabling transparent switchover of the REs **without requiring a restart of supporting routing protocols** by synchronizing the **Routing Protocol Process (rpd)** and routing information.
 
+NSR allows switchover of the REs (or in Virtual Chassis) without alerting peering devices. On top of synchronizing configuration, interface and Kernel information (GRES), NSR also synchronizes Routing Protocol information by running the **Routing Protocol Process (rpd)** on the backup RE.
+
+```
+show task replication
+```
+
+Alternatively, issue operational `show` commands such as `show ospf neighbor, show bgp summary, show route` on the backup RE to verify the state information was successfully replicated.
+
+NSR configuration
+
+**NOTE:** NSR requires GRES to be configured.
+
+```
+set routing-options nonstop-routing
+commit synchronize
+```
+
+**NOTE:** `commit synchronize` can become the default behavior once we configure it with `set system commit synchronize`
+
 ## Nonstop Briding (NSB)
 
 Provides high availability in a Switch with **redundant REs** or on a **Virtual Chassis** by enabling transparent switchover of the REs by enabling transparent switchover of the REs **without requiring a restart of supported L2 protocols** by synchronizing the RE process and switching information.
+
+NSB allows switchover of the REs (or in Virtual Chassis) without alerting peering devices. NSB also saves supported Layer 2 (L2) information by running the **l2cpd** process on the backup RE.
+
+**NSB does the same for L2 protocols that NSR does for L3 Routing Protocols.**
+
+NSB configuration
+
+**NOTE:** NSB requires GRES to be configured.
+
+```
+set protocols layer2-control nonstop-bridging
+```
+
+If NSB is enabled, the backup RE will show some information in the output of `show spanning-tree bridge`, otherwise it would show that the `l2cpd-service` subsystem is NOT running.
 
 ## Routing
 
