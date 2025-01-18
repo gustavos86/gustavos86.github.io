@@ -839,6 +839,124 @@ set protocols layer2-control nonstop-bridging
 
 If NSB is enabled, the backup RE will show some information in the output of `show spanning-tree bridge`, otherwise it would show that the `l2cpd-service` subsystem is NOT running.
 
+## Virtual Chassis
+
+Renumber the **member-id** of a Switch member of a Virtual Chassis
+
+```
+request virtual-chassis renumber member-id 0 new-member-id 5
+```
+
+Shutdown a specific member of a Virtual Chassis.
+
+```
+request system halt member <MEMBER-ID>
+```
+
+Access individual member of a Virtual Chassis.
+
+```
+request session number <MEMBER-ID>
+```
+
+Upgrade Switches part of a Virtual Chassis.
+
+```
+# All switches
+request system software add
+
+# Specific Swich
+request system software add member <MEMBER-ID>
+```
+
+Auto Software Update for new members of the Virtual Chassis
+
+```
+set virtual-chassis auto-sw-update package-name /var/tmp/jinstall-ex-4300-21.3R1.9-signed.tgz
+```
+
+Enabling Virtual Chassis Ports
+
+```
+request virtual-chassis vc-port set pic-slot 1 port 0
+request virtual-chassis vc-port set pic-slot 1 port 1
+show virtual-chassis vc-port
+```
+
+Disabling and Deleting Virtual Chassis Ports
+
+```
+request virtual-chassis vc-port set interface vcp-255/1/0 disable
+request virtual-chassis vc-port delete pic-slot 1 port 0
+show virtual-chassis vc-port
+```
+
+Example of Virtual Chassis configuration
+
+```
+edit virtual-chassis
+set preprovisioned
+set member 0 role routing-engine
+set member 0 serial-number XX0123456789
+set member 1 role line-card
+set member 1 serial-number XX0987654321
+set member 2 role routing-engine
+set member 2 serial-number XX1234123412
+set member 3 role line-card
+set member 3 serial-number XX9128387465
+```
+
+Commands to monitor Virtual Chassis
+
+```
+show configuration virtual-chassis
+show virtual-chassis status
+show virtual-chassis vc-port
+```
+
+Failover between Switches acting as Routing-Engines in Virtual-Chassis
+
+```
+request chassis routing-engine master switch
+```
+
+Another example of configuring Virtual-Chassis
+
+EX1
+
+```
+edit virtual-chassis
+set member 0 mastership-priority 255
+set no-split-detection
+
+request virtual-chassis vc-port set interface vcp-255/1/0
+request virtual-chassis vc-port set interface vcp-255/1/1
+
+request virtual-chassis vc-port set interface vcp-255/1/1 member 1
+```
+
+EX2
+
+```
+request virtual-chassis vc-port set interface vcp-255/1/0
+```
+
+To return to standalone mode:
+
+EX1
+
+```
+request virtual-chassis vc-port delete pic-slot 1 port 0
+request virtual-chassis vc-port delete pic-slot 1 port 0 member 1
+
+request virtual-chassis vc-port delete pic-slot 1 port 1
+request virtual-chassis vc-port delete pic-slot 1 port 1 member 1
+
+request virtual-chassis recycle member-id 0
+request virtual-chassis renumber member-id 1 new-member-id 0
+request virtual-chasiss recycle member-id 1
+```
+
 ## Routing
 
 ```
