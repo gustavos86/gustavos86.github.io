@@ -957,6 +957,29 @@ request virtual-chassis renumber member-id 1 new-member-id 0
 request virtual-chasiss recycle member-id 1
 ```
 
+## MSTP
+
+```
+show spanning-tree mstp configuration
+show spanning-tree interface
+show spanning-tree bridge
+```
+
+```
+edit protocols mstp
+set configuration-name <CONFIGURATION_NAME>  # Optional but must match on all Swithches part of the MSTP region. Default to blank.
+set revision-level <REVISION_LEVEL>          # Optional but must match on all Swithches part of the MSTP region. Default to zero (0).
+
+set interface <INTERFACE_NAME>  # Interfaces participating in MSTP
+
+# VLANS not part of any MSTI are assigned to MSTI 0 (CST)
+set msti <MSTI_ID> bridge-priority <PRIORITY>
+set msti <MSTI_ID> vlan <VLAN_ID>|<VLAN_NAME>
+
+set msti <MSTI_ID> bridge-priority <PRIORITY>
+set msti <MSTI_ID> vlan <VLAN_ID>|<VLAN_NAME>
+```
+
 ## Routing
 
 ```
