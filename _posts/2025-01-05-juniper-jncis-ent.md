@@ -1190,6 +1190,31 @@ set martians 36.0.0.0/8 orlonger
 set martians 240.0.0.0/4 orlonger allow
 ```
 
+## Routing instances
+
+```
+show route instance
+
+show interfaces terse routing-instance <INSTANCE_NAME>
+show route table <INSTANCE_NAME>
+
+ping X.X.X.X routing-instance <INSTANCE_NAME>
+```
+
+Configure:
+
+```
+edit routing-instances <INSTANCE_NAME>
+set instance-type virtual-router
+set interface ge-0/0/x.0
+set interface ge-0/0/y.0
+set interface lo0.x
+set routing-options static route 0.0.0.0/0 next-hop 172.26.25.1
+set protocols ospf area 0.0.0.0 interface ge-0/0/x.0
+set protocols ospf area 0.0.0.0 interface ge-0/0/y.0
+set protocols ospf area 0.0.0.0 interface lo0.x
+```
+
 ## OSPF
 
 ```
