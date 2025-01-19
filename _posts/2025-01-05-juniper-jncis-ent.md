@@ -980,6 +980,39 @@ set msti <MSTI_ID> bridge-priority <PRIORITY>
 set msti <MSTI_ID> vlan <VLAN_ID>|<VLAN_NAME>
 ```
 
+## Non-ELS vs ELS
+
+### ethernet-switching-options vs switch-options
+
+- Non-ELS use `edit ethernet-switching-options` hierarchy for Layer 2 feature configurations.
+- ELS uses `edit switch-options` instead.
+
+### RVI interfaces vs IRB interfaces
+
+These are uses for Layer 3, similar to Cisco SVIs.
+
+- Non-ELS uses RVIs (Routed Vlan Interfaces)
+
+```
+set interfaces vlan.11 family inet address 172.23.11.10/24
+set interfaces vlan.12 family inet address 172.23.12.10/24
+set vlans <VLAN11> vlan-id 11
+set vlans <VLAN11> l3-interface vlan.11
+set vlans <VLAN12> vlan-id 12
+set vlans <VLAN12> l3-interface vlan.12
+```
+
+- ELS uses IRB (Internet Routing and Bridging)
+
+```
+set interfaces irb.11 family inet address 172.23.11.10/24
+set interfaces irb.12 family inet address 172.23.12.10/24
+set vlans <VLAN11> vlan-id 11
+set vlans <VLAN11> l3-interface irb.11
+set vlans <VLAN12> vlan-id 12
+set vlans <VLAN12> l3-interface irb.12
+```
+
 ## Routing
 
 ```
