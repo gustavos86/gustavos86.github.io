@@ -1094,6 +1094,102 @@ Requires the parameter `resolve` for next-hop not in the Routing Table as `direc
 set routing-options static route 3.3.3.3/32 next-hop 192.168.1.32 resolve
 ```
 
+No-readvertise option
+
+Restricts route from being advertised through routing policy; highly suggested for static routes used for management traffic.
+
+```
+set routing-options static route 172.28.102.0/24 next-hop 10.210.11.190
+set routing-options static route 172.28.102.0/24 no-readvertise
+```
+
+More Static Route options
+
+|  Options   |                                                                                        Description                                                                                         |
+|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| as-path    | Used if the route is intended to be redistributed into BGP and you want to add values manually to the AS path attribute.                                                                   |
+| community  | Used if this route is intended for BGP, and you want to add community values to the route for your AS.                                                                                     |
+| metric     | If multiple routes share the same preference value, then the route with the best metric becomes active in the routing table. Use this value to prefer one route over another in this case. |
+| preference | Used to increase the value of the static routes to prefer other sources of routing information.                                                                                            |
+
+## Aggregate Static Routes
+
+```
+show route protocol aggregate
+show route 172.29.0.0/22 exact detail
+```
+
+```
+edit routing-options
+set aggregate route 172.29.0.0/22
+set aggregate route 172.25.0.0/16 discard
+```
+
+## Generated Static Route
+
+Similar to the **Aggregate Static Route**. The difference is that the **next-hop** is the one from the "primary contributing route".
+The **primary contributing route** is the route with the lowest Preference that falls with the aggregated range of prefixes.
+If there are multiple routes that fall within the aggregated range that share the same route preference, the route with the lowest number prefix (not lowest prefix range) is selected as the primary contributing route.
+
+```
+edit routing-options
+set generate route 10.0.0.0/16
+```
+
+Example of **Conditional Route Advertisemente**
+
+OSPF to advertise default route 0.0.0.0/0 only if we have received **10.0.0.0/16** via BGP (and is installed in the Routing Table)
+
+```
+edit policy-options
+set policy-statement MATCH_CONTRIBUTING_PREFIX term MATCH_BGP_PREFIX from protocol bgp
+set policy-statement MATCH_CONTRIBUTING_PREFIX term MATCH_BGP_PREFIX from route-filter 10.0.0.0/16 exact
+set policy-statement MATCH_CONTRIBUTING_PREFIX term MATCH_BGP_PREFIX then accept
+set policy-statement MATCH_CONTRIBUTING_PREFIX term ELSE-REJECT then reject
+
+set policy-statement EXPORT_DEFAULT term MATCH_DEFAULT from protocol aggregate
+set policy-statement EXPORT_DEFAULT term MATCH_DEFAULT from route-filter 0.0.0.0/0 exact
+set policy-statement EXPORT_DEFAULT term MATCH_DEFAULT then accept
+
+top
+edit routing-options
+set generate route 0.0.0.0/0 policy MATCH_CONTRIBUTING_PREFIX
+
+top
+edit protocols ospf
+set export EXPORT_DEFAULT
+```
+
+## Martian addresses
+
+Hosts or network addresses for which all routing information (also known as routing table) is ignored.
+Martian addresses are never installed in the routign table (also known as routing information base [RIB])
+
+Default Martian Addresses for IPv4 and IPv6
+
+|         IPv4          |                      IPv6                      |
+|-----------------------|------------------------------------------------|
+| 0.0.0.0/8 orlonger    | Loopback address                               |
+| 127.0.0.0/8 orlonger  | Reserved and unassigned prefixes from RFC 2373 |
+| 192.0.0.0/24 orlonger | Link-local unicast prefix                      |
+| 240.0.0.0/4 orlonger  |                                                |
+
+Match types: `exact`, `longer`, `orlonger`, `prefix-length-range`, `through` and `upto`
+
+```
+show route martians
+```
+
+```
+edit routing-options
+set martians 23.0.0.0/8 orlonger
+set martians 31.0.0.0/8 orlonger
+set martians 36.0.0.0/8 orlonger
+
+# To remove and IP address block from the Martian address list use the allow command
+set martians 240.0.0.0/4 orlonger allow
+```
+
 ## OSPF
 
 ```
