@@ -1452,6 +1452,61 @@ For IPv6, Junos OS already performs ECMP based on L3 & L4 information in the For
 
 This is like **PBR (Policy-Based Routing)** in Cisco IOS.
 
+1. Creating a match filter
+Defined under the `[edit firewall]` hierarchy.
+Matches traffic with respective routing instance.
+The defined filter is applied as an `input` filter to ingress interface.
+
+Example:
+
+```
+set firewall family inet filter <FILTER_NAME> term <TERM_NAME_A> from <MATCH_CONDITIONS>
+set firewall family inet filter <FILTER_NAME> term <TERM_NAME_A> then routing-instance <INSTANCE_NAME_A>
+
+set firewall family inet filter <FILTER_NAME> term <TERM_NAME_B> from <MATCH_CONDITIONS>
+set firewall family inet filter <FILTER_NAME> term <TERM_NAME_B> then routing-instance <INSTANCE_NAME_B>
+
+set firewall family inet filter <FILTER_NAME> term <TERM_NAME_C> then accept
+```
+
+2. Creating routing instances
+Defined under the `[edit routing-instances]` hierarchy.
+Creates unique routing tables to forward traffic towards destination along associated path.
+The instance includes routing information (typically a default static route) that is stored in the corresponding route table.
+
+```
+set routing-instances <INSTANCE_NAME_A> instance-type forwarding
+set routing-instances <INSTANCE_NAME_A> routing-options static route 0.0.0.0/0 next-hop <NEXT_HOP_IP>
+
+set routing-instances <INSTANCE_NAME_B> instance-type forwarding
+set routing-instances <INSTANCE_NAME_B> routing-options static route 0.0.0.0/0 next-hop <NEXT_HOP_IP>
+```
+
+3. Creating a RIB group
+Defined under the `[edit routing-options]` hierarchy.
+Shares interface routes between intances so that directly connected next hops can be resolved.
+
+**NOTE:** You cannot associate any interface to a routing-instance of type `forwarding`.
+Therefore, **RIB-Groups** is required to redistribute the **next-hop IP** of the static routes to the routing-instances.
+
+```
+set routing-options rib-groups <GROUP_NAME> import-rib [ inet.0 <INSTANCE_NAME_A>.inet.0 <INSTANCE_NAME_B>.inet.0 ]
+set routing-options interface-routes rib-group inet <GROUP_NAME>
+```
+
+Alternatively to **RIB groups**, use the `instance-import` option.
+
+```
+# the master keyword is used to refer to master routing instance to import routes from inet.0 into ISP-A.inet.0
+set policy-options policy-statement <ISP-A-import> from instance master then accept
+
+set routing-instances <INSTANCE_NAME_B> instance-type forwarding
+set routing-instances <INSTANCE_NAME_B> routing-options static route 0.0.0.0/0 next-hop <NEXT_HOP_IP>
+set routing-instances <INSTANCE_NAME_B> routing-options instance-import <ISP-A-import>
+```
+
+Another example:
+
 ```
 show firewall family inet filter customer-servers
 show route-instances
