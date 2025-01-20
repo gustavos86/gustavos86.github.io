@@ -1413,6 +1413,9 @@ This is ECMP (Equal Cost Multi-Path)
 - Per packet (not recommended)
 - Per flow. This is the one we are configuring
 
+**IMPORTANT:** Defining and applying a load-balancing policy affects only the **forwarding table (show route forwarding-table)**.
+The **routing table (show route)** remains as it was before you defined and applied the load-balancing policy.
+
 ```
 show route 1.1.1.1
 show route forwarding-table | match 1.1.1.1   # Here is where we should the ECMP entry
@@ -1426,6 +1429,24 @@ set then load-balance per-packet   # this actually means "per flow"
 top edit routing-options
 set forwarding-table export load-balance-loopback
 ```
+
+Another example, this time for all routes with ECMP entries in the Routig Table.
+
+```
+set policy-options policy-statement LOAD_BALANCE_ALL then load-balance per-packet
+set routing-options forwarding-table export LOAD_BALANCE_ALL
+```
+
+By default, ECMP hash is based on Source IP, Destionation IP and L4 protocol.
+To include Layer 4 ports information in the ECMP forwarding hash. Note that `layer-3` and `layer-4` keywords must both be used in the configuration.
+
+```
+set forwarding-options hash-key family inet layer-3
+set forwarding-options hash-key family inet layer-4
+```
+
+This also is optional for MPLS (`set family mpls`) and VPLS (`set family multiservices`).
+For IPv6, Junos OS already performs ECMP based on L3 & L4 information in the Forwarding Table by default.
 
 ## Filter-Based Forwarding
 
