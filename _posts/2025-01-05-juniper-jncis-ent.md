@@ -1608,6 +1608,46 @@ edit protocols bgp group <GROUP-NAME>
 set export BGP-connected
 ```
 
+## Tunneling
+
+- GRE adds 24 bytes of overhead to the packet.
+- GRE uses IP protocol 47.
+- GRE uses `gr-x/y/z` naming convention.
+- GRE configuration example
+
+```
+show interfaces gr-0/0/0 terse
+show route X.X.X.X
+show interfaces gr-0/0/0.0 detail | find "traffic statistics"
+```
+
+```
+set interfaces gr-0/0/0.0 tunnel source <X.X.X.X>
+set interfaces gr-0/0/0.0 tunnel destination <Y.Y.Y.Y>
+set interfaces gr-0/0/0.0 family inet
+
+set routing-options static route 192.168.2.0/24 next-hop gr-0/0/0.0
+```
+
+- GRE keepalives configuration:
+
+```
+set protocols oam gre-tunnel interface gr-x/y/z.A keepalive-time 10
+set protocols oam gre-tunnel interface gr-x/y/z.A hold-time 30
+```
+
+
+- IP over IP (IP-IP) adds 20 bytes of overhead to the packet.
+- IP-IP can only tunnel IP traffic.
+- IP-IP uses `ip-x/y/z` naming convention. 
+
+
+Configure PMTUD (Path MTU Discovery)
+
+```
+set system internet-options gre-path-mtu-discovery|ipip-path-mtu-discovery
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
