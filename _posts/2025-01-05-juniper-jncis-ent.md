@@ -1551,10 +1551,11 @@ set rib-group FBF-rib-group import-policy <POLICY_NAME>  # optional
 
 ```
 show bgp summary
-show bgp neighbor
-show route protocol bgp
-show route receive-protocol bgp <NEIGHBOR-ADDRESS>
-show route advertising-protocol bgp <NEIGHBOR-ADDRESS>
+show bgp neighbor <X.X.X.X>
+show bgp group
+show route protocol bgp [detail|extensive]
+show route receive-protocol bgp <NEIGHBOR-ADDRESS>  # Before the effects of import-policy
+show route advertising-protocol bgp <NEIGHBOR-ADDRESS>  # Before the effects of export-policy
 ```
 
 ```
@@ -1567,6 +1568,32 @@ edit group <GROUP-NAME>
 set type external
 set neighbor <NEIGHBOR_IP>
 set peer-as <PEER_ASN>
+```
+
+Another example:
+
+```
+set routing-options router-id <X.X.X.X>
+set routing-options autonomous-system <ASN>
+
+set protocols bgp group <GROUP_NAME> type external
+set protocols bgp group <GROUP_NAME> peer-as <ASN>
+set protocols bgp group <GROUP_NAME> neighbor <X.X.X.X>
+
+set protocols bgp group <GROUP_NAME> type internal
+set protocols bgp group <GROUP_NAME> local-address <X.X.X.X>
+set protocols bgp group <GROUP_NAME> neighbor <X.X.X.X>
+set protocols bgp group <GROUP_NAME> export NEXT_HOP_SELF_POLICY  # Next-hop-self example
+set protocols bgp group <GROUP_NAME> export ADVERTISE_AGGREGATE   # Advertise an aggregate route example
+
+# Next-hop-self example
+set policy-options policy-statement NEXT_HOP_SELF_POLICY then next-hop self
+
+# Advertise an aggregate route example
+set routing-options aggregate route 172.24.0.0/22
+set policy-options policy-statement ADVERTISE_AGGREGATE term MATCH_AGGREGATE from protocol aggregate
+set policy-options policy-statement ADVERTISE_AGGREGATE term MATCH_AGGREGATE from route-filter 172.24.0.0/22 exact
+set policy-options policy-statement ADVERTISE_AGGREGATE term MATCH_AGGREGATE then accept
 ```
 
 ### Redistribute connected into BGP
