@@ -1220,10 +1220,24 @@ set protocols ospf area 0.0.0.0 interface lo0.x
 ```
 show ospf statistics
 show ospf database
-show ospf interface
-show ospf neighbor
+show ospf interface [extensive]
+show ospf neighbor [extensive]
+show ospf route
+show ospf log
 show route protocol ospf
 ```
+
+```
+set routing-options router-id <X.X.X.X>
+
+set protocols ospf area <AREA-ID> <AREA-OPTIONS>
+set protocols ospf area <AREA-ID> interface <INTERFACE-NAME> <INTERFACE-OPTIONS>
+
+set protocols ospf3 area <AREA-ID> <AREA-OPTIONS>
+set protocols ospf3 area <AREA-ID> interface <INTERFACE-NAME> <INTERFACE-OPTIONS>
+```
+
+Another example:
 
 ```
 edit protocols ospf
@@ -1288,6 +1302,8 @@ set protocols ospf traceoptions flag error detail
 set protocols ospf traceoptions flag event detail
 show log ospf-trace
 ```
+
+Use `show log <FILENAME>` or `monitor start` to see the "trace" information.
 
 ### Summarize in OSPF
 
