@@ -781,11 +781,12 @@ Without GRES, a failure on the primary RE or a manual switchover to the backup R
 With GRES enabled, the PFE is NOT restarted and all interface and kernet information is preserved.
 
 ```
+show chassis routing-engine
 show system switchover  # Only on Backup RE
 commit synchronize
 ```
 
-Enable GRES
+- **Enable GRES**
 
 ```
 set chassis redundancy graceful-switchover
@@ -810,11 +811,12 @@ show task replication
 
 Alternatively, issue operational `show` commands such as `show ospf neighbor, show bgp summary, show route` on the backup RE to verify the state information was successfully replicated.
 
-NSR configuration
+- **Enable NSR**
 
 **NOTE:** NSR requires GRES to be configured.
 
 ```
+set chassis redundancy graceful-switchover  # Enable GRES first
 set routing-options nonstop-routing
 commit synchronize
 ```
@@ -829,15 +831,32 @@ NSB allows switchover of the REs (or in Virtual Chassis) without alerting peerin
 
 **NSB does the same for L2 protocols that NSR does for L3 Routing Protocols.**
 
-NSB configuration
+-- **Enable NSB**
 
 **NOTE:** NSB requires GRES to be configured.
 
 ```
+set chassis redundancy graceful-switchover  # Enable GRES first
 set protocols layer2-control nonstop-bridging
+commit synchronize
 ```
 
+**NOTE:** `commit synchronize` can become the default behavior once we configure it with `set system commit synchronize`
+
 If NSB is enabled, the backup RE will show some information in the output of `show spanning-tree bridge`, otherwise it would show that the `l2cpd-service` subsystem is NOT running.
+
+## Unified ISSU - Unified In-Service Software Upgrade
+
+Requires:
+
+1. Have GRES and NSR enabled
+2. Both RE running same Junos OS release
+3. Have the new Juons OS release downloaded to both RE
+4. Execute the command `request system software in-service-upgrade`
+
+```
+show chassis in-service-upgrade
+```
 
 ## Virtual Chassis
 
@@ -1392,6 +1411,7 @@ GRES often works in conjunction with NSR (Non-Stop Routing) to maintain uninterr
 
 ```
 show system switchover
+show chassis routing-engine
 ```
 
 ```
