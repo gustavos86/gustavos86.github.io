@@ -1664,6 +1664,36 @@ Configure PMTUD (Path MTU Discovery)
 set system internet-options gre-path-mtu-discovery|ipip-path-mtu-discovery
 ```
 
+## Graceful Restart
+
+```
+set routing-options graceful-restart
+```
+
+This command restarts the **rpd** process.
+
+```
+restart routing
+```
+
+## BFD
+
+```
+show bfd session
+```
+
+Enabling BFD on OSPF
+
+```
+set protocols ospf area X interface ge-0/0/x.0 bfd-liveness-detection minimum-interval 300
+```
+
+Enabling BFD on BGP
+
+```
+set protocols bgp group <GROUP_NAME> neighbor <X.X.X.X> bfd-liveness-detection minimum-interval 300
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
