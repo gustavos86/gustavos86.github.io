@@ -1714,6 +1714,61 @@ Enabling BFD on BGP
 set protocols bgp group <GROUP_NAME> neighbor <X.X.X.X> bfd-liveness-detection minimum-interval 300
 ```
 
+## VRRP - Virtual Router Redundancy Protocol
+
+Industry standard defined in **RFC 2338**.
+Master & Backup Routers.
+VRRP cummunication uses multicast destionation IP address of **224.0.0.18** with **TTL of 255**
+Hello interval is **1 second** by default
+**VRID** and authentication must match for VRRP routers to sync with each other
+The Master Router replies to ARP requests with MAC **00:00:5E:00:01:VRID**
+Default **priority is 100**. The VRRP Router with the highest priority get elected as the **Master Router**
+If the VRRP Router owns the VIP address, the priority must be set to 255
+
+|      Term      |                                                                     Description                                                                      |
+|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| VRRP Router    | Any router participating in VRRP, including the master and all backup routers                                                                        |
+| Master Router  | VRRP router performing packet forwarding and responding to ARP requests                                                                              |
+| Backup Routers | VRRP router available to accept the role of the master router upon failure                                                                           |
+| Virtual Router | Virtual entity that functionas as default router on a LAN; consists of virtual router ID and IP address used as gateway address known as VIP address |
+
+VRRP States
+
+| VRRP State |                                               Description                                               |
+|------------|---------------------------------------------------------------------------------------------------------|
+| Initialize | Router negotiates VRRP roles through startup events; no forwarding can be performed while in this state |
+| Master     | Router assumes traffic forwarding responsibilities for the LAN and responds to ARP requests             |
+| Backup     | Router monitors master VRRP router and is ready to assume forwarding responsibilities if failure occurs |
+| Transition | Router switches between master and backup states; no forwarding can be performed while in this state    |
+
+Sample VRRP configuration
+
+R1 - Master Router
+
+```
+set interface ge-0/0/x.0 family inet address 192.168.1.2/24 vrrp-group <X> virtual-address 192.168.1.1 priority 100
+```
+
+R2 - Backup Router
+
+```
+set interface ge-0/0/x.0 family inet address 192.168.1.3/24 vrrp-group <X> virtual-address 192.168.1.1 priority 90
+```
+
+| Configuration Option |                                                                                     Description                                                                                     |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| track                | Monitors state of specified interface (typically a WAN interface) or route and reduces designated priority value of VRRP group if tracker interface or route is no longer available |
+| accepts-data         | Enables master router to respond to ICMP requests sent to VIP address-by default, master router does not respond                                                                    |
+| authentication-type  | Authenticates VRRP messages between VRRP routers (type and key must match on all VRRP routers in the same group)                                                                    |
+| authentication-key   |                                                                                                                                                                                     |
+| no-preempt           | Disables preemption to avoid unwanted mastership changes. Note: Preemption is enabled by default, which means the router with the highest priority always assumes the master role   |
+
+Show commands
+
+```
+show vrrp summary
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
