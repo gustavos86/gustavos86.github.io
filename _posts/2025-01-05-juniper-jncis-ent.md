@@ -1769,6 +1769,80 @@ Show commands
 show vrrp summary
 ```
 
+## IPv6
+
+```
+show route table inet6
+show route table inet6 protoco static
+show ipv6 neighbors
+show interface terse
+```
+
+### IPv6 Static Route configuration example
+
+```
+set routing-options rib inet.6 static route ::/0 next-hop fec0:0:0:2003::2
+set routing-options rib inet.6 static route ::/0 preference 250
+```
+
+### OSPFv3 configuration example
+
+```
+set routing-options router-id 192.168.100.1
+set protocols ospf3 area 0.0.0.0 interface ge-0/0/1.0
+```
+
+|       OSPFv2        |        OSPFv3        |
+|---------------------|----------------------|
+| show ospf neighbor  | show ospf3 neighbor  |
+| show ospf interface | show ospf3 interface |
+| show ospf database  | show ospf3 database  |
+| show ospf route     | show ospf3 route     |
+
+### ISIS configuration example
+
+```
+show isis interface
+show isis adjacency
+show isis adjacency detail
+```
+
+```
+set interfaces ge-0/0/1.0 family iso
+set interfaces ge-0/0/1.0 family inet6 address fec0:0:0:2003::1/64
+
+set interfaces lo0.0 family iso address 49.0002.1111.1111.1111.00
+set interfaces lo0.0 family inet6 address fec0:0:0:1001::1/128
+
+set protocols isis interface ge-0/0/1.0
+set protocols isis interface lo0.0
+```
+
+### BGP configuration example
+
+```
+show bgp summary
+```
+
+```
+set routing-options router-id 192.168.100.1
+set routing-options autonomous-system 64700
+
+set protocols bgp group INT-64700 type internal
+set protocols bgp group INT-64700 local-address fec0:0:0:1001:1
+set protocols bgp group INT-64700 neighbor fec0:0:0:1002:1
+
+set protocols bgp group EXT-65100 type external
+set protocols bgp group EXT-65100 peer-as 65100
+set protocols bgp group EXT-65100 neighbor fec0:0:0:2005:2
+```
+
+### SRX IPv6 configuration
+
+```
+set security forwarding-options family inet6 mode packet-based
+```
+
 ## References
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
