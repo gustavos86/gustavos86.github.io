@@ -1799,7 +1799,7 @@ set protocols ospf3 area 0.0.0.0 interface ge-0/0/1.0
 | show ospf database  | show ospf3 database  |
 | show ospf route     | show ospf3 route     |
 
-### ISIS configuration example
+### IS-IS configuration example
 
 ```
 show isis interface
@@ -1841,6 +1841,47 @@ set protocols bgp group EXT-65100 neighbor fec0:0:0:2005:2
 
 ```
 set security forwarding-options family inet6 mode packet-based
+```
+## IS-IS
+
+```
+show isis interface
+show isis database
+show isis database extensive
+show isis adjacency
+show isis adjacency detail
+show isis spf log
+show isis statistics
+show isis route
+show route protocol isis
+clear isis adjacency <>
+```
+
+By default, all interfaces are L1 & L2. We can disable either in the `protocols isis` configuration hierarcy.
+
+```
+set protocols isis interface ge-0/0/0.0 level 1 disable
+set protocols isis interface ge-0/0/1.0 level 2 disable
+```
+
+We must include the `family iso` on all interfaces on which we want to run IS-IS and a network entity title on one of the router's interfaces (usually **lo0**).
+
+```
+set interfaces ge-0/0/1.0 family iso
+
+set interfaces lo0.0 family iso address 49.0002.1111.1111.1111.00
+
+set protocols isis interface ge-0/0/1.0
+set protocols isis interface lo0.0
+```
+
+To debug IS-IS, monitor the resulting **ISIS_TRACE** log file using `monitor start <LOG_FILE_NAME>` or the `show log <LOG_FILE_NAME>` commands.
+
+```
+set protocols isis traceoptions file ISIS_TRACE
+set protocols isis traceoptions flag error detail
+set protocols isis traceoptions flag hello detail
+set protocols isis traceoptions flag lsp detail
 ```
 
 ## References
