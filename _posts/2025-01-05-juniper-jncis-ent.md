@@ -357,14 +357,26 @@ set from ...
 set then ...
 ```
 
-4. Apply the policy to the `rib-group` (optional)
+4. Apply an `import-policy` to the `rib-group` (optional)
 
 The `import-policy` controls which routes are installed in each routing table.
 
 ```
-edit routing-options rib-groups <RIB-GROUP-NAME>
+set routing-options rib-groups <RIB-GROUP-NAME> import-policy <POLICY-NAME>
+```
 
-set import-policy <POLICY-NAME>
+Referece: [Junos CLI Reference - rib-groups](https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/rib-groups-edit-routing-options.html)
+
+```
+[edit routing-options]
+
+rib-groups {
+    group-name {
+        export-rib group-name;
+        import-policy [ policy-names ];
+        import-rib [ group-names ];
+    }
+}
 ```
 
 ## Mac Limiting
@@ -1888,3 +1900,4 @@ set protocols isis traceoptions flag lsp detail
 
 - [Complete JNCIS-ENT (YouTube playlist)](https://www.youtube.com/playlist?list=PLsPPnwREYxwvQMlVtfpKU34uTwShws-3b)
 - [JUNOS RIB-GROUPS (1/2)](https://momcanfixanything.com/junos-rib-groups-1-2/)
+- [Junos CLI Reference - rib-groups](https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/rib-groups-edit-routing-options.html)
