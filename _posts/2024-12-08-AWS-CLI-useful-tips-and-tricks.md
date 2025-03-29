@@ -28,6 +28,13 @@ ubuntu@ip-172-31-25-204:~$
 I always forget the name of these envars =P
 
 ```bash
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+```
+
+Example:
+
+```bash
 $ export AWS_ACCESS_KEY_ID=AKI...
 $ export AWS_SECRET_ACCESS_KEY=bQv...
 $ aws sts get-caller-identity
