@@ -23,6 +23,22 @@ ubuntu@ip-172-31-25-204:~$ aws sts get-caller-identity --query Account --output 
 ubuntu@ip-172-31-25-204:~$
 ```
 
+## Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+
+I always forget the name of these envars =P
+
+```bash
+$ export AWS_ACCESS_KEY_ID=AKI...
+$ export AWS_SECRET_ACCESS_KEY=bQv...
+$ aws sts get-caller-identity
+{
+    "UserId": "AID...F",
+    "Account": "767397664936",
+    "Arn": "arn:aws:iam::767397664936:user/cloud_user"
+}
+$
+```
+
 ## Resources
 
 - [Installing or updating to the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
