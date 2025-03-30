@@ -1,6 +1,6 @@
 ---
 title: AWS ECS Exec to access a container's CLI running in Fargate
-date: 2024-12-08 15:30:00 -0700
+date: 2025-03-30 16:30:00 -0700
 categories: [AWS, AWS CLI]
 tags: [aws, aws cli]     # TAG names should always be lowercase
 ---
