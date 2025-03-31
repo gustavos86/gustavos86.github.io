@@ -29,6 +29,9 @@ I always forget the name of these envars =P
 
 ```bash
 export AWS_ACCESS_KEY_ID=
+```
+
+```bash
 export AWS_SECRET_ACCESS_KEY=
 ```
 
