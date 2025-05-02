@@ -94,3 +94,35 @@ show vlans
 show vlans extensive <PRIMARY-VLAN-NAME>
 show vlans extensive <SECONDARY-VLAN-NAME>
 ```
+
+## Dynamic VLAN Registration
+
+MVRP - Multiple VLAN Registration Protocol.
+Dynamically manages VLAN registration on a LAN. Prunes VLAN information on Trunk ports when a Switch has no active access ports for a configured vlan.
+It can also be used to dynamically create VLANs in Switching networks.
+MVRP replaces GVRP.
+
+MVRP can only be enabled on Trunk interfaces.
+MVRP does not support all Spanning-Tree Protocols (STPs). Currently, MVRP does not support the VLAN Spanning Tree Protocol (VSTP).
+
+**NOTE:** There is an MVRP "extra byte" incompatibility in old vs new versions of Junos OS. Check the documentation in case of doubt.
+
+Configuration
+
+1. Configure all VLANs in the Access Switch.
+2. Trunk ports are configured as usual but do not allow any VLAN on it.
+3. Enable MVRP and specify the trunk/uplink ports.
+
+```
+set protocols mvrp interface ge-0/0/x.0
+set protocols mvrp interface ge-0/0/y.0
+```
+
+Monitoring commands:
+
+```
+show mvrp
+show mvrp dynamic-vlan-memberships
+show mvrp statistics
+show vlans
+```
