@@ -86,3 +86,11 @@ Summary:
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/p-vlan_03.png)
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/p-vlan_04.png)
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/p-vlan_05.png)
+
+Tshoot commands
+
+```
+show vlans
+show vlans extensive <PRIMARY-VLAN-NAME>
+show vlans extensive <SECONDARY-VLAN-NAME>
+```
