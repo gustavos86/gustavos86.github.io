@@ -126,3 +126,195 @@ show mvrp dynamic-vlan-memberships
 show mvrp statistics
 show vlans
 ```
+
+## Layer 2 Tunnel Traffic
+
+Q-in-Q tunneling is defined in IEEE 802.1ad.
+Stacked VLAN tags:
+- Service VLAN (S-VLAN): controlled by the service provider
+- Customer VLAN (C-VLAN): typically controlled by the customer
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/l2tunneling-01.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/l2tunneling-02.png)
+
+### Configuration using Bundling Method
+
+C-VLAN interface (towards end-customer)
+
+```
+set interfaces ge-0/0/7 flexible-vlan-tagging
+set interfaces ge-0/0/7 native-vlan-id 10
+set interfaces ge-0/0/7 encapsulation extended-vlan-bridge
+set interfaces ge-0/0/7 unit 100 vlan-id-list 1-25
+set interfaces ge-0/0/7 unit 100 input-vlan-map push
+set interfaces ge-0/0/7 unit 100 output-vlan-map pop
+```
+
+S-VLAN interface (towards the provider)
+
+```
+set interfaces ge-0/0/1 flexible-vlan-tagging
+set interfaces ge-0/0/1 encapsulation extended-vlan-bridge
+set interfaces ge-0/0/1 unit 100 vlan-id 100
+```
+
+### Configuration using Many-to-Many method
+
+C-VLAN interface (towards end-customer)
+
+```
+set interfaces ge-0/0/7 flexible-vlan-tagging
+set interfaces ge-0/0/7 native-vlan-id 10
+set interfaces ge-0/0/7 encapsulation extended-vlan-bridge
+set interfaces ge-0/0/7 unit 100 vlan-id-list 1-25
+set interfaces ge-0/0/7 unit 100 input-vlan-map push
+set interfaces ge-0/0/7 unit 100 output-vlan-map pop
+set interfaces ge-0/0/7 unit 200 vlan-id-list 1-25
+set interfaces ge-0/0/7 unit 200 input-vlan-map push
+set interfaces ge-0/0/7 unit 200 output-vlan-map pop
+```
+
+S-VLAN interface (towards the provider)
+
+```
+set interfaces ge-0/0/1 flexible-vlan-tagging
+set interfaces ge-0/0/1 encapsulation extended-vlan-bridge
+set interfaces ge-0/0/1 unit 100 vlan-id 100
+set interfaces ge-0/0/1 unit 200 vlan-id 200
+```
+
+### Configuring specific C-VLAN to S-VLAN Mapping
+
+C-VLAN interface (towards end-customer)
+
+```
+set interfaces ge-0/0/15 flexible-vlan-tagging
+set interfaces ge-0/0/15 encapsulation extended-vlan-bridge
+set interfaces ge-0/0/15 unit 300 vlan-id 125
+set interfaces ge-0/0/15 unit 300 input-vlan-map swap
+set interfaces ge-0/0/15 unit 300 output-vlan-map swap
+```
+
+Monitoring commands
+
+```
+show interfaces ge-0/0/7 extensive
+show interfaces ge-0/0/7 detail
+```
+
+## L2PT
+
+```
+set layer2-control mac-rewrite interface ge-0/0/7 protocol ?
+```
+
+Considerations:
+
+- If you enable L2PT for untagged OAM LFM packets, do not configure LFM on the corresponding access interface
+- If you enable L2PT for untagged LACP packets, do not configure LACP on the corresponding access interface
+- CPD, UDLD, and VTP cannot be configured on EX Series switches. L2PT does, however, tunnel CDP, UDLD, and VTP PDUs.
+
+## Configuring an LACP interface
+
+1. Global command, allows X number of aggregated Ethernet interfaces to be created
+
+```
+set chassis aggregated-devices ethernet device-count 1
+```
+
+2. Assign physical interface to the LAG interface
+
+```
+set interfaces ge-0/0/1 ether-options 802.3ad ae0
+set interfaces ge-0/0/2 ether-options 802.3ad ae0
+```
+
+3. Configure the LAG interface
+
+```
+set interfaces ae0.0 family ethernet-switching interface-mode trunk
+set interfaces ae0.0 family ethernet-switching vlan members [v11 v12]
+```
+
+## Configuring a P-VLAN
+
+```
+set vlans pvlan-50 description "Primary VLAN" vlan-id 50
+set vlans pvlan-50 community-vlans [finance sales]
+
+set vlans finance description "Community VLAN" vlan-id 41
+set vlans finance private-vlan community
+
+set vlans sales description "Community VLAN" vlan-id 42
+set vlans sales private-vlan community
+```
+
+```
+set interfaces ge-0/0/1 family ethernet-switching interface-mode access
+set interfaces ge-0/0/1 family ethernet-switching vlan members finance
+set interfaces ge-0/0/2 family ethernet-switching interface-mode access
+set interfaces ge-0/0/2 family ethernet-switching vlan members finance
+
+set interfaces ge-0/0/3 family ethernet-switching interface-mode access
+set interfaces ge-0/0/3 family ethernet-switching vlan members sales
+set interfaces ge-0/0/4 family ethernet-switching interface-mode access
+set interfaces ge-0/0/4 family ethernet-switching vlan members sales
+
+set interfaces ae0.0 family ethernet-switching interface-mode trunk
+set interfaces ae0.0 family ethernet-switching inter-switch-link
+set interfaces ae0.0 family ethernet-switching vlan members pvlan-50
+```
+
+## Configuring MVRP
+
+MVRP requires to use Spanning-Tree enabled on the Trunk interfaces that are configured for MVRP.
+It requires Rapid Spanning Tree Protocol (RSTP) or Multiple Spanning Tree Protocol (MSTP) enabled on the interface
+
+```
+set protocols rstp interface ae0
+set protocols mvrp interface ae0
+```
+
+Verification commands
+
+```
+show vlans
+show mvrp dynamic-vlan-memberships
+show mvrp statistics
+```
+
+## Configuring Q-in-Q tunneling
+
+C-VLAN to use is 100
+P-VLAN to use is 200
+
+Port facing the end-customer
+
+```
+set interfaces ge-0/0/6 family ethernet-switching
+set interfaces ge-0/0/6 flexible-vlan-tagging
+set interfaces ge-0/0/6 encapsulation extended-vlan-bridge
+set interfaces ge-0/0/6 unit 200 vlan-id-list 100
+set interfaces ge-0/0/6 unit 200 input-vlan-map push
+set interfaces ge-0/0/6 unit 200 output-vlan-map pop
+```
+
+Port facing the provider's network
+
+```
+set interfaces ae0 family ethernet-switching
+set interfaces ae0 flexible-vlan-tagging
+set interfaces ae0 encapsulation extended-vlan-bridge
+set interfaces ae0 unit 200 vlan-id 200
+set interfaces ae0 unit 11 vlan-id 11
+set interfaces ae0 unit 12 vlan-id 12
+```
+
+```
+set vlans v100 interface ge-0/0/6.200
+set vlans v100 interface ae0.200
+
+set vlans v11 interface ae0.11
+set vlans v12 interface ae0.12
+```
