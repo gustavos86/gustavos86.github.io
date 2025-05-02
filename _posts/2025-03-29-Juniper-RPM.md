@@ -5,6 +5,8 @@ categories: [JUNIPER, JUNOS OS]
 tags: [juniper]     # TAG names should always be lowercase
 ---
 
+![]({{ site.baseurl }}/images/services/juniper_logo.png)
+
 ## Real-Time Performance Monitoring (RPM)
 
 The **Real-Time Performance Monitoring (RPM)** feature in Junos OS is similar to **IP SLA** in Cisco IOS.
