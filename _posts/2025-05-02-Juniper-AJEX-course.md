@@ -319,7 +319,7 @@ set vlans v11 interface ae0.11
 set vlans v12 interface ae0.12
 ```
 
-## MSTP
+## MSTP - Multiple Spanning Tree Protocol
 
 Switch with the least Bridge ID (Bridge Priority + MAC address) becomes the **root bridge**. Default Bridge Priority 32K by default.
 
@@ -338,7 +338,7 @@ You can configure a maximum of 64 MSTIs per MST region with one regional root br
 
 Up to 64 MSTIs can be configured on each MST region.
 
-Configuration
+### Configuration of MSTP
 
 MSTI 0 is the **Common STP** instance
 
@@ -353,3 +353,30 @@ show spanning-tree bridge
 ```
 
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mstp-04.png)
+
+## VSTP - VLAN Spanning Tree Protocol
+
+VLAN Spanning Tree Protocol (VSTP) maintains a separate spanning-tree instance for each VLAN, enabling load balancing of Layer 2 traffic.
+
+Proprietary protocol that is compatible with similar protocols from other vendors including:
+- Per-VLAN Spanning Tree Plus (PVST+)
+- Rapid-PVST+ (RPVST+)
+
+Supports up to 253 different spanning-tree topologies
+
+Rapid Spanning Tree Protocol (RSTP) can be enabled in addition to VSTP to account for any VLANs above and beyond 253.
+
+Each STI (Spanning Tree Instance) will send their own BPDUs effectively making that each VLAN will send their own BPDUs.
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/vstp-01.png)
+
+### Configuration of VSTP
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/vstp-02.png)
+
+```
+show spanning-tree interface
+show spanning-tree bridge
+```
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/vstp-03.png)
