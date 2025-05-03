@@ -441,3 +441,68 @@ Configuring 802.1X
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-10.png)
 
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-11.png)
+
+## Access Control Features - MAC Radius and Captive Portal
+
+### MAC RADIUS
+
+Uses a centralized RADIUS Server and database to authenticate end user devices not 802.1X enabled.
+Hosts that are not 802.1X-enabled can be authenticated using MAC RADIUS.
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mac-radius-01.png)
+
+MAC RADIUS and 802.1X on the same port
+
+- MAC RADIUS can be configured in conjuction with 802.1X on ports that also serve 802.1X clients
+- The switch uses the **Extensible Authentication Protocol-Message Digest 5 (EAP-MD5)** method, when both **802.1X amd MAC RADIUS** authentication methods are enabled on the same port
+- With the preivuos case, if only **non-802.1X-enabled** end devices connect to a given interface, you can eliminate the delay (which can be upto 90 seconds) by configuring the `mac-radius restrict` option
+
+Configuring MAC RADIUS
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mac-radius-02.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mac-radius-03.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mac-radius-04.png)
+
+### Captive Portal Access Control Features
+
+Uses authentication with RADIUS server.
+Captive Portal is enabled on individual interfaces on EX switches.
+Captive Portal can be configured on Layer 2 interfaces.
+Captive Portal **does not support** dynamic VLAN assigments through the RADIUS server.
+Captive Portal is a supported fallback option for 802.1X.
+By Default, Captive Portal uses the single supplicant mode.
+Captive Portal limits the number of user authentication attempts, the default is 3. After these attempts, the wait period to retry is 60 seconds by default.
+Upon expiry of the re-authentication timer, Captive Portal tears down the connection.
+Sessions by default are 3600 seconds (1 hour), which can be changed in the configuration per interface or for all the interfaces with the command "session expiry".
+When an end-user device opens a Web browswer and points to a remote website, the connected switch, with the Captive Portal feature enabled, intercepts the request and presents the user with the Captive Portal login HTML page. The Captive Portal login HTML page requests the user's username and password.
+End-device should have IP/Mask, Gateway, DNS information so DHCP & DNS traffic is bypassed.
+
+Authentication Allowlist
+
+This is just to bypass devices from the Captive Portal (printers, IP Phones, etc) by having their MAC address statically configured in a local list in the Switch's configuration.
+
+Captive Portal configuration
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-01.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-02.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-03.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-04.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-05.png)
+
+Captive Portal Authentication Allowlist configuration
+
+**NOTE**: Multiple supplicant must is required.
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-07.png)
+
+Captive Portal verification
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-07.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-08.png)
