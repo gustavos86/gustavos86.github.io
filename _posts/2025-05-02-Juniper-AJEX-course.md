@@ -349,6 +349,8 @@ MSTI 0 is the **Common STP** instance
 ```
 show spanning-tree mstp configuration
 show spanning-tree interface
+show spanning-tree interface msti 1 detail
+show spanning-tree interface msti 2 detail
 show spanning-tree bridge
 ```
 
@@ -376,7 +378,66 @@ Each STI (Spanning Tree Instance) will send their own BPDUs effectively making t
 
 ```
 show spanning-tree interface
+show spanning-tree interface vlan-id XXX detail
 show spanning-tree bridge
 ```
 
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/vstp-03.png)
+
+## Authentication and Access Control
+
+802.1X
+MAC Radius
+Captive Portal
+
+Radius clients are network devices that rqeuest AAA services from a RADIUS server.
+
+802.1X IEEE defines a method to authenticate and associate users with network access rights based on an assigned profile and VLAN.
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-01.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-02.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-03.png)
+
+Dynamic VLAN Assigment
+
+802.1X can dynamically associate hosts with their corresponding VLANs during authentication process.
+RADIUS server returns VLAN attributes as part of the access-accept message (VLAN must be configured on the switch).
+
+Guest VLAN
+
+Provides limited access, typically just Internet access, for Guests and devices that don't support 802.1X authentication
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-05.png)
+
+Suplicants can be moved to a specific VLAN upon the Authenticator receiving an access-reject message from the RADIUS Server.
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-06.png)
+
+Server Fail Fallback Options
+
+If RADIUS server fails to **respond or authenticate** a device, these are the supported actions:
+
+- Permit: Enables traffic from devices as if they are successfully authenticated by the RADIUS server
+- Deny: Prevents traffic from devices **(default behavior)**
+- Move: Associates device with the specified VLAN
+- Sustain: Maintains authentication for devices that already have LAN access and denies unauthenticated devices
+
+Static MAC Bypass
+
+Exclusion list specifying MAC addresses of devices allowed access to the ALN without authentication.
+Commonly used with printers and IP phones.
+You must use the **Multiple Supplicant** mode.
+
+Configuring 802.1X
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-07.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-08.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-09.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-10.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/8021x-11.png)
