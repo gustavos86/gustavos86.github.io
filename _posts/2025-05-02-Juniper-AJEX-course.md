@@ -318,3 +318,38 @@ set vlans v100 interface ae0.200
 set vlans v11 interface ae0.11
 set vlans v12 interface ae0.12
 ```
+
+## MSTP
+
+Switch with the least Bridge ID (Bridge Priority + MAC address) becomes the **root bridge**. Default Bridge Priority 32K by default.
+
+The Root Bridge has all its port as Designated Ports (Forwarding State).
+STP cost on 1Gbps interfaces `ge-0/0/x` interfaces is **20,000** by default.
+Pord ID = Sender port priority + Sender interface number
+Port Priority is **128** by default.
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mstp-01.png)
+
+MSTP provides extension to RSTP.
+Enables you to create Multiple Spanning-Tree Instances (MSTIs) to balance traffic flows over all available links.
+
+MSTP Regions are "clusters". MSTP Regions shares same Region name, revision level and VLAN-to-instance mapping.
+You can configure a maximum of 64 MSTIs per MST region with one regional root bridge per instance.
+
+Up to 64 MSTIs can be configured on each MST region.
+
+Configuration
+
+MSTI 0 is the **Common STP** instance
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mstp-02.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mstp-03.png)
+
+```
+show spanning-tree mstp configuration
+show spanning-tree interface
+show spanning-tree bridge
+```
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/mstp-04.png)
