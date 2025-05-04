@@ -586,3 +586,39 @@ show dot1x interface detail
 show dot1x interface ge-0/0/10 detail
 show dot1x static-mac-address
 ```
+
+## IP Telephony Features: Voice VLAN
+
+The voice VLAN feature enables access ports to accept both untagged (data) and tagged (voice) traffic and separate that traffic into different VLANs.
+Used with the class of service (CoS) to differentiate data and voice traffic
+Voice VLAN and CoS values can be communicated to IP phones through LLDP-MED (Link Layer Discovery Protocol-Media Endpoint Discovery).
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/voice-vlan-01.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/voice-vlan-02.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/voice-vlan-03.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/voice-vlan-04.png)
+
+Commands to verify
+
+```
+show lldp local-information
+show lldp statistics interface ge-0/0/10
+```
+
+L3 port with 802.1Q / VLAN tagging
+
+```
+set interfaces ge-0/0/11 vlan-tagging
+deactivate interfaces ge-0/0/11 unit 0
+set interfaces ge-0/0/11 unit 25 vlan-id 25
+set interfaces ge-0/0/11 unit 25 family inet addresss 172.23.25.11/24
+```
+
+Capture traffic on an interface
+
+```
+monitor traffic interface ge-0/0/10 print-ascii no-resolve detail
+```
