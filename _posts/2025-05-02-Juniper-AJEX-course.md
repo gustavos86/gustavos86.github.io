@@ -506,3 +506,83 @@ Captive Portal verification
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-07.png)
 
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/captiveportal-08.png)
+
+### Authentication Process Considerations
+
+Listing all authentication processes here:
+- 802.1X
+- MAC RADIUS
+- Captive Portal
+- MAC Allowlist & Static MAC Bypass
+- Server-Reject VLAN & Guest VLAN
+
+Captive Portal **cannot be mixed for active authentications** with 802.1X and/or MAC Radius.
+
+Fallback order:
+1. 802.1X Authentication
+2. MAC RADIUS Authentication
+3. Captive Portal Authentication
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/auth-proc-considerations-01.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/auth-proc-considerations-02.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/auth-proc-considerations-03.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/auth-proc-considerations-04.png)
+
+### Configuring 802.1X
+
+```
+set access radius-server 172.25.11.254 secret Juniper
+set access profile my-profile authentication-order radius
+set access profile my-profile radius authentication-server 172.25.11.254
+
+set protocols dot1x authenticator authentication-profile-name my-profile
+set protocols dot1x authenticator interface ge-0/0/10
+set protocols dot1x authenticator interface ge-0/0/12
+```
+
+Single-secure suplicant mode
+
+```
+set protocols dot1x authenticator interface ge-0/0/10 no-reauthentication   # Disabling re-authentication
+set protocols dot1x authenticator interface ge-0/0/12 suplicant single-secure   # By default suplicant mode is "Single", we're changing that on this line
+set protocols dot1x authenticator interface ge-0/0/12 reauthentication 7200    # By default it is 3600 (1 hour)
+```
+
+MAC Bypass
+
+```
+set protocols dot1x authenticator static 00:26:88:00:00:00/24
+```
+
+Multiple suplicant mode
+
+```
+set protocols dot1x authenticator interface ge-0/0/10 suplicant multiple
+set protocols dot1x authenticator interface ge-0/0/12 suplicant multiple
+```
+
+MAC RADIUS
+
+```
+set protocols dot1x authenticator interface ge-0/0/10 mac-radius restrict
+set protocols dot1x authenticator interface ge-0/0/12 mac-radius restrict
+```
+
+Fail fallback - allows traffic on port even when RADIUS was unresponsive to the request
+
+```
+set protocols dot1x authenticator interface ge-0/0/10 server-fail permit
+set protocols dot1x authenticator interface ge-0/0/12 server-fail permit
+```
+
+Commands to verify the configuration
+
+```
+show dot1x interface
+show dot1x interface detail
+show dot1x interface ge-0/0/10 detail
+show dot1x static-mac-address
+```
