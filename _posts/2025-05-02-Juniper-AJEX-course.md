@@ -660,3 +660,54 @@ show lldp neighbors
 show lldp local-info
 show lldp statistics
 ```
+
+## Class of Service
+
+- **Policers** monitor and limit traffic on **ingress interfaces**
+- **Shapers** monitor and limit traffic on **egress interfaces or queues**
+  - **Port shaping** defines the maximum bandwidth allocated to a port
+  - **Queue shaping** defines a limit at which queues transmit packets
+
+```
+set class-of-service code-point-aliases dscp custom-ef 101110
+```
+
+```
+show class-of-service interface ge-0/0/6
+show class-of-service code-point-aliases
+show class-of-service forwarding-class
+show interfaces ge-0/0/16 extensive
+```
+
+Rewrite rules are applied to logical interfaces
+
+```
+show class-of-service rewrite-rule type dscp
+set interfaces ge-* unit * rewrite-rules dscp
+```
+
+Changing the Default behavior on EX Switches
+
+The default behavior is overwritting the CoS fields, so in case the EX switch receives a frame with the CoS set to EF, the frame will be allocated to Queue 0 and forwarded with CoS all zeros.
+
+Enabling Behavior Aggregate (BA)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-01.png)
+
+Defining Schedulers
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-02.png)
+
+Configuring Schedulers Maps
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-03.png)
+
+EZQoS configuration template
+
+Template specifically designed for VoIP deployments
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-04.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-05.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-06.png)
