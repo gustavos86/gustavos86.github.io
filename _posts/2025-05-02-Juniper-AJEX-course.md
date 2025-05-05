@@ -622,3 +622,41 @@ Capture traffic on an interface
 ```
 monitor traffic interface ge-0/0/10 print-ascii no-resolve detail
 ```
+
+## IP Telephony Features: Power over Ethernet and Neighbor Discovery using LLDP
+
+Power over Ethernet Plus (PoE+) was designed to support PDs with higher power level requirements.
+
+- PoE (IEEE 802.3af) provides up to 15.4W of power
+- PoE (IEEE 802.3at) provides up to 30W of power
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/poe-01.png)
+
+Configuring PoE
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/poe-02.png)
+
+PoE Verification Commands
+
+```
+show chassis hardware
+show poe interface
+show poe interface ge-0/0/0
+```
+
+When 802.1X is enabled, LLDP frames are not transmitted or received until the port is authenticated.
+
+When an IP Phone and a PC both connected to the same 802.1X enabled port and only one of them is configured to be 802.1X supplicant, use the **Single supplicate mode** on the Switch's port. When both are configured as 802.1X supplicant use the **Multiple supplicant mode**.
+
+Configuring LLDP
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/lldp-01.png)
+
+Verification commands
+
+```
+show lldp detail
+show lldp neighbors
+show lldp local-info
+show lldp statistics
+```
