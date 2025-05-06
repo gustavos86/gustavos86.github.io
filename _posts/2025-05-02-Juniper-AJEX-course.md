@@ -711,3 +711,31 @@ Template specifically designed for VoIP deployments
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-05.png)
 
 ![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-06.png)
+
+## Class of Service Implementation
+
+1. Use EZQoS template to consistently implement class of service (CoS)
+2. Use operational mode commands to verify proper operations.
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-07.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/cos-08.png)
+
+```
+show class-of-service code-point-aliases dscp | match ef
+show class-of-service forwarding-class
+show class-of-service classifier name ezqos-dscp-classifier
+show class-of-service interface ge-0/0/6
+show interfaces ge-0/0/10 extensive | find "Queue counters"
+show interfaces ge-0/0/10 extensive | find "CoS information"
+show interfaces queue ge-0/0/10 egress
+traceroute x.x.x.x tos 0
+```
+
+| command                         | description                                                                                                                 |
+|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| show interfaces extensive       | Show interface statistics and Packet Forwarding Engine queue configuration                                                  |
+| show interface queue            | Show detailed per-queue interface statistics                                                                                |
+| show class-of-service interface | Display every CoS-related feature active on the interface                                                                   |
+| traceroute                      | Can help for a summary checking of rewrite rules                                                                            |
+| show firewall                   | Defines counters on multifield classifiers at the edge or forwarding classes in the core-is a valuable troubleshooting tool |
