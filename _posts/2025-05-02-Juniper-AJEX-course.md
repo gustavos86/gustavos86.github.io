@@ -739,3 +739,47 @@ traceroute x.x.x.x tos 0
 | show class-of-service interface | Display every CoS-related feature active on the interface                                                                   |
 | traceroute                      | Can help for a summary checking of rewrite rules                                                                            |
 | show firewall                   | Defines counters on multifield classifiers at the edge or forwarding classes in the core-is a valuable troubleshooting tool |
+
+## troubleshooting
+
+Hardware troubleshooting
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/troubleshooting-01.png)
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/troubleshooting-02.png)
+
+System log
+
+```
+set system syslog file messages any notice
+set system syslog file messages authorization info
+```
+
+Traceoptions
+
+```
+set protocols rstp traceoptions file rstp-trace-file
+set protocols rstp traceoptions flag all-failures
+```
+
+Routing Engine
+
+```
+show chassis routing-engine
+```
+
+Process Failures
+
+```
+show system core-dumps
+```
+
+JTAC usually request these outputs
+
+```
+set cli timestamp
+
+request support information | no-more
+show log messages
+show log chassisd
+```
