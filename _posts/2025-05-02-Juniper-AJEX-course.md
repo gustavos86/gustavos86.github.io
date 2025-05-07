@@ -740,7 +740,7 @@ traceroute x.x.x.x tos 0
 | traceroute                      | Can help for a summary checking of rewrite rules                                                                            |
 | show firewall                   | Defines counters on multifield classifiers at the edge or forwarding classes in the core-is a valuable troubleshooting tool |
 
-## troubleshooting
+## Network Troubleshooting
 
 Hardware troubleshooting
 
@@ -782,4 +782,40 @@ set cli timestamp
 request support information | no-more
 show log messages
 show log chassisd
+```
+
+## Network Troubleshooting tools
+
+SNMP
+
+```
+set snmp health-monitor ?
+```
+
+sFlow
+
+```
+set protocols sflow polling-interval 20
+set protocols sflow sample-rate egress 100
+set protocols sflow source-ip <management-address>
+set protocols sflow collector 10.10.10.254 udp-port 6343
+set protocols sflow interfaces ge-0/0/10.0
+set protocols sflow interfaces ge-0/0/12.0
+```
+
+```
+show sflow
+show sflow collector
+```
+
+Port Mirroring
+
+```
+set forwarding-options analyzer monitor-AB input ingress interface ge-0/0/0.0
+set forwarding-options analyzer monitor-AB input ingress interface ge-0/0/1.0
+set forwarding-options analyzer monitor-AB output interface ge-0/0/10.0
+```
+
+```
+monitor interface traffic
 ```
