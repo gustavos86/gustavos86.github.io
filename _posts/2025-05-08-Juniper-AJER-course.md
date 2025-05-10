@@ -38,3 +38,39 @@ OSPF verification commands
 ```
 show ospf database detail
 ```
+
+Display information about the Router LSA: Type 1
+
+```
+show ospf database router extensive
+```
+
+Display information about the Network LSA: Type 2
+
+```
+show ospf database network extensive
+```
+
+Display information about the Summary LSA: Type 3
+
+```
+show ospf database netsummary extensive
+```
+
+Display information about the ASBR SummaryLSA: Type 4
+
+```
+show ospf database asbrsummary extensive
+```
+
+Display information about the External LSA: Type 5
+
+```
+show ospf database external extensive
+```
+
+Display information about the NSSA LSA: Type 7
+
+```
+show ospf database nssa extensive
+```
