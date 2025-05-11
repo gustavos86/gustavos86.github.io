@@ -95,7 +95,7 @@ show ospf database nssa extensive
 3. External Type E1
 4. External Type E2
 
-## OSPF Reference Bandwidth
+### OSPF Reference Bandwidth
 
 Default OSPF cost for all links is 10^8 / bandwidth (bps).
 With these defauls, links with bandwidth >= 100 Mbps have a cost of 1.
