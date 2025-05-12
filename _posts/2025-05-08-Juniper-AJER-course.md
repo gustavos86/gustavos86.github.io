@@ -43,7 +43,9 @@ OSPF verification commands
 
 ```
 show ospf database
+show ospf database summary
 show ospf database detail
+show ospf database area x.x.x.x
 ```
 
 Display OSPF learned routes
@@ -210,4 +212,90 @@ To disable it
 set protocols ospf deactivate traceoptions
 
 run file delete /var/log/trace-ospf
+```
+
+### Stub Area configuration
+
+```
+set protocols ospf area 0.0.0.1 stub
+```
+
+This is the ABR configuration to inject an OSPF Type 3 Summary LSA `0.0.0./0` route into the Stub Area with a specific metric.
+
+```
+set protocols ospf area 0.0.0.1 stub default-metric 10
+```
+
+### Totally Stub Area configuration
+
+The Totally Stub Area configuration is only required on the ABRs.
+
+```
+set protocols ospf area 0.0.0.1 stub no-summaries default-metric 10
+```
+
+### NSSA Area configuration
+
+```
+set protocols ospf area 0.0.0.3 nssa
+```
+
+For the ABR to inject a `0.0.0.0/0` default route into the NSSA area as **OSPF LSA Type 7**
+
+```
+set protocols ospf area 0.0.0.3 nssa default-lsa default-metric 10
+```
+
+When an ASBR is also an ABR with an NSSA area attached to it, all NSSA areas receive the LSA type 7 from it.
+To disable the behaviour, use this command:
+
+```
+set protocols ospf no-nssa-abr
+```
+
+### Totally NSSA Area configuration
+
+```
+set protocols ospf area 0.0.0.3 nssa no-summaries
+```
+
+For the ABR to inject a `0.0.0.0/0` default route into the NSSA area as **OSPF LSA Type 3**
+
+```
+set protocols ospf area 0.0.0.3 nssa default-lsa default-metric 10
+set protocols ospf area 0.0.0.3 nssa no-summaries
+```
+
+For the ABR to inject a `0.0.0.0/0` default route into the NSSA area as **OSPF LSA Type 7**
+
+```
+set protocols ospf area 0.0.0.3 nssa default-lsa default-metric 10
+set protocols ospf area 0.0.0.3 nssa default-lsa type-7
+set protocols ospf area 0.0.0.3 nssa no-summaries
+```
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ospf-nssa-default-route-types-01.png)
+
+### Summarize OSPF Type 1 and Type 2 LSAs advertised to the Backbone Area by the ABR
+
+```
+set protocols ospf area 1 area-range 192.168.16/20
+```
+
+### Block OSPF Type 1 and Type 2 LSAs from being advertised to the Backbone Area by the ABR
+
+```
+set protocols ospf area 1 area-range 192.168.16/20 restric
+```
+
+### Summarize OSPF Type 7 LSAs advertised to the Backbone Area by the ABR
+
+```
+set protocols ospf area 1 nssa area-range  192.168.16/20
+```
+
+### Block OSPF Type 7 LSAs from being advertised to the Backbone Area by the ABR
+
+```
+set protocols ospf area 1 nssa area-range  192.168.16/20
 ```
