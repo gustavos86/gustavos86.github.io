@@ -299,3 +299,58 @@ set protocols ospf area 1 nssa area-range  192.168.16/20
 ```
 set protocols ospf area 1 nssa area-range  192.168.16/20
 ```
+
+### OSPF Multi-Area Adjacencies
+
+Interfaces can belong to more than one Area.
+In this example, `ge-0/0/1` is configured on both, **Area 0** and **Area 1**.
+
+Note that the `secondary` is configured as **OSPF point-to-point**.
+
+```
+set protocols ospf area 0.0.0.0 interface ge-0/0/1.0
+set protocols ospf area 0.0.0.1 interface ge-0/0/1.0 secondary
+```
+
+### OSPF Virtual Links
+
+Router A
+
+```
+set protocols ospf area 0.0.0.0 virtual-link neighbor-id 192.168.0.2 transit-area 0.0.0.10
+```
+
+Router B
+
+```
+set protocols ospf area 0.0.0.0 virtual-link neighbor-id 172.16.0.4 transit-area 0.0.0.10
+```
+
+### Redistribute Static Routes into OSPF
+
+By default external routes into OSPF are advertised as **type E2**.
+
+```
+set policy-options policy-statement REDISTRIBUTE-STATICS term STATIC-ROUTES from protocol static
+set policy-options policy-statement REDISTRIBUTE-STATICS term STATIC-ROUTES then external type 1   <<< To make the routes type E1
+set policy-options policy-statement REDISTRIBUTE-STATICS term STATIC-ROUTES then accept
+
+set protocols ospf expoert REDISTRIBUTE-STATICS
+```
+
+### OSPF Prefix Limit
+
+If the number of network prefixes to be redistributed into OSPF exceed `prefix-export-limit <#>` then none is redistributed.
+
+```
+set protocols ospf prefix-export-limit <#>
+```
+
+### Display Routing
+
+| # |       Source       |         Command          |
+|---|--------------------|--------------------------|
+| 1 | Link State Databse | show ospf database       |
+| 2 | Tree Database      | show ospf route          |
+| 3 | inet.0             | show route protocol ospf |
+
