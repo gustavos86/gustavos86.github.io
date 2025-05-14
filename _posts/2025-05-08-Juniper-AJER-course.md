@@ -202,8 +202,13 @@ OSPFv3 LSA Types
 ### OSPF debugging
 
 ```
-set protocols ospf traceoptions file trace-ospf
+set protocols ospf traceoptions file trace-ospf.log size 10m files 3
 set protocols ospf traceoptions flag error detail
+set protocols ospf traceoptions flag hello detail
+set protocols ospf traceoptions flag hello send receive
+
+show log trace-ospf.log
+show log trace-ospf.log | match mismatch
 ```
 
 To disable it
@@ -354,3 +359,52 @@ set protocols ospf prefix-export-limit <#>
 | 2 | Tree Database      | show ospf route          |
 | 3 | inet.0             | show route protocol ospf |
 
+### OSPF Neighbor State Machine
+
+- Down
+- Init
+- 2Way
+- ExStart
+- Exchange
+- Loading
+- Full
+
+NOTE: If 2 directly connected Routers have the same Router ID, OSPF will NOT form adjacency.
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ospf-troubleshooting-1.png)
+
+Items that Must Match:
+
+1. Interface Types (p2p or MultiAccess)
+2. Network (MultiAccess only)
+3. Hello Intervals
+4. Dead Intervals
+5. Area Types
+6. Area Numbers
+7. Authentication
+
+```
+clear ospf statistics
+show ospf statistics
+```
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ospf-troubleshooting-2.png)
+
+Internal command that displays some timing statistics about SPF runs. Not very useful.
+
+```
+show ospf log
+```
+
+Monitor Traffic Interface
+
+```
+monitor traffic interface ge-0/0/1 detail no-resolve
+monitor traffic interface ge-0/0/1 matching dst 224.0.0.5
+```
+
+### Troubleshoot OSPF Routing issues
+
+- `show route protocol ospf` Displays OSPF-computed routes and their attributes
+- `show ospf route` Notifies the type (intra-area, interarea, external type-1 and type-2 and so on) of each of the prefixes computed by OSPF
+- `show ospf database` Enables you to check the content of the link-state database (LSDB)
