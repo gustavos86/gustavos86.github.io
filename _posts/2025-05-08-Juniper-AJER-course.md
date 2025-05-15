@@ -487,7 +487,7 @@ set protocols bgp group int-65503 authentication-key-chain KEY-CHAIN-NAME
 set protocols bgp group int-65503 neighbor 192.168.100.2
 ```
 
-## BGP TTL Security - Generalized TTL Security Mechanism (GTSM)
+### BGP TTL Security - Generalized TTL Security Mechanism (GTSM)
 
 BGP peer 1
 
@@ -578,13 +578,21 @@ set protocols bgp group MY-EXT-GROUP export ADV-AGGREGATES
 
 ### Verify BGP
 
-Verify BGP routes
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-import.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-export.png)
+
+- RIB-IN
+- RIB-LOCAL
+- RIB-OUT
 
 ```
-show route receive-protocol bgp <X.X.X.X>
-show route protocol bgp
+show route receive-protocol bgp <X.X.X.X> [hidden]
+show route protocol bgp [source-gateway <X.X.X.X>]
 show route advertising-protocol bgp <X.X.X.X>
+```
 
+```
 show route aspath-regex "65510 .*"
 show route 0/0 exact extensive
 ```
@@ -594,3 +602,7 @@ BGP sessions
 ```
 show bgp summary
 ```
+
+### Common BGP Path Attributes
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-common-path-attributes.png)
