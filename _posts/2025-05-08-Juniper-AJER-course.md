@@ -408,3 +408,119 @@ monitor traffic interface ge-0/0/1 matching dst 224.0.0.5
 - `show route protocol ospf` Displays OSPF-computed routes and their attributes
 - `show ospf route` Notifies the type (intra-area, interarea, external type-1 and type-2 and so on) of each of the prefixes computed by OSPF
 - `show ospf database` Enables you to check the content of the link-state database (LSDB)
+
+## BGP
+
+BGP Message Types:
+
+- Open
+- Keepalive
+- Update
+- Notification
+- Refresh
+
+BGP Neighbor States
+
+| TCP Connectivity | BGP Connectivity |
+|------------------|------------------|
+| Idle             | OpenSent         |
+| Connect          | OpenConfirm      |
+| Active           | Established      |
+
+### Configure BGP ASN and Router-ID
+
+```
+set routing-options autonomous-system 65503
+set routing-options router-id 192.168.100.1
+```
+
+### iBGP Configuration example
+
+```
+set protocols bgp group int-65503 type internal
+set protocols bgp group int-65503 local-address 192.168.100.1
+set protocols bgp group int-65503 neighbor 192.168.100.2
+```
+
+### eBGP Configuration example
+
+```
+set protocols bgp group ext-65501 type external
+set protocols bgp group ext-65501 peer-as 65501
+set protocols bgp group ext-65501 neighbor 172.30.1.2
+```
+
+### BGP Authentication
+
+BGP Authentication configured at BGP protocol level
+
+```
+set protocols bgp authentication-key <PASSWORD>
+```
+
+BGP Authentication configured at BGP group level
+
+```
+set protocols bgp group int-65503 authentication-key <PASSWORD>
+```
+
+BGP Authentication configured at BGP neighbor level
+
+```
+set protocols bgp group ext-65501 neighbor 172.30.1.2 authentication-key <PASSWORD>
+```
+
+BGP Authentication using Key Chains
+
+```
+set security authentication-key-chains key-chain KEY-CHAIN-NAME key 1 secret SECRET-DATA
+set security authentication-key-chains key-chain KEY-CHAIN-NAME key 1 start-time YYYY-MM-DD.HH:MM:SS
+
+set security authentication-key-chains key-chain KEY-CHAIN-NAME key 2 secret SECRET-DATA
+set security authentication-key-chains key-chain KEY-CHAIN-NAME key 2 start-time YYYY-MM-DD.HH:MM:SS
+```
+
+```
+set protocols bgp group int-65503 type internal
+set protocols bgp group int-65503 local-address 192.168.100.1
+set protocols bgp group int-65503 authentication-key-chain KEY-CHAIN-NAME
+set protocols bgp group int-65503 neighbor 192.168.100.2
+```
+
+## BGP TTL Security - Generalized TTL Security Mechanism (GTSM)
+
+BGP peer 1
+
+```
+set firewall filter TTL-SECURITY term GTSM from soruce-address 10.1.2.1/32
+set firewall filter TTL-SECURITY term GTSM from protocol tcp
+set firewall filter TTL-SECURITY term GTSM from ttl-except 255
+set firewall filter TTL-SECURITY term GTSM from port 179
+set firewall filter TTL-SECURITY term GTSM then discard
+
+set firewall filter TTL-SECURITY term ELSE then accept
+
+set interfaces ge-1/0/0 unit 0 family inet address 10.1.2.2/30 filter input TTL-SECURITY
+```
+
+BGP peer 2
+
+```
+set protocols bgp group toAS2 type external
+set protocols bgp group toAS2 peer-as 2
+set protocols bgp group toAS2 ttl 255           <<<<<<<<<<<<<<-----------
+set protocols bgp group toAS2 neighbor 10.1.2.2
+```
+
+### Protecting BGP session
+
+```
+set protocols bgp group ext-peers family inet unicast prefix-limit maximum 25000
+set protocols bgp group ext-peers family inet unicast prefix-limit teardown 80 idle-timeout 10   <<< Optional
+```
+
+### show route hidden extensive
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-showroute-hidden-extensive-output.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-reasons-hidden-routes.png)
