@@ -606,3 +606,15 @@ show bgp summary
 ### Common BGP Path Attributes
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-common-path-attributes.png)
+
+|         Attribute Name         |      Attribute Type      |
+|--------------------------------|--------------------------|
+| Next Hop                       | Well-known mandatory     |
+| Local Preference               | Well-known discretionary |
+| AS Path                        | Well-known mandatory     |
+| Origin                         | Well-known mandatory     |
+| Multi Exit Discriminator (MED) | Optional non-transitive  |
+
+### BGP Regex
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-regex.png)
