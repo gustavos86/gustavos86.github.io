@@ -524,3 +524,73 @@ set protocols bgp group ext-peers family inet unicast prefix-limit teardown 80 i
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-showroute-hidden-extensive-output.png)
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-reasons-hidden-routes.png)
+
+### Selecting the Active BGP Route
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-path-selection.png)
+
+### BGP Multipath
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-multipath.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-multipath-2.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-multipath-3.png)
+
+### BGP Multihop peering
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-multihop-peering.png)
+
+### Multiple Hops with Per-Flow Load Balancing
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/per-flow-load-balancing.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/per-flow-load-balancing-config-1.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/per-flow-load-balancing-config-2.png)
+
+### Advertise-inactive
+
+Overrides the default behavior and advertise BGP routes that are not currently selected as active because of route preference.
+
+```
+set protocol bgp advertise-inactive
+```
+
+### Aggregate routes
+
+```
+set routing-options aggregate route 172.21.0.0/22
+set routing-options aggregate route 172.22.0.0/22
+set routing-options aggregate route 192.168.1.0/30
+set routing-options aggregate route 192.168.2.0/30
+```
+
+```
+set routing-options policy-options policy-statement ADV-AGGREGATES term MATCH-AGGREGATE-ROUTES from protocol aggregate
+set routing-options policy-options policy-statement ADV-AGGREGATES term MATCH-AGGREGATE-ROUTES then accept
+set routing-options policy-options policy-statement ADV-AGGREGATES term DENY-OTHER then reject
+```
+
+```
+set protocols bgp group MY-EXT-GROUP export ADV-AGGREGATES
+```
+
+### Verify BGP
+
+Verify BGP routes
+
+```
+show route receive-protocol bgp <X.X.X.X>
+show route protocol bgp
+show route advertising-protocol bgp <X.X.X.X>
+
+show route aspath-regex "65510 .*"
+show route 0/0 exact extensive
+```
+
+BGP sessions
+
+```
+show bgp summary
+```
