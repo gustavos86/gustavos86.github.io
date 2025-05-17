@@ -679,3 +679,69 @@ set policy-options policy-statement EXPORT-EBGP term LAST then reject
 ```
 set protocols bgp group MY-EXT-GROUP exprt EXPORT-EBGP
 ```
+
+### BGP Troubleshooting
+
+iBGP
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ibgp-troubleshooting-steps.png)
+
+eBGP
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ebgp-troubleshooting-steps.png)
+
+### BGP Operational commands
+
+```
+show bgp summary | refresh 2
+show system connections
+show bgp group
+show bgp neighbor X.X.X.X
+show log messages | match notification
+```
+
+```
+monitor traffic interface ge-0/0/4.303 matching "tcp and port 179"
+```
+
+Displays routes being advertised **after** the export policy is processed
+
+```
+show route advertising-protocol bgp X.X.X.X [extensive]
+```
+
+Displays routes received from specific neighor **before** the import policy except for filtered routes which are hidden.
+
+Use `hidden` parameter to see the filtered routes.
+
+```
+show route receive-protocol bgp X.X.X.X [hidden]
+```
+
+To see the routes **after** the import policy, look for the in the Routing Table
+
+```
+show route protocol bgp source-gateway X.X.X.X [detail]
+```
+
+```
+show route protocol bgp [active-path]
+```
+
+```
+show route protocol bgp terse
+show route protocol bgp
+show route protocol bgp detail
+show route protocol bgp extensive
+```
+
+### BGP Debugging
+
+```
+set protocols bgp traceoptions file bgp_trace.log size 10m files 2
+set protocols bgp traceoptions flag packets detail
+set protocols bgp traceoptions flag general
+set protocols bgp traceoptions flag open
+set protocols bgp traceoptions flag update
+set protocols bgp traceoptions flag all
+```
