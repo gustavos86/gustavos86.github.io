@@ -801,6 +801,12 @@ set policy-options policy-statement GRE-EBGP term 1 then accept
 set policy-options policy-statement GRE-EBGP term 2 then reject
 ```
 
+alternatively:
+
+```
+set policy-options policy-statement GRE-EBGP term 1 then as-path-prepend "65000 65000 65000"
+```
+
 ```
 set protocols bgp group EBGP neighbor 172.17.1.37
 set protocols bgp group EBGP neighbor 172.17.1.37 export GRE-EBGP
