@@ -614,7 +614,68 @@ show bgp summary
 | AS Path                        | Well-known mandatory     |
 | Origin                         | Well-known mandatory     |
 | Multi Exit Discriminator (MED) | Optional non-transitive  |
+| Community                      | Optional transitive      |
 
 ### BGP Regex
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-regex.png)
+
+### BGP Well-Known Communities
+
+|        Type         |   Value    |                                                Notes                                                |
+|---------------------|------------|-----------------------------------------------------------------------------------------------------|
+| No-export           | 0xFFFFFF01 | These routes are nto advertised outside a BGP confederation or AS                                   |
+| No-advertise        | 0xFFFFFF02 | These routes are not advertised to other BGP peers                                                  |
+| No-export-subconfed | 0xFFFFFF03 | These routes are advertised to IBGP peers in the same AS but not to members of other confederations |
+
+BGP Communities configuration
+
+```
+set policy-options community <COMMUNITY_NAME> members [ <COMMUNITY-ID> <COMMUNITY-ID> ... ]
+```
+
+```
+set policy-options policy-statement <PS_NAME> term <X> from community <COMMUNITY_NAME>
+set policy-options policy-statement <PS_NAME> term <X> then local-preference 200
+set policy-options policy-statement <PS_NAME> term <X> then accept
+```
+
+```
+set protocols bgp group <MY-GROUP> export <PS_NAME>
+set protocols bgp group <MY-GROUP> neighbor <X.X.X.X>
+```
+
+### BGP Communities Regular Expressions
+
+Looking for routes with communities matching a regex in the Routing Table
+
+```
+show route community *:20 terse
+show route community *:20 detail
+show route community-name <NAME> detail
+```
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-communities-regex.png)
+
+### BGP Next-Hop-Self
+
+```
+set policy-options policy-statement NHS term <X> then next-hop-self
+
+set protocols bgp group <GROUP-NAME> export NHS
+```
+
+### Advertise only routes generated within the AS to the eBGP peer
+
+```
+set policy-options as-path null-as "()"
+
+set policy-options policy-statement EXPORT-EBGP term LOCAL-ROUTES from as-path null-as
+set policy-options policy-statement EXPORT-EBGP term LOCAL-ROUTES from protocol bgp
+set policy-options policy-statement EXPORT-EBGP term LOCAL-ROUTES then accept
+set policy-options policy-statement EXPORT-EBGP term LAST then reject
+```
+
+```
+set protocols bgp group MY-EXT-GROUP exprt EXPORT-EBGP
+```
