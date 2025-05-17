@@ -765,3 +765,44 @@ show interfaces lo0.0 detail | match "input filter"
 show configuration firewall family inter filter blocks-frags
 show firewall
 ```
+
+## Enterprise Policies
+
+### Summarize BGP routes
+
+```
+set routing-options aggregate route 10.0.0.0/8
+```
+
+```
+set policy-options policy-statement EXPORT-EBGP term 1 from protocol aggregate
+set policy-options policy-statement EXPORT-EBGP term 1 from route-filter 10.0.0.0/8 exact
+set policy-options policy-statement EXPORT-EBGP term 1 then accept
+set policy-options policy-statement EXPORT-EBGP term 2 then reject
+```
+
+```
+set protocols bgp group EBGP type external
+set protocols bgp group EBGP export EXPORT-EBGP
+set protocols bgp group EBGP peer-as 65002
+```
+
+### BGP prepend AS-path
+
+```
+set routing-options aggregate route 10.0.0.0/8 as-path path 65000
+```
+
+```
+set policy-options policy-statement GRE-EBGP term 1 from protocol aggregate
+set policy-options policy-statement GRE-EBGP term 1 from route-filter 10.0.0.0/8 exact
+set policy-options policy-statement GRE-EBGP term 1 then as-path-expand last-as count 5
+set policy-options policy-statement GRE-EBGP term 1 then accept
+set policy-options policy-statement GRE-EBGP term 2 then reject
+```
+
+```
+set protocols bgp group EBGP neighbor 172.17.1.37
+set protocols bgp group EBGP neighbor 172.17.1.37 export GRE-EBGP
+set protocols bgp group EBGP neighbor 172.17.1.37 peer-as 65001
+```
