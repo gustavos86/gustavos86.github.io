@@ -745,3 +745,23 @@ set protocols bgp traceoptions flag open
 set protocols bgp traceoptions flag update
 set protocols bgp traceoptions flag all
 ```
+
+### BGP Troubleshooting
+
+```
+show bgp neighbor X.X.X.X
+show log messages | match "open message"
+show log messages | match notification | match X.X.X.X
+show log bgp_trace.log | match "(BGP SEND)|(BGP RECV)"
+show route advertising-protocol bgp X.X.X.X
+show route receive-protocol bgp X.X.X.X
+show route hidden
+show route resolution unresolved
+show log bgp_trace.log | match "BGP RECV message type 2"
+show system connection inet extensive | find X.X.X.X
+ping X.X.X.X source X.X.X.X size 512 do-not-fragment
+show interfaces ge-* detail | match "input filter"
+show interfaces lo0.0 detail | match "input filter"
+show configuration firewall family inter filter blocks-frags
+show firewall
+```
