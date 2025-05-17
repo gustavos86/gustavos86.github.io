@@ -812,3 +812,60 @@ set protocols bgp group EBGP neighbor 172.17.1.37
 set protocols bgp group EBGP neighbor 172.17.1.37 export GRE-EBGP
 set protocols bgp group EBGP neighbor 172.17.1.37 peer-as 65001
 ```
+
+## Routing Policy Structure
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/routing-policy-structure-01.png)
+
+- You can apply multiple policies in a **policy chain**
+  - Evaluates sequentially, from left to right
+    - A terminating action in a matching term of a policy in the chain stops the processing
+  - The default policy is always last in a chian
+    - Applied implicitly
+    - Is protocol dependent
+    - Use the `default-action` statement to override the protocols default
+    - Always completes with a conclusive action
+
+### Prefix Lists
+
+```
+set policy-options prefix-list RFC1918 10.0.0.0/8
+set policy-options prefix-list RFC1918 172.16.0.0/20
+set policy-options prefix-list RFC1918 192.168.0.0/16
+```
+
+```
+set policy-options policy-statament REJECT-RFC1918 from prefix-list-filter RFC1918 orlonger
+set policy-options policy-statament REJECT-RFC1918 then reject
+```
+
+### Route Filters
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/route-filters-01.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/route-filters-02.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/route-filters-03.png)
+
+### BGP AS-path regex examples
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-as-path-regex-examples.png)
+
+### BGP Communitiies regex examples
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp-communities-regex-examples.png)
+
+### Routing Policy Troubleshooting
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/routing-policy-troubleshooting-diagram.png)
+
+### Policy Test Utility
+
+Only evaluates active routes in the Routing Table.
+Does not support all `match` conditions. Useful for policies with `route-filters`.
+Default action of the test is `accept`.
+
+```
+test policy reject-unwanted-routes 192.168/16
+test policy test-statics 172.16.0.1/18
+```
