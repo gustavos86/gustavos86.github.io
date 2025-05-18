@@ -869,3 +869,160 @@ Default action of the test is `accept`.
 test policy reject-unwanted-routes 192.168/16
 test policy test-statics 172.16.0.1/18
 ```
+
+### Policy Troubleshooting
+
+View the BGP routes that are received prior to the filtering of the import policy.
+
+```
+show route receive-protocol bgp X.X.X.X
+```
+
+View the BGP routes that have been filtered by the import policy.
+
+```
+show route receive-protocol bgp X.X.X.X hidden
+```
+
+View the BGP routes after the import policy processing in the Routing Table.
+
+```
+show route protocol bgp source-gateway X.X.X.X
+```
+
+View the BGP routes advertised by the export policy.
+
+```
+show route advertising-protocol bgp X.X.X.X
+```
+
+View the OSPF external routes exported by the export policy
+
+```
+show ospf database external
+```
+
+Displays the Shorted Path First (SPF) computed routes to the External OSPF subnets
+
+```
+show ospf route extern
+```
+
+View the OSPF external routes in the Routing Table
+
+```
+show route protocol ospf terse | match "O 150"
+```
+
+View the IS-IS external routes exported by the export policy
+
+```
+show isis database router-4.00 detail | match external
+```
+
+Displays IS-IS routes in the Routing Table
+
+```
+show route protocol isis terse | match "I 165"
+```
+
+View the routes in the Forwardin Table (FIB)
+
+```
+show route forwarding-table destination X.X.X.X/XX
+```
+
+Find all BGP routes that traversed AS 50292 or AS 50293
+
+```
+show route protocol bgp aspath-regex ".* (50292|50293)"
+```
+
+Use community regex filters to limit operational command output
+
+```
+show route protocol bgp community ".*:[678]0"
+show route 200.200/16 detail | match communities
+```
+
+View all configured policies
+
+```
+show policy
+```
+
+View Import and Export policies attached to a BGP neighbor
+
+```
+show bgp neighbor X.X.X.X | match "(export) | (import)"
+```
+
+### Policy roubleshooting Use Case
+
+- Do not accept the `any:777` **or** `any:888` communities
+
+```
+show route receive-protocol bgp X.X.X.X community "*:(777)|(888)"
+show route protocol bgp community "*:(777)|(888)"
+```
+
+- Replace all incoming communities with `65000:neighbor_AS`
+
+```
+show route protocol bgp source-gateway X.X.X.X community-name as100-comm
+show route protocol bgp community-name no-export terse
+```
+
+- Mark routes originating in any autonomous system (AS) other than the neighboring AS with the `no-export` community
+
+Incorrect configuration:
+
+```
+set policy-options policy-statement ENT-IMPORT-FILTER term 1 from community DROP-COMM
+set policy-options policy-statement ENT-IMPORT-FILTER term 1 then reject
+
+set policy-options policy-statement ENT-IMPORT-FILTER term 2 from as-path AS100
+set policy-options policy-statement ENT-IMPORT-FILTER term 2 then community set AS100-COMM  <--- Error: does not have a terminating action, which passes processing to the next term
+
+set policy-options policy-statement ENT-IMPORT-FILTER term 3 then community set NO-EXPORT  <--- Error: Overwrites all previously set communities with the new community, no-export
+
+
+
+set policy-options as-path AS100 "100"
+
+set policy-options community AS100-COMM members 65000:100
+set policy-options community DROP-COMMM members [ *:777 *:888 ]  <--- Error: this is a logical AND, not a logical OR
+set policy-options community NO-EXPORT members no-export
+```
+
+**IMPORTANT:** If the policy does not explicilty `accept` or `reject` the route, the next policy is processed.
+
+Correct configuration:
+
+```
+set policy-options policy-statement ENT-IMPORT-FILTER term 1 from community [ DROP-COMM-1 DROP-COMM-2 ]  <--- Correct: Logical OR
+set policy-options policy-statement ENT-IMPORT-FILTER term 1 then reject
+
+set policy-options policy-statement ENT-IMPORT-FILTER term 2 from as-path AS100
+set policy-options policy-statement ENT-IMPORT-FILTER term 2 then community set AS100-COMM
+set policy-options policy-statement ENT-IMPORT-FILTER term 2 then accept   <--- Correct: terminating Action
+
+set policy-options policy-statement ENT-IMPORT-FILTER term 3 then community set NO-EXPORT
+set policy-options policy-statement ENT-IMPORT-FILTER term 3 then community add AS100-COMM  <--- Correct: adding Community
+
+
+set policy-options as-path AS100 "100"
+
+set policy-options community AS100-COMM members 65000:100
+
+set policy-options community DROP-COMMM-1 members *:777
+set policy-options community DROP-COMMM-2 members *:888
+
+set policy-options community NO-EXPORT members no-export
+```
+
+```
+show route protocol bgp source-gateway X.X.X.X hidden terse
+show route 10.1.100/24 detail | match "(communities)|(as path)"
+show route 10.3.100/24 detail | match "(communities)|(as path)"
+```
