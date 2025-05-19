@@ -1026,3 +1026,32 @@ show route protocol bgp source-gateway X.X.X.X hidden terse
 show route 10.1.100/24 detail | match "(communities)|(as path)"
 show route 10.3.100/24 detail | match "(communities)|(as path)"
 ```
+
+## Multicast
+
+### Multicast IP & Ethernet addressing
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/multicast-ip-addressing-01.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/multicast-ip-addressing-02.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/multicast-ethernet-address.png)
+
+### RPF Check
+
+```
+show multicast rpf X.X.X.X
+```
+
+### Multicast Routing Tables
+
+- `inet.0`
+  - Default table used for RPF check lookups
+
+- `inet.1`
+  - Forwarding cache for successful RPF-checked traffic
+
+- `inet.2`
+  - Alsternate table for RPF check lookups
+  - Multicast topology independent from unicast topology
+  - Use of RIB groups required
