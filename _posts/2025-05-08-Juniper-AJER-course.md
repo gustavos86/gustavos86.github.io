@@ -1056,7 +1056,7 @@ show multicast rpf X.X.X.X
   - Multicast topology independent from unicast topology
   - Use of RIB groups required
 
-### IGMP
+### IGMP verification commands
 
 ```
 show igmp interface
@@ -1074,4 +1074,38 @@ set protocol igmp traceoptions flag general detail
 
 ```
 monitor start trace-igmp.log
+```
+
+### PIM verification commands
+
+```
+show pim interfaces
+show pim rps extensive
+show pim join extensive
+```
+
+```
+show multicast route extensive
+```
+
+### Configuring IGMP
+
+```
+set protocols igmp interface ge-0/0/8 version 2
+set protocols igmp interface ge-0/0/8 immediate-leave
+```
+
+### Configuring PIM
+
+```
+set protocols pim interface ge-0/0/4 mode sparse
+set protocols pim interface ge-0/0/8 mode sparse
+set protocols pim interface ge-0/0/1 mode sparse
+set protocols pim interface lo0 mode sparse
+```
+
+Static RP
+
+```
+set protocols pim rp local address 192.168.121.1 group-ranges 224/4
 ```
