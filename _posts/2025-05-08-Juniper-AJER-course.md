@@ -1055,3 +1055,23 @@ show multicast rpf X.X.X.X
   - Alsternate table for RPF check lookups
   - Multicast topology independent from unicast topology
   - Use of RIB groups required
+
+### IGMP
+
+```
+show igmp interface
+show igmp group
+show igmp statistics
+```
+
+Traceoptions
+
+```
+set protocol igmp traceoptions file trace-igmp.log
+set protocol igmp traceoptions flag packets detail
+set protocol igmp traceoptions flag general detail
+```
+
+```
+monitor start trace-igmp.log
+```
