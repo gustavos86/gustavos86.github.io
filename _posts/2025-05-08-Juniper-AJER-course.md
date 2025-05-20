@@ -1095,17 +1095,183 @@ set protocols igmp interface ge-0/0/8 version 2
 set protocols igmp interface ge-0/0/8 immediate-leave
 ```
 
+```
+clear igmp statistics
+clear igmp membership all
+```
+
 ### Configuring PIM
 
 ```
+set protocols pim interface all mode sparse
+set protocols pim interface fxp0.0 disable
+or
 set protocols pim interface ge-0/0/4 mode sparse
 set protocols pim interface ge-0/0/8 mode sparse
 set protocols pim interface ge-0/0/1 mode sparse
+
 set protocols pim interface lo0 mode sparse
 ```
 
-Static RP
+### Static RP configuration on the RP
 
 ```
-set protocols pim rp local address 192.168.121.1 group-ranges 224/4
+set protocols pim rp local address 192.168.121.1 [group-ranges 224/4]
+```
+
+### Static RP configuration on all other (non-RP) Routers
+
+```
+set protocols pim rp static address 192.168.121.1
+```
+
+### Auto RP configuration
+
+Configuration on RP-candidate and Mapping Agent Routers configuration:
+
+- RP candidacy
+
+```
+set protocols pim rp local address 10.1.1.1
+```
+
+- Auto-RP mapping agent role: Performs election of RPs
+
+```
+set protocols pim rp auto-rp mapping
+```
+
+- Dense mode flooding for announce/discovery groups
+
+```
+set protocols pim dense-groups 224.0.1.39
+set protocols pim dense-groups 224.0.1.40
+```
+
+- Interface sparse-dense mode
+
+```
+set protocols pim interface all mode sparse-dense
+set protocols pim interface fxp0.0 disable
+```
+
+Configuration on all other Routers:
+
+- Auto-RP discovery role: Listen to election results
+
+```
+set protocols pim rp auto-rp discovery
+```
+
+- Dense mode flooding for announce/discovery groups
+
+```
+set protocols pim dense-groups 224.0.1.39
+set protocols pim dense-groups 224.0.1.40
+```
+
+- Interface sparse-dense mode
+
+```
+set protocols pim interface all mode sparse-dense
+set protocols pim interface fxp0.0 disable
+```
+
+### BSR configuration
+
+Configuration on RP and BSR Routers:
+
+- RP candidacy
+
+```
+set protocols pim rp local address 10.1.1.1
+```
+
+- Bootstrap candidacy, higher priority value to become boostrap router
+
+```
+set protocols pim rp bootstrap priority 200
+```
+
+- Interface sparse mode
+
+```
+set protocols pim interface all mode sparse
+set protocols pim interface fxp0.0 disable
+```
+
+Configuration on all other Routers:
+
+- Interface sparse mode
+
+```
+set protocols pim interface all mode sparse
+set protocols pim interface fxp0.0 disable
+```
+
+### Configuration to keep traffic on the Share Path
+
+```
+set protocols pim spt-threshold infinity RPT-ALWAYS-POLICY
+```
+
+```
+set policy-options policy-statement RPT-ALWAYS-POLICY term 1 from route-filter 224.7.7.7/32 exact
+set policy-options policy-statement RPT-ALWAYS-POLICY term 1 from source-address-filter 10.1.1.1/32 exact
+set policy-options policy-statement RPT-ALWAYS-POLICY term 1 then accept
+set policy-options policy-statement RPT-ALWAYS-POLICY term 2 then reject
+```
+
+### Load balance PIM Joins on ECMP
+
+```
+set protocols pim join-load-balance
+```
+
+### PIM Join/Prune timeout
+
+```
+set protocols pim join-prune-timeout 230
+
+set protocols pim reset-tracking-bit
+set protocols pim propagation-delay 500
+set protocols pim override-interval 2000
+```
+
+### Monitoring and Verifying PIM
+
+```
+show pim interfaces
+show pim neighbors [detail]
+show pim statistics
+show pim join [extensive]
+show pim source [detail]
+show pim rps [extensive]
+show pim bootstrap
+show multicast usage
+show multicast route extensive
+show multicast next-hops
+show multicast rpf X.X.X.X (IP SRC of the Multicast traffic)
+show route table inet.1
+```
+
+```
+mtrace from-source group 224.7.7.7 ttl 20 source 10.0.107.1
+```
+
+```
+ping 225.1.2.3 ttl 10 interface ge-1/0/4.12 bypass-routing
+```
+
+Disable Routers to respond to multicast pings
+
+```
+set system no-multicast-echo
+```
+
+IGMP static joins do not respond to pings requests.
+Enabling SA (Session Announcement Protocol) listening on Routers action as the receiver:
+
+```
+set protocols sap listen 225.1.2.3
 ```
