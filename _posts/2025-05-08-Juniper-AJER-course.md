@@ -1275,3 +1275,37 @@ Enabling SA (Session Announcement Protocol) listening on Routers action as the r
 ```
 set protocols sap listen 225.1.2.3
 ```
+
+## BGP Route Reflection
+
+- Route Reflection ([RFC 4456](https://www.rfc-editor.org/rfc/rfc4456))
+- Confederation ([RFC 3065](https://www.rfc-editor.org/rfc/rfc3065))
+
+Route Reflector new attributes:
+
+- Cluster list
+- Originator ID
+
+To configure BGP Route Reflector, use the `cluster` configuration line:
+
+```
+set protocols bgp group INT-PEERS type internal
+set protocols bgp group INT-PEERS local-address 172.16.1.1
+set protocols bgp group INT-PEERS cluster 172.16.1.1   <<<<<<-------
+set protocols bgp group INT-PEERS neighbor 172.16.2.2
+set protocols bgp group INT-PEERS neighbor 172.16.3.3
+set protocols bgp group INT-PEERS neighbor 172.16.4.4
+```
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/bgp_cluster_id_considerations.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/rr_placement_considerations.png)
+
+- [Border Gateway Protocol (BGP) Persistent Route Oscillation Condition](https://www.rfc-editor.org/rfc/rfc3345)
+
+One solution is the use of the BGP feature `path-selection always-compare-med`.
+Another solution is the `add-path` command to advertise all the routes and not only the active one.
+
+## VXLAN BGP EVPN
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/vxlan_evpn_gateway_placement_options.png)
