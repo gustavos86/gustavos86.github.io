@@ -1345,3 +1345,50 @@ Types 9 to 11 refer to Broadcast traffic.
 `inet.3` - MPLS VPN routing table
 `vxlan.inet.0` - BGP EVPN routing table
 `bgp.evpn.0` - BGP EVPN routing table
+
+## Configure VXLAN BGP EVPN (ECC - Evolved Campus Core)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_01.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_02.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_03.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_04.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_05.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_05.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_06.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_07.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_08.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_09.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_10.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_11.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_12.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_13.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_16.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_17.png)
+
+Verification commands
+
+```
+show lacp interfaces
+show interfaces ae0 detail
+show bgp summary
+show route table bgp.evpn.0 extensive
+```
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_14.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_15.png)
