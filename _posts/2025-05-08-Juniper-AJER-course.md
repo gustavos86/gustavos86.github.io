@@ -1309,3 +1309,39 @@ Another solution is the `add-path` command to advertise all the routes and not o
 ## VXLAN BGP EVPN
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/vxlan_evpn_gateway_placement_options.png)
+
+- EVPN
+  - AFI (Address Family Indicator): **25 Layer VPN**
+  - SAFI (Subsequent Address Family Indicator): **70 EVPN**
+  - Configuration on Junos OS: `family evpn signaling`
+
+EVPN instanve (EVI) = Virtual Switch = MAC VRF
+
+ESI - Ethernet Segment Identifier
+
+- Multihomed devices must be assigned a unique, 10-octet ESI that starts with 00
+- Single-homed sites use reserved ESI of 0 (0x00:00:00:00:00:00:00:00:00:00)
+
+### EVPN Route Types 
+
+Types 1 to 5 refer to Unicast traffic.
+Types 6 to 8 refer to Multicast traffic.
+Types 9 to 11 refer to Broadcast traffic.
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/evpn_route_types.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/evpn_type_1_description.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/evpn_type_1_withdrawn_example.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/evpn_type_2_description.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/evpn_type_3_description.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/evpn_type_4_description.png)
+
+### Routing Tables
+
+`inet.3` - MPLS VPN routing table
+`vxlan.inet.0` - BGP EVPN routing table
+`bgp.evpn.0` - BGP EVPN routing table
