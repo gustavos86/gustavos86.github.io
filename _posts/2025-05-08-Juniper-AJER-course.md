@@ -1405,6 +1405,8 @@ show route table bgp.evpn.0 extensive
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_05.png)
 
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_05_2.png)
+
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_06.png)
 
 ## Configuring VXLAN BGP EVPN (IP Fabric) Greenfield
@@ -1412,3 +1414,39 @@ show route table bgp.evpn.0 extensive
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_07.png)
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_08.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_09.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_10.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_11.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_12.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_13.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_14.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_15.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_16.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_17.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_18.png)
+
+## Configuring Full Fabric
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_01.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_02.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_03.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_04.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_05.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_06.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_07.png)
