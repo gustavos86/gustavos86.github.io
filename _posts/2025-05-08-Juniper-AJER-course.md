@@ -1467,3 +1467,51 @@ show krp indirect-next-hop
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/vxlan_evpn_lab_01.png)
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/vxlan_evpn_lab_02.png)
+
+## Verifying and Troubleshooting EVPN-VXLAN Architecture
+
+EVPN Type 1 and Type 2 format
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_01.png)
+
+EVPN Type 3 and Type 4 format
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_02.png)
+
+EVPN Type 1 per EVPN instance (EVI).
+The Ethernet Tag value is **0** (zero) at the end of the route.
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_03.png)
+
+EVPN Type 1 per Ethernet Segment Identifier (ESI).
+We see **FFFF:FFFF** (Max-ET) at the end of the route.
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_04.png)
+
+EVPN Type 2 advertising a MAC address.
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_05.png)
+
+EVPN Type 2 advertising a MAC and an IP address.
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_06.png)
+
+EVPN Type 2 advertising the information of a Virtual Gateway's IRB
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_07.png)
+
+EVPN Type 3 advertising Multicast information
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_08.png)
+
+EVPN Type 4 advertising to elect the DR in a multihomed setup
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_09.png)
+
+Routes learned from hosts connected to the VXLAN EVPN network on the `inet.0` routing table
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_10.png)
+
+EVPN Database
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_11.png)
