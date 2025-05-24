@@ -1377,6 +1377,12 @@ Types 9 to 11 refer to Broadcast traffic.
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_13.png)
 
+Configures the device to automatically create an **End System Identifier (ESI ID)** based on the **LACP system ID**.
+
+```
+set interfaces ae0 esi auto-derive lacp
+```
+
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_16.png)
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_17.png)
