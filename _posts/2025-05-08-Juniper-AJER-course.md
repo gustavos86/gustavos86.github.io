@@ -1515,3 +1515,78 @@ Routes learned from hosts connected to the VXLAN EVPN network on the `inet.0` ro
 EVPN Database
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_11.png)
+
+## EVPN Network Topology troubleshooting example
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_12.png)
+
+General EVPN Troubleshooting Steps
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_13.png)
+
+Useful Junos Commands
+
+```
+show bgp summary
+show bgp neighbor
+show route advertising-protocol bgp <NEIGHBOR-IP-ADDRESS>
+show route receive-protocol bgp <NEIGHBOR-IP-ADDRESS>
+show route table bgp.evpn.0
+show evpn instance [extensive]
+show ethernet-switching table
+show interfaces vtep
+show ethernet-switching vxlan-tunnel-end-point source
+show ethernet-switching vxlan-tunnel-end-point remote [mac-table]
+```
+
+EVPN Routes **Type 1, 2 and 3** are installed in the `default-switch.evpn.0` Routing Table
+
+EVPN Routes **Type 4** are installed in the `__default_evpn__.evpn.0` Routing Table
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_14.png)
+
+The `bgp.evpn.0` table holds all routes from remote peers that have a matching
+VRF (`vrf-target`) community defined on the local device.
+The table holds all EVPN route types and can be viewed using the
+`show route table bgp.evpn.0` command.
+
+Use the `keep all` BGP command to override the default action of dropping the routes
+when there is not a matching community configured locally.
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_15.png)
+
+If no VRFs are used (Tenants), the routes can be seen in the `default-switch.evpn.0` table
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_16.png)
+
+Verifying that an EVPN Instance exists
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_17.png)
+
+`show evpn instance extensive`
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_18.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_19.png)
+
+`show evpn database`
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_20.png)
+
+A **VTEP interface** is automatically created to represent the locally attached network
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_21.png)
+
+Other VTEP interfaces are built to tunnel the traffic to the remote VTEP endpoint
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_22.png)
+
+To see VLANs to VTEPs association, use the `show vlans` command
+
+VXLAN Tunnels
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_23.png)
+
+Traceoptions to debug BGP EVPN
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_24.png)
