@@ -1342,9 +1342,10 @@ Types 9 to 11 refer to Broadcast traffic.
 
 ### Routing Tables
 
-`inet.3` - MPLS VPN routing table
-`vxlan.inet.0` - BGP EVPN routing table
-`bgp.evpn.0` - BGP EVPN routing table
+- `inet.3` - MPLS VPN routing table
+- `vxlan.inet.0` - BGP EVPN routing table
+- `bgp.evpn.0` - BGP EVPN routing table. Contains the EVPN routes received from remote BGP peers
+- `default-switch.evpn.0`
 
 ## Configuring VXLAN BGP EVPN (ECC - Evolved Campus Core design)
 
@@ -1387,6 +1388,10 @@ show lacp interfaces
 show interfaces ae0 detail
 show bgp summary
 show route table bgp.evpn.0 extensive
+show interfaces vtep
+show ethernet-switching vxlan-tunnel-end-point
+show ethernet-switching vxlan-tunnel-end-point remote
+show krp indirect-next-hop
 ```
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_14.png)
@@ -1450,3 +1455,9 @@ show route table bgp.evpn.0 extensive
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_06.png)
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/full_fabric_case_study_07.png)
+
+## VXLAN EVPN Lab Network
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/vxlan_evpn_lab_01.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/vxlan_evpn_lab_02.png)
