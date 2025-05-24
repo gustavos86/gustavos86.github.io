@@ -1346,7 +1346,7 @@ Types 9 to 11 refer to Broadcast traffic.
 `vxlan.inet.0` - BGP EVPN routing table
 `bgp.evpn.0` - BGP EVPN routing table
 
-## Configure VXLAN BGP EVPN (ECC - Evolved Campus Core)
+## Configuring VXLAN BGP EVPN (ECC - Evolved Campus Core design)
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_01.png)
 
@@ -1392,3 +1392,23 @@ show route table bgp.evpn.0 extensive
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_14.png)
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ecc_case_study_15.png)
+
+## Configuring VXLAN BGP EVPN (IP Fabric) Brownfield from ECC
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_01.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_02.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_03.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_04.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_05.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_06.png)
+
+## Configuring VXLAN BGP EVPN (IP Fabric) Greenfield
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_07.png)
+
+![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/ip_fabric_case_study_08.png)
