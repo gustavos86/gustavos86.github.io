@@ -1590,3 +1590,22 @@ VXLAN Tunnels
 Traceoptions to debug BGP EVPN
 
 ![]({{ site.baseurl }}/images/2025/05-11-Juniper-AJER-course/tshoot_evpn_vxlan_24.png)
+
+## IS-IS
+
+- from a **Level 2 area** to a **Level 1 area**, an **export policy** must be explicitly configured to leak routing information.
+- from a **Level 1 area** to a **Level 2 area**, by default, IS-IS protocol leaks routing information.
+
+Source: [Example: Configuring IS-IS Route Leaking from a Level 2 Area to a Level 1 Area](https://www.juniper.net/documentation/us/en/software/junos/is-is/topics/example/example-configuring-is-is-route-leaking-L2-to-L1.html)
+
+Same as in Cisco:
+
+- **By default**, **Level 2** routers are not leaked into **Level 1** areas by L1L2 router
+- **Level 1** routers always propagate to **Level 2** area.
+
+And aboue the **Attach bit**
+
+In order to reach Level 2 area, L1L2 router sets the **Attach bit** in Level1 LSP.
+Level 1 router installs the default route in routing table, this route would point towards L1L2 router.
+
+Source: [Configure Attach Bit Set](https://www.cisco.com/c/en/us/support/docs/ip/ip-routing/200472-Configure-the-Attach-bit-set.html)
