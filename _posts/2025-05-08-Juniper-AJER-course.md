@@ -1609,3 +1609,50 @@ In order to reach Level 2 area, L1L2 router sets the **Attach bit** in Level1 LS
 Level 1 router installs the default route in routing table, this route would point towards L1L2 router.
 
 Source: [Configure Attach Bit Set](https://www.cisco.com/c/en/us/support/docs/ip/ip-routing/200472-Configure-the-Attach-bit-set.html)
+
+## BGP Route Reflector with next-hop self
+
+`set protocols bgp group IBGP export nhs-policy`
+The best practice when setting up `next-hop self` in a BGP Route Reflector is to have a policy on the BGP global level set as:
+
+```
+user@router# show policy-options
+policy-statement bgp-export {
+  term ebgp {
+    from route-type external;    <<<---- Only eBGP routes
+    then {
+      next-hop self;             <<<---- Setting next-hop self
+      accept;
+    }
+  }
+  term ibgp {
+    from route-type internal;
+    then accept;
+  }
+}
+```
+
+Source: [Best practices for route reflector configuration with regard to next-hop self](https://supportportal.juniper.net/s/article/Best-practices-for-route-reflector-configuration-with-regard-to-next-hop-self?language=en_US)
+
+## clear pim join-distribution
+
+PIM join load balancing only takes effect when the feature is configured. Prior joins are not redistributed to achieve perfect load balancing. In addition, if an interface or neighbor fails, the new joins are redistributed among remaining active interfaces and neighbors. However, when the interface or neighbor is restored, prior joins are not redistributed. The `clear pim join-distribution` command redistributes the existing flows to new or restored upstream neighbors. Redistributing the existing flows causes traffic to be disrupted, so we recommend that you perform PIM join redistribution during a maintenance window.
+
+Source: [Configuring PIM Join Load Balancing](https://www.juniper.net/documentation/us/en/software/junos/multicast/topics/task/mcast-pim-join-load-balance.html)
+
+## PIM Tunnel services on MX Routers
+
+```
+chassis {
+    fpc 4;
+    pic 1 {
+        tunnel services {
+            bandwidth 1g;
+        }
+    }
+}
+```
+
+All RP routers and IP version 4 (IPv4) PIM Sparse-Mode DRs that are connected to a multicast source require a **Tunnel Services PIC**.
+
+Source: [[MX] Setting up an MX-Series node for use as an RP or source DR in a PIM Sparse-Mode network](https://supportportal.juniper.net/s/article/MX-Setting-up-an-MX-Series-node-for-use-as-an-RP-or-source-DR-in-a-PIM-Sparse-Mode-network?language=en_US)
