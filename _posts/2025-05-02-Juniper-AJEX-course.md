@@ -819,3 +819,116 @@ set forwarding-options analyzer monitor-AB output interface ge-0/0/10.0
 ```
 monitor interface traffic
 ```
+
+## Q-in-Q configuration example 
+
+![]({{ site.baseurl }}/images/2025/05-02-Juniper-AJEX-course/q-in-q-example-01.png)
+
+```
+root@switch> show configuration interfaces 
+ge-0/0/0 {
+    flexible-vlan-tagging;
+    encapsulation extended-vlan-bridge;
+    unit 10 {                        <<<< Defines outer tag or Service VLAN tag.
+        vlan-id-list [ 100 200 ];    <<<< Defines inner tags or customer VLAN tags.
+        input-vlan-map push;         <<<< Pushes tag 10 on top of 100 OR 200.
+        output-vlan-map pop;         <<<< Pops tag 10 leaving only tag 100 OR 200.
+    }
+}
+ge-0/0/1 {
+    flexible-vlan-tagging;
+    mtu 1522;
+    encapsulation flexible-ethernet-services;
+    unit 10 {
+        encapsulation vlan-bridge;
+        vlan-id 10;
+    }
+}
+
+root@switch> show configuration vlans 
+QinQ-Tunnel {
+    interface ge-0/0/0.10;
+    interface ge-0/0/1.10;
+}
+```
+
+[[EX] Understanding and configuring 802.1Q (Q-in-Q) dot1q tunneling with examples](https://supportportal.juniper.net/s/article/EX-Understanding-and-configuring-802-1Q-Q-in-Q-dot1q-tunneling?language=en_US)
+
+## MSTP config and output examples
+
+EX Switch A Configuration:
+
+```
+[Edit protocols mstp]
+user@switchA# show
+  configuration-name test >>>>> Must Match on participating switches. - User defined configuration name.
+  revision-level 1;       >>>>> Must Match on participating switches.
+  msti 1 {
+    bridge-priority 4k;
+    vlan 1-10;            >>>>> Must Match on participating switches.
+  }
+  msti 2 {
+    bridge-priority 8K;   >>>>> MSTP instances defined with individual bridge-priority values and VLAN ranges
+    vlan 11-20;
+  }
+  msti 3 {
+    bridge-priority 12k;
+    vlan 21-30;
+  }
+```
+
+EX Switch B Configuration:
+
+```
+[Edit protocols mstp]
+user@switchA# show
+  configuration-name test >>>>> Must Match on participating switches. - User defined configuration name.
+  revision-level 1;       >>>>> Must Match on participating switches.
+  msti 1 {
+    bridge-priority 12k;
+    vlan 1-10;            >>>>> Must Match on participating switches.
+  }
+  msti 2 {
+    bridge-priority 4K;   >>>>> MSTP instances defined with individual bridge-priority values and VLAN ranges
+    vlan 11-20;
+  }
+  msti 3 {
+    bridge-priority 8k;
+    vlan 21-30;
+  }
+```
+
+Verifying MST activity on the EX Switch:
+
+```
+user@switchA# run show spanning-tree mstp configuration
+MSTP information
+Context identifier     : 0
+Region name            : test
+Revision               : 10
+Configuration digest   : 0x476c7ee38f56eea4a9bbe3fa9e7b7979
+
+MSTI     Member VLANs                                                      
+   0 0,31-4094                                                       
+   1 1-10                                                            
+   2 11-20                                                           
+   3 21-30   
+```
+
+[EX-series Switch and MSTP (Multiple Spanning Tree Protocol)](https://supportportal.juniper.net/s/article/EX-series-Switch-and-MSTP-Multiple-Spanning-Tree-Protocol?language=en_US)
+
+## PoE priority
+
+Set the power priority for individual interfaces when there is insufficient power for all PoE interfaces.
+If the switch needs to shut down powered devices because PoE demand exceeds the PoE budget, **low-priority** devices are shut down **before high-priority** devices.
+Among interfaces that have the same assigned priority, **priority is determined by port number**, with **lower-numbered ports having higher priority**.
+
+[Junos CLI Reference - priority (Power over Ethernet)](https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/priority-poe.html)
+
+## CoS
+
+- Behavior Aggregate Classifiers - core devices that handle high traffic volumes are normally configured to perform BA classification
+- Multifield Classifiers - normally performed at the network edge because of the general lack of support for DSCP or IP precedence classifiers in end-user applications. 
+
+[Understanding CoS Classifiers](https://www.juniper.net/documentation/us/en/software/junos/cos-ex/topics/concept/cos-ex-series-classifiers-understanding.html)
+[[EX] Full CoS Configuring with BA and MF classifier on Juniper Networks ELS switches except QFX5K and EX46's](https://supportportal.juniper.net/s/article/CoS-Configuring-on-Juniper-Networks-ELS-EXSeries-Switch-With-MF-BA-Classifier?language=en_US)
