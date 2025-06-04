@@ -21,3 +21,9 @@ set security forwarding-options family mpls mode packet-based
 
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/logical-packet-flow-diagram.png)
 
+## Bramch SRX Series Factory-Default configuration
+
+- Interface `ge-0/0/0` is set for **untrust zone** and to get IP via DHCP
+- Default IP address on `fxp0.0`: **192.168.1.1/24**
+- Interface `irb.0` is the **trust zone** with address **192.168.2.1/24**
+- All other ports are configured as Layer 2
