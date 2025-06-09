@@ -109,3 +109,146 @@ Screen Categories
 Configuring Screen Options
 
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/screen-config.png)
+
+## Address Objects
+
+- Zone Address Objects
+
+Address objects that are tied to a specific zone
+May only be used in security policies where the zone is referred
+
+- Global Address Objects
+
+Define objects in a global address book to avoid duplicate entries for multiple zones
+Can be used by all security policies
+All objects must be unique
+
+### Creating Address Objects with the CLI
+
+IP address
+
+```
+set security address-book PRIVATE address HOST1 192.168.1.35
+```
+
+Wildcard address
+
+```
+set security address-book PRIVATE address HOST1 wildcard-address 192.168.0.12/255.255.0.255
+```
+
+Domain name address
+
+```
+set security address-book PRIVATE address HOST1 dns-name www.host1.com
+```
+
+Range address
+
+```
+set security address-book PRIVATE address HOST1 range-address 192.168.1.100 to 192.168.1.150
+```
+
+To configure Global address books
+
+```
+set security address-book global
+```
+
+```
+set security address-book TRUST_ADDRESSES description "Address objects for the trust zone" address HR-PRINTER-05 description "PRINTER IN HR BUILDING C ROOM 05" 192.168.50.45
+```
+
+Create and Address Set
+
+```
+set security address-book TRUST_ADDRESSES address-set HR-PRINTERS address HR-PRINTER-1
+```
+
+Global Address Book attached to a specific Zone
+
+```
+set security address-book TRUST_ADDRESSES attach zone TRUST
+```
+
+## Service Objects
+
+Display pre-defined Service Security Objects
+
+```
+show configuration groups junos-defaults applications
+```
+
+Create Custom Applications
+
+```
+set applications application MyFTP description "FTP with smaller timer" application-protocol ftp protocol tcp desination-port 21 inactivity-timeout 300
+```
+
+Application Sets
+
+```
+set applications application-set access application junos-ping
+set applications application-set access application junos-ssh
+set applications application-set access application junos-https
+```
+
+## Configuring Security Zones (LAB)
+
+**NOTE:** The `host-inbound-traffic interface` settings overrides the `host-inbound-traffic zone`.
+
+```
+set security zones security-zone UNTRUST interfaces ge-0/0/0.0
+
+delete security zones security-zone TRUST host-inbound-traffic system-services all
+set security zones security-zone TRUST host-inbound-traffic system-services ssh
+set security zones security-zone TRUST host-inbound-traffic system-services https
+set security zones security-zone TRUST interfaces ge-0/0/1.0
+set security zones security-zone TRUST interfaces ge-0/0/1.0 host-inbound-traffic system-services telnet
+
+set security zones security-zone DMZ interfaces ge-0/0/2.0
+```
+
+## Configuring Screens (LAB)
+
+```
+set security screen ids-option DMZ-SCREEN icmp large
+
+set security zones security-zone DMZ screen DMZ-SCREEN
+set security zones security-zone DMZ host-inbound-traffic system-services ping
+```
+
+```
+show security screen statistics zone DMZ
+```
+
+## Configuring Global Addresses And Address Sets (LAB)
+
+```
+set security address-book global address INTERNET-HOST 172.31.15.1/32
+
+set security address-book DMZ-BOOK address DMZ-NET 10.10.102.0/24
+set security address-book DMZ-BOOK address WebServer01 10.10.102.11/32
+set security address-book DMZ-BOOK address WebServer02 10.10.102.12/32
+set security address-book DMZ-BOOK address WebServer03 10.10.102.13/32
+set security address-book DMZ-BOOK attach zone DMZ
+
+set security address-book DMZ-BOOK address-set WebServerSet address WebServer01
+set security address-book DMZ-BOOK address-set WebServerSet address WebServer02
+set security address-book DMZ-BOOK address-set WebServerSet address WebServer03
+```
+
+## Configuring Service Applications and Applications Sets (LAB)
+
+```
+set applications application MY-APP protocol tcp destination-port 2020 activity-timeout 300
+
+set applications application-set WebServerAppSet description "Applications for the Web Server"
+set applications application-set WebServerAppSet application MY-APP
+set applications application-set WebServerAppSet application junos-http
+set applications application-set WebServerAppSet application junos-https
+```
+
+```
+run show configuration groups junos-defaults applications
+```
