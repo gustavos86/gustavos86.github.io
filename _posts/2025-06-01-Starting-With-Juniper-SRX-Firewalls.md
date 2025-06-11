@@ -252,3 +252,44 @@ set applications application-set WebServerAppSet application junos-https
 ```
 run show configuration groups junos-defaults applications
 ```
+
+## Security Policies
+
+Security Policies are examined in the following order:
+
+1. Zone policies
+2. Global policies
+3. Default policy
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/security-policies-and-transit-traffic.png)
+
+Zone security policy example:
+
+```
+set security policies from-zone UNTRUST to-zone TRUST policy POLICY-2 match source-address any destination-address any application any
+set security policies from-zone UNTRUST to-zone TRUST policy POLICY-2 then deny
+
+set security policies from-zone UNTRUST to-zone TRUST policy RULE-2 match source-address any desination-addresa any application any
+set security policies from-zone UNTRUST to-zone TRUST policy RULE-2 then deny
+```
+
+Global security policy example:
+
+```
+set security policies global policy GLOBAL-1 match source-address any destination-address any application any
+set security policies global policy GLOBAL-1 then deny
+```
+
+Default security policy example:
+
+Default is deny all traffic.
+
+```
+set default-policy permit-all
+```
+
+Troubleshoot
+
+```
+show security policies
+```
