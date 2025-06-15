@@ -293,3 +293,106 @@ Troubleshoot
 ```
 show security policies
 ```
+
+## Security Policy Components
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/security-policy_match_criteria.png)
+
+Configuring policy actions example:
+
+```
+set security policies from-zone UNTRUST to-zone TRUST policy TEST then permit
+set security policies from-zone UNTRUST to-zone TRUST policy TEST then deny
+set security policies from-zone UNTRUST to-zone TRUST policy TEST then reject
+```
+
+```
+set security policies from-zone TRUST to-zone UNTRUST policy RULE-1 match source-address any destination-address any application any
+set security policies from-zone TRUST to-zone UNTRUST policy RULE-1 then permit
+set security policies from-zone TRUST to-zone UNTRUST policy RULE-1 then log session-init
+set security policies from-zone TRUST to-zone UNTRUST policy RULE-1 then log session-close
+```
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/working-with-security-rules-cli.png)
+
+```
+set security policies from-zone TRUST to-zonee UNTRUST policy POLICY-1 match source-address any destination-address any application any
+set security policies from-zone TRUST to-zonee UNTRUST policy POLICY-1 then permit
+
+set security policies from-zone TRUST to-zonee UNTRUST policy RULE-2 match source-address any destination-address any application [junos-ftp junos-ftp-data]
+set security policies from-zone TRUST to-zonee UNTRUST policy RULE-2 then deny
+```
+
+## Unified Security Policies
+
+Example of unified security policy
+
+```
+set security policy match source-address any destination-address any dynamic-application junos:FACEBOOK-ACCESS url-category Enhanced_Social_Web_Facebook
+```
+
+AppFW
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/appfw.png)
+
+Unified Security Policy Evaluation
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/unified-security-policy-evaluation.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/visualizing-unified-security-policy-evaluation.png)
+
+Configuring the Pre-ID Default Policy
+
+```
+set security policies pre-id-default-policy then session-timeout icmp 4
+set security policies pre-id-default-policy then log session-init
+```
+
+### Configuring Security Policies
+
+```
+edit security address-book global
+set address TRUST-NET 10.10.101.0/24
+set address DMZ-NET   10.10.102.2/24
+
+top
+edit security policies
+edit from-zone TRUST to-zone UNTRUST policy TRUST-INTERNET-ACCESS
+set match source-address TRUST-NET
+set match destination-address any
+set match application any
+set then permit
+set then count
+
+top
+edit security policies
+edit from-zone TRUST to-zone DMZ policy TRUST-DMZ-ACCESS
+set match source-address TRUST-NET
+set match destination-address DMZ-NET
+set match match application [ junos-ftp junos-ping ]
+set then permit
+
+up 1
+edit policy TRUST-DMZ-BLOCK
+set match source-address TRUST-NET
+set match destination-address DMZ-NET
+set match application junos-ssh
+set then deny
+set then log session-init
+
+up 2
+edit from-zone UNTRUST to-zone DMZ policy UNTRUST-DMZ-ACCESS
+set match source-address any
+set match destination-address DMZ-NET
+set match application junos-ssh
+set then permit
+set then log session-init session-close
+```
+
+```
+show security policies
+show security policies from-zone trust to-zone dmz
+show log message | match TRUST-DMZ-BLOCK | match RT_Flow
+show log message | match UNTRUST-DMZ-ACCESS | match RT_Flow
+show security policies policy-name TRUST-INTERNET-ACCESS detail
+```
