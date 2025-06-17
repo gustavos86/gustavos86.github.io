@@ -396,3 +396,48 @@ show log message | match TRUST-DMZ-BLOCK | match RT_Flow
 show log message | match UNTRUST-DMZ-ACCESS | match RT_Flow
 show security policies policy-name TRUST-INTERNET-ACCESS detail
 ```
+
+## IPS policies
+
+Part 1: Deploying
+    - Install License
+    - Download and Install intrustion prevention system (IPS) signature database
+    - Optionally, download and install policy templates
+
+Part 2: Applying
+    - Configure IPS policy
+        - Policy templates can be used to assist with building a new policy
+        - Templates can be customized
+    - Configure security policy to send traffic for IPS evaluation
+
+### Manually download and update the signature database
+
+```
+set security idp security-package url https://services.netscreen.com/cgi-bin/index.cgi
+request security idp security-package download full-update
+request security idp security-package download status
+request security idp security-package install
+```
+
+### Automatically download and update the signature database
+
+```
+set security idp security-package url https://services.netscreen.com/cgi-bin/index.cgi
+set security idp security-package automatic interval 48 start 2021-01-01.23.59.00
+set security idp security-package automatic enable
+```
+
+### IPS Templates and Policies
+
+```
+request security idp security-package download policy-templates
+request security idp security-package install policy-templates
+set system scripts commit file templates.xls
+set security idp active-policy recommended
+```
+
+### Referencing IPS Policy
+
+```
+set from-zone UNTRUST to-zone SERVER policy IPS-SEC then permit application-services idp-policy IPS_POLICY
+```
