@@ -441,3 +441,119 @@ set security idp active-policy recommended
 ```
 set from-zone UNTRUST to-zone SERVER policy IPS-SEC then permit application-services idp-policy IPS_POLICY
 ```
+
+## Integraded User Firewall
+
+Active Directory Configuration
+
+```
+edit services user-identification active-directory-access
+set authentication-entry-timeout 5
+set wmi-timeout 10
+set domain juniper.net user administrator password lab123
+set domain juniper.net domain-controller DC1 address 172.16.10.253
+set domain juniper.net user-group-mapping ldap base DC=juniper,DC=net
+set domain juniper.net ip-user-mapping discovery-method wmi
+```
+
+Configure Access Profile
+
+```
+set access profile LDAP-UFW authentication-order ldap
+set access profile LDAP-UFW authentication-order password
+set access profile LDAP-UFW ldap-options base-distinguished-name CN=Users,DC=juniper,DC=net
+set access profile LDAP-UFW ldap-options search search-filter sAMAcountName=
+set access profile LDAP-UFW ldap-options search admin-search distinguished-name CN=Administrator,CN=Users,DC=juniper,DC=net
+set access profile LDAP-UFW ldap-options search admin-search password lab123
+```
+
+Security Policy
+
+```
+edit security policies from-zone trust to-zone untrust policy test
+set match source-address any
+set match destination-address any
+set match application any
+set match source-identity authenticated-user
+set then permit firewall-authentication user-firewall access-profile LDAP-UFW
+set then permit firewall-authentication user-firewall domain juniper.net
+```
+
+## Lab - Implementing Security Services
+
+### IP Signature Database
+
+```
+show security idp security-package-version
+```
+
+```
+set security idp security-package url <URL>
+request security idp security-package download full-update
+request security idp security-package download status
+request security idp security-package install
+request security idp security-package install status
+
+set security idp security-package automatic enable interval 24 start-time 2021-09-15.15:30
+```
+
+### IPS Policies
+
+```
+request security idp security-package download policy-templates
+request security idp security-package download status
+
+request security idp security-package install policy-templates
+request security idp security-package install status
+```
+
+```
+set system scripts commit file templates.xsl
+
+show security idp
+copy security idp idp-policy Recommended to idp-policy IJSEC-IPS
+
+edit security idp idp-policy IJSEC-IPS
+delete rulebase-ips rule TCP/IP
+delete rulebase-ips rule ICMP
+delete rulebase-ips rule FTP
+delete rulebase-ips rule Malware
+
+top
+delete system scripts
+
+edit security policies
+set from-zone untrust to-zone dmz policy IPS-FW-Rule match source-address any destination-address any application any
+set from-zone untrust to-zone dmz policy IPS-FW-Rule then permit application-services idp-policy IJSEC-IPS
+```
+
+### Creating an Active Directory Profile
+
+```
+set services user-identification active-directory-access authentication-entry-timeout 30
+set services user-identification active-directory-access wmi-timeout 10
+
+set services user-identification active-directory-access domain juniper.net user-group-mapping ldap base DC=juniper,DC=net user administrator password lab123@Lab
+set services user-identification active-directory-access domain juniper.net user administrator password lab123@Lab
+set services user-identification active-directory-access domain juniper.net domain-controller DC1 address 172.16.1.253
+```
+
+```
+show services user-identification active-directory-access domain-controller status
+show services user-identification active-directory-access statistics ip-user-mapping
+```
+
+### Security Policy
+
+```
+ediit security policies
+set from-zone Trust to-zone Server policy UserFW match source-identity authenticated-user
+set from-zone Trust to-zone Server policy UserFW match source-address any
+set from-zone Trust to-zone Server policy UserFW match destination-address any
+set from-zone Trust to-zone Server policy UserFW match application any
+set from-zone Trust to-zone Server policy UserFW then permit
+```
+
+```
+show services user-identification active-directory-access active-directory-authentication-table all
+```
