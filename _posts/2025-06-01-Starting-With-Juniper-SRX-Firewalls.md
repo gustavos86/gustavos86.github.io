@@ -557,3 +557,103 @@ set from-zone Trust to-zone Server policy UserFW then permit
 ```
 show services user-identification active-directory-access active-directory-authentication-table all
 ```
+
+## UTM (Unified Threat Management)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/utm-design-overview.png)
+
+Create Custom Objects
+
+```
+set security utm custom-objects url-pattern allow-list value goodcompany.com value partners.com value 90.79.129.7
+```
+
+Antispam Default Configuration
+
+```
+edit security utm default-configuration
+set anti-spam address-whitelist allow-list address-blacklist reject-list type sbl sbl custom-tag-string "***SPAM***" sbl-default-server spam-action tag-subject
+```
+
+Antispam Feature Profile
+
+```
+edit security utm feature-profile
+set anti-spam sbl profile AS-Profile-1 sbl-default-server custom-tag-string "***SPAM***" spam-action block
+```
+
+Antispamm Policy
+
+```
+edit security utm
+set utm-policy "Anti SPAM" anti-spam smtp-profile AS-Profile-1
+```
+
+Advanced Security Policy Settings
+
+```
+edit security policies
+set from-zone Trust to-zone Untrust policy AS-Policy then permit application-services utm-policy "Anti Spam"
+```
+
+Monitoring Antispam
+
+```
+show security utm anti-spam status
+show security utm anti-spam statistics
+```
+
+## Antivirus
+
+Creating URL Pattern Allowlist
+
+```
+edit security utm custom-objects
+set url-pattern Whilelist value *.goodsite.com value *.juniper.net value *.microsoft.com
+set custom-url-category URL-Whitelist value Whitelist
+```
+
+Creating MIME Allowlist
+
+```
+edit security utm custom-objects
+set mime-pattern MIME-Whitelist value image/ value video/
+```
+
+Avira Antivirus Default Configuration
+
+```
+edit security utm
+set default-configuration anti-virus type avira-engine
+```
+
+Antivirus Feature Profile Configuration
+
+```
+edit security utm feature-profile anti-virus
+set profile AV-Profile-1 fallback-options default permit
+set profile AV-Profile-1 notification-options fallback-block type message no-notify-mail-sender
+set profile AV-Profile-1 notification-options fallback-non-block notify-mail-receipient custom-message "Virus Detected"
+set profile AV-Profile-1 notification-options virus-detection type message notify-mail-sender custom-message "VIRUS WARNING"
+```
+
+Antivirus UTM Policy
+
+```
+edit security utm
+set utm-policy AV-Policy-1 anti-virus http-profile AV-Profile-1 pop3-profile AV-Profile-1
+```
+
+Security Policy Configuration
+
+```
+edit security policies
+set from-zone Trust to-zone Untrust policy AV-Policy then permit application-services utm-policy AV-Policy-1
+```
+
+Monitoring Antivirus
+
+```
+show security utm anti-virus status
+show security utm anti-virus statistics
+```
