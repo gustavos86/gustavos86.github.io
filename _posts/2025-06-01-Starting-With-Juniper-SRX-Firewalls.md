@@ -479,7 +479,7 @@ set then permit firewall-authentication user-firewall access-profile LDAP-UFW
 set then permit firewall-authentication user-firewall domain juniper.net
 ```
 
-## Lab - Implementing Security Services
+## Implementing Security Services (LAB)
 
 ### IP Signature Database
 
@@ -656,4 +656,157 @@ Monitoring Antivirus
 ```
 show security utm anti-virus status
 show security utm anti-virus statistics
+```
+
+## UTM: Content Filtering
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/content-filtering-features.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/content-filtering-supported-protocols.png)
+
+Content Filtering Configuration: Custom Objects
+
+```
+edit security utm default-configuration
+set content-filtering block-extension junos-default-extension
+```
+
+Content Filtering Configuration: Default Options
+
+```
+set content-filtering block-extension junos-default-extension block-mime list junos-default-bypass-mime
+set content-filtering block-content-type zip exe java-applet http-cookie
+set content-filtering notification-options type message custom-message "***BLOCKED***"
+```
+
+Content Filtering Configuration: Filter Profile
+
+```
+edit security utm feature-profile
+set content-filtering profile Content-Filter-1
+```
+
+Content Filtering Configuration: UTM Policy
+
+```
+edit security utm
+set feature-profile content-filtering profile Content-Filter-1
+```
+
+Content Filtering Configuration: Security Policy Configuration
+
+```
+edit security policies
+set from-zone Trust to-zone Untrust policy Policy-1 then permit application-services utm-policy Content-Filter-1
+```
+
+Content Filtering Verification
+
+```
+show security utm content-filtering statistics
+```
+
+## UTM: Web Filtering
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/web-filtering-solutions.png)
+
+Web Filtering Configuration: Custom Objects
+
+```
+edit security utm
+set custom-objects url-pattern Bypass-WF value *.juniper.net
+```
+
+Web Filtering Configuration: Default Options
+
+```
+edit security utm
+set default-configuration url-whitelist WF-Whitelist
+```
+
+Web Filtering Configuration: Filter Profile
+
+```
+edit security utm
+set feature-profile web-filtering juniper-enhanced profile WF-Profile-1 default block custom-block-message "Do not visit this website please"
+set feature-profile web-filtering juniper-enhanced profile WF-Profile-1 fallback-settings default log-and-permit
+set feature-profile web-filtering juniper-enhanced profile WF-Profile-1 site-reputation-action harmful block
+set feature-profile web-filtering juniper-enhanced profile WF-Profile-1 category Enhanced_Gambling action block
+```
+
+Web Filtering Configuration: UTM Policy
+
+```
+edit security utm
+set utm-policy WF-Policy-1 web-filtering http-profile WF-Profile-1
+```
+
+Web Filtering Configuration: Security Policy
+
+```
+edit security policies
+set from-zone Trust to-zone Untrust policy WF-Policy then permit application-services utm-policy WF-Policy-1
+```
+
+Web Filtering Verification
+
+```
+show security utm web-filtering statistics
+show security utm web-filtering status
+```
+
+## Working with UTM Anti-Virus (LAB)
+
+```
+edit security utm
+set default-configuration anti-virus type sophos-engine
+
+top
+edit security utm feature-profile anti-virus
+set profile av-profile fallback-options engine-not-ready block
+set profile av-profile notification-options fallback-block  type protocol-only no-notify-mail-sender custom-message "AV Fallback Block"
+set profile av-profile notification-options virus-detection type protocol-only no-notify-mail-sender custom-message "VIRUS WARNING"
+
+top
+edit security utm
+set utm-policy MyUTMPolicy anti-virus ftp download-profile av-profile
+set utm-policy MyUTMPolicy anti-virus ?
+
+top
+edit security policies from-zone Untrust to-zone Server
+set policy Untrust-Server then permit application-services utm-policy MyUTMPolicy
+```
+
+```
+show security utm anti-virus status
+show security utm anti-virus statistics
+```
+
+## Working with UTM Web Filtering (LAB)
+
+```
+edit security utm custom-objects
+set url-pattern whitelist value http://utmserver.utm.juniper.net/good.html
+set url-pattern blacklist value http://utmserver.utm.juniper.net/bad.html
+set custom-url-category bad value blacklist
+set custom-url-category good value whitelist
+
+top
+edit security utm default-configuration web-filtering
+set url-whitelist good
+set url-blacklist bad
+set type juniper-local
+set juniper-local custom-block-message "This site is not allowed!"
+
+top
+edit security utm feature-profile web-filtering juniper-local
+set profile WebFilterPolicy default permit custom-block-message "This site is not allowed!"
+
+top
+edit security utm utm-policy MyUTMPolicy
+set web-filtering http-profile WebFilterPolicy
+```
+
+```
+show security utm web-filtering statistics
 ```
