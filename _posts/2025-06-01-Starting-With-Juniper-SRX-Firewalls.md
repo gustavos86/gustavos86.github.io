@@ -832,3 +832,52 @@ show security utm web-filtering statistics
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Source-NAT-17.png)
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Source-NAT-18.png)
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Source-NAT-19.png)
+
+## Destination NAT
+
+Main use case is allow a device on the Internet to connect to an internal device behind NAT.
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Destination-NAT-1.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Destination-NAT-2.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Destination-NAT-3.png)
+
+Destination NAT Example:
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Destination-NAT-4.png)
+
+```
+set security nat destination pool WEB-SERVER-POOL address 10.10.102.10/32
+set security nat destination rule-set WEB-SERVER from zone unstrust
+set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS match source 0.0.0.0/0
+set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS match destination-address-name EXP-IP
+set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS then destination-nat pool WEB-SERVER-POOL
+```
+
+Proxy ARP must be configured to enable the device to respond to ARP queries for the destination NAT IP address:
+
+```
+set security nat proxy-arp interface ge-0/0/0 address 172.18.1.1
+```
+
+To verify Destionation NAT
+
+```
+show security flow session
+```
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Destination-NAT-5.png)
+
+## Static NAT
+
+Static NAT mapping includes **destination IP address translation** in one direction and **source IP address* translation in the reverse direction.
+Static NAT is **bidirectional**.
+
+{% include note.html content="Static NAT always takes precedence over Source or Destination NAT rules" %}
+
+**Static NAT always takes precedence over Source or Destination NAT rules**
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-1.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-2.png)
