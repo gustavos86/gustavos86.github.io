@@ -843,7 +843,7 @@ Main use case is allow a device on the Internet to connect to an internal device
 
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Destination-NAT-3.png)
 
-Destination NAT Example:
+Destination NAT example:
 
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Destination-NAT-4.png)
 
@@ -855,13 +855,15 @@ set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS match de
 set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS then destination-nat pool WEB-SERVER-POOL
 ```
 
-Proxy ARP must be configured to enable the device to respond to ARP queries for the destination NAT IP address:
+Proxy ARP must be configured to enable the device to respond to ARP queries for the destination NAT IP address.
+
+{% include note.html content="Only required when both the interface IP network and NAT IP are on the same subnet" %}
 
 ```
 set security nat proxy-arp interface ge-0/0/0 address 172.18.1.1
 ```
 
-To verify Destionation NAT
+To verify Destination NAT
 
 ```
 show security flow session
@@ -871,13 +873,43 @@ show security flow session
 
 ## Static NAT
 
-Static NAT mapping includes **destination IP address translation** in one direction and **source IP address* translation in the reverse direction.
+Static NAT mapping includes **destination IP address translation** in one direction and **source IP address** translation in the reverse direction.
 Static NAT is **bidirectional**.
 
 {% include note.html content="Static NAT always takes precedence over Source or Destination NAT rules" %}
 
-**Static NAT always takes precedence over Source or Destination NAT rules**
-
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-1.png)
 
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-2.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-3.png)
+
+Static NAT example:
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-4.png)
+
+```
+set security nat static rule-set RULE-SET1 from zone untrust
+set security nat static rule-set RULE-SET1 rule R1 match destination-address 203.0.113.15/32
+set security nat static rule-set RULE-SET1 rule R1 then static-nat prefix 10.10.102.10/32
+```
+
+Proxy ARP must be configured to enable the device to respond to ARP queries for the destination NAT IP Address.
+
+{% include note.html content="Only required when both the interface IP network and NAT IP are on the same subnet" %}
+
+```
+set security nat proxy-arp interface ge-0/0/0.0 address 203.0.113.15
+```
+
+To verify Static NAT
+
+```
+show security flow session
+```
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-5.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-6.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-7.png)
