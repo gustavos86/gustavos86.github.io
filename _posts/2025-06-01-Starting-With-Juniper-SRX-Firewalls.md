@@ -999,3 +999,163 @@ Verify the `st` interface
 show security st0 extensive
 show security ipsec traffic-selector interface-name st0.0 detail
 ```
+
+## Packet Captures
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Packet-Captures-1.png)
+
+```
+set forwarding-options packet-capture file filename PACKET-CAPTURE
+set forwarding-options packet-capture maximum-capture-size 1500   (optional)
+
+set firewall family inet filter PACKET-CAP term INIT from source-address 172.25.99.1/32
+set firewall family inet filter PACKET-CAP term INIT from destination-address 198.51.100.8/32
+set firewall family inet filter PACKET-CAP term INIT then sample   (important)
+set firewall family inet filter PACKET-CAP term INIT then accept
+set firewall family inet filter PACKET-CAP term RETURN from source-address 198.51.100.8/32
+set firewall family inet filter PACKET-CAP term RETURN from destination-address 172.25.99.1/32
+set firewall family inet filter PACKET-CAP term RETURN then sample   (important)
+set firewall family inet filter PACKET-CAP term RETURN then accept
+set firewall family inet filter PACKET-CAP term ALLOW-ALL then accept
+
+set interfaces ge-0/0/0 unit 0 family inet filter input PACKET-CAP
+set interfaces ge-0/0/0 unit 0 family inet filter output PACKET-CAP
+set interfaces ge-0/0/0 unit 0 family inet address 172.25.99.254/24
+```
+
+The capture is stored in `/var/tmp/`
+
+```
+file list /var/tmp/ | match PACKET-CAPTURE
+```
+
+## Packet Captures on High-End SRX
+
+Configure datapath debugging.
+Drop to the shell to remove unnecessary fields.
+
+{% include warning.html content="The datapath-debug should not be used in IPv6 environments when using hash-based session distribution" %}
+
+{% include important.html content="Works only on:
+
+SRX1400
+SRX3400, SRX3600
+SRX5400, SRX5600, SRX5800" %}
+
+```
+set security datapath-debug capture-file MY-CAPTURE format pcap size 1m files 5
+set security datapath-debug maximum-capture-size 1500
+
+set security datapath-debug action-profile perform-capture event np-egress packet-dump
+set security datapath-debug action-profile perform-capture event np-ingress packet-dump
+
+set security datapath-debug packet-filter cap-filter action-profile perform-capture
+set security datapath-debug packet-filter cap-filter source-prefix 172.25.99.1/32
+set security datapath-debug packet-filter cap-filter destination-prefix 198.51.100.8/32
+```
+
+Start the packet capture and stop it when finished
+
+```
+request security datapath-debug capture [start | stop]
+```
+
+View the packet capture locally
+
+```
+show security datapath-debug capture
+```
+
+View the packet capture offline. We need to remove some fields:
+
+```
+start shell
+su
+
+cd /var/log
+e2einfo -Ccapture -Snormalize -I MY-CAPTURE -F MY-CAPTURE.pcap
+```
+
+Collecting Control Plane traffic
+
+```
+start shell
+su root
+
+tcpdump -i ge-0/0/0 -s 1500 -w /var/tmp/TO-HOST.pcap -c 5000
+
+ls /var/tmp/ | grep TO-HOST.pcap
+```
+
+## Traceoptions
+
+Always stored in `/var/log`
+
+Enabling Tracefiles for Application Identification
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Traceoptions-1.png)
+
+Enabling Tracefiles for IDP
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Traceoptions-2.png)
+
+Enabling Tracefiles for Content Security
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Traceoptions-3.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Traceoptions-4.png)
+
+## Investigating False Positives/Negatives
+
+### Antivirus
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Antivirus-tshoot-1.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Antivirus-tshoot-2.png)
+
+```
+show security utm anti-virus statistics
+```
+
+### Antispam
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Antispam-tshoot-1.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Antispam-tshoot-2.png)
+
+```
+show security utm anti-spam statistics
+```
+
+```
+test security utm anti-spam ip-check 10.1.1.1
+```
+
+### Web Filtering
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/WebFiltering-tshoot-1.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/WebFiltering-tshoot-2.png)
+
+```
+show security utm web-filtering statistics
+```
+
+```
+test security utm enhanced-web-filtering url-check juniper.net
+
+test security utm web-filtering profile WF-pro juniper.net
+test security utm web-filtering profile WF-pro example.com
+```
+
+### Content Filtering
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/ContentFiltering-tshoot-1.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/ContentFiltering-tshoot-2.png)
+
+```
+show security utm content-filtering statistics
+```
+
+### Examining Syslog Logging
+
+```
+show log message | match RT_UTM
+```
