@@ -850,7 +850,7 @@ Destination NAT example:
 ```
 set security nat destination pool WEB-SERVER-POOL address 10.10.102.10/32
 set security nat destination rule-set WEB-SERVER from zone unstrust
-set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS match source 0.0.0.0/0
+set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS match source-address 0.0.0.0/0
 set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS match destination-address-name EXP-IP
 set security nat destination rule-set WEB-SERVER rule WEB-SERVER-ACCESS then destination-nat pool WEB-SERVER-POOL
 ```
@@ -913,3 +913,12 @@ show security flow session
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-6.png)
 
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Static-NAT-7.png)
+
+## Troublehsoot NAT
+
+```
+show security nat source rule all
+show security nat destination rule all
+show security nat static rule all
+show security flow session protocol tcp
+```
