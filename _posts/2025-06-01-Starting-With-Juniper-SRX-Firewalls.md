@@ -922,3 +922,80 @@ show security nat destination rule all
 show security nat static rule all
 show security flow session protocol tcp
 ```
+
+## IPsec VPN
+
+Steps to configure IPSec VPN
+
+1. Configuration of Internet Key Exchange (IKE) Phase 1
+    - Proposal
+    - Policy
+    - Gateway
+2. Configuration of IKE Phase 2 (IPSec)
+    - Proposal
+    - Policy
+    - VPN tunnel
+3. Configuration of the required VPN Routing Parameters
+    - Configuring the st0 interface and bind to VPN
+    - Configure routes to remote networks with st0 interface as next hop
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IKE-Phase-1-Configuration-Options.png)
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IKE-Phase-2-Configuration-Options-1.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IKE-Phase-2-Configuration-Options-2.png)
+
+IPSec VPN config example
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPSec-VPN-cofig-example-1.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPSec-VPN-cofig-example-2.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPSec-VPN-cofig-example-3.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPSec-VPN-cofig-example-4.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPSec-VPN-cofig-example-5.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPSec-VPN-cofig-example-6.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPSec-VPN-cofig-example-7.png)
+
+Configuring Proxy ID (optional)
+
+```
+set security ipsec vpn BRANCH-TO-HQ ike proxy-identity local 10.10.101.0/24 remote 10.10.201.0/24
+```
+
+Traffic Selector (optional)
+
+```
+set security ipsec vpn BRANCH-TO-HQ traffic-selector local-ip 10.10.101.0/24 remote-ip 10.10.201.0/24
+```
+
+DPD (Dead Peer Detection) (optional)
+
+```
+set security ike gateway HQ dead-peer-detection interval 10 threshold 5
+```
+
+VPN Monitoring (optional) - Juniper proprietary method to monitor the VPN's health
+
+```
+set security ipsec vpn BRANCH-TO-HQ vpn-monitor destination-ip 10.10.201.10 optimized source-interface st0.0
+```
+
+### Troubleshooting IPSec VPN
+
+Tunnel setup
+
+```
+show security ike security-associations
+show security ipsec security-associations
+```
+
+Data Plane traffic statistics
+
+```
+show security ipsec statistics
+```
+
+Verify the `st` interface
+
+```
+show security st0 extensive
+show security ipsec traffic-selector interface-name st0.0 detail
+```
