@@ -1159,3 +1159,90 @@ show security utm content-filtering statistics
 ```
 show log message | match RT_UTM
 ```
+
+## Basic Monitoring
+
+- Resource Utilization
+
+```
+show system uptime
+show chassis routing-enginge
+show chassis hardware
+show chassis forwarding
+show system storage
+show system virtual-memory
+file list recursive
+```
+
+- Traffic Patterns
+
+```
+monitor interface traffic
+```
+
+- Chassis components
+
+```
+show chassis status
+show fan status   (doesn't apply to vSRX)
+show chassis fan
+show chassis routing-engive
+show chassis hardware
+show chassis forwarding
+```
+
+- Interface status
+
+```
+show interfaces terse
+show interfaces statistics
+show interfaces ge-0/0/0.0
+```
+
+- Layer 2 information
+
+```
+show ethernet-switching table
+```
+
+- Route Table
+
+```
+show route
+```
+
+- Displaying Junos OS Release
+
+```
+show system uptime
+show version
+show system information
+show system firmware
+```
+
+- Junos OS Naming Convention
+
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Junos-OS-Maintenance-1.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Junos-OS-Maintenance-2.png)
+![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/Junos-OS-Maintenance-3.png)
+
+- Upgrading Junos OS
+
+```
+request system software add /var/tmp/junos-srxsme-20.1r1 no-copy reboot
+```
+
+{% include tip.html content="Add the reboot option rather than executing an additional command to reboot the SRX" %}
+
+- Rollback to Previoos Junos OS version
+
+```
+request system software rollback reboot
+```
+
+- Logs
+
+```
+show log messages | match Events
+show log interactive-commands
+```
