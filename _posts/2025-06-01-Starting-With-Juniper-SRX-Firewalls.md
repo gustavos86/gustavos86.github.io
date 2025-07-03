@@ -65,6 +65,10 @@ show security zones <NAME>
 
 Junos-Host Zone CLI Configuration
 
+**Junos-Host** zone can be used to for additional checks for traffic destined to SRX itself.
+When not configuring any security policy to-zone `junos-host`, the traffic/packets will be validated based on `host-inbound-traffic` configured under security zones.
+If you configure security policy `to-zone junos-host`, that policy check will be done additional to `host-inbound-traffic`/services specified under zones.
+
 Allow specific hosts from **SRC_ZONE** to SSH to the SRX
 
 ```
@@ -1285,3 +1289,8 @@ show log interactive-commands
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPsec-VPN-Concepts-34.png)
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPsec-VPN-Concepts-35.png)
 ![]({{ site.baseurl }}/images/2025/06-01-Starting-With-Juniper-SRX-Firewalls/IPsec-VPN-Concepts-36.png)
+
+## Useful Resources
+
+- [SRX Getting Started -- Troubleshooting Traffic Flows and Session Establishment](https://supportportal.juniper.net/s/article/SRX-Getting-Started-Troubleshooting-Traffic-Flows-and-Session-Establishment)
+- (Security, Associate (JNCIA-SEC): Voucher Assessment Test)[https://quizlet.com/eg/511759804/security-associate-jncia-sec-voucher-assessment-test-flash-cards/]
