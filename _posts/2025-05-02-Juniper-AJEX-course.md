@@ -19,12 +19,12 @@ Access Ports
 
 ```
 set interfaces ge-0/0/8 unit 0 family ethernet-switching interface-mode access
-set interfaces ge-0/0/8 unit 0 family ethernet-switching vlam members 10
+set interfaces ge-0/0/8 unit 0 family ethernet-switching vlan members 10
 ```
 
 ```
 set interfaces ge-0/0/9 unit 0 family ethernet-switching interface-mode access
-set interfaces ge-0/0/9 unit 0 family ethernet-switching vlam members 20
+set interfaces ge-0/0/9 unit 0 family ethernet-switching vlan members 20
 ```
 
 Trunk Ports
@@ -36,11 +36,12 @@ Trunk Ports
 
 ```
 set interfaces ge-0/0/12 unit 0 family ethernet-switching interface-mode trunk
-set interfaces ge-0/0/12 unit 0 family ethernet-switching vlam members [ v10 v20 ]
+set interfaces ge-0/0/12 unit 0 family ethernet-switching vlan members [ v10 v20 ]
+set interfaces ge-0/0/12 native-vlan-id X
 
 or 
 
-set interfaces ge-0/0/12 unit 0 family ethernet-switching vlam members all
+set interfaces ge-0/0/12 unit 0 family ethernet-switching vlan members all
 ```
 
 CLI commands available
