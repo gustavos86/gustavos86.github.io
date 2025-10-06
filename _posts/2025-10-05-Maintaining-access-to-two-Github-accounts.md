@@ -50,3 +50,11 @@ Make sure to update `some-repo.git` with the corresponding repo name
 ```
 git remote set-url origin git@github.com-hserranog:hserranog/some-repo.git
 ```
+
+- Use `git remote -v` to verify. Example:
+
+```
+$ git remote -v
+origin	git@github.com-hserranog:hserranog/miso-readings.git (fetch)
+origin	git@github.com-hserranog:hserranog/miso-readings.git (push)
+```
