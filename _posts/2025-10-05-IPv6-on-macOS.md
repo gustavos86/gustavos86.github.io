@@ -138,3 +138,15 @@ Example:
 }
 >
 ```
+
+- To see the macOS Routing Table
+
+```
+netstat -nr -f inet6
+```
+
+- To see only the default route
+
+```
+netstat -nr -f inet6 | grep default | grep en0
+```

